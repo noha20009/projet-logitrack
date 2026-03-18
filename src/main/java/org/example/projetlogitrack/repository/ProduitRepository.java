@@ -1,6 +1,6 @@
-package repository;
+package org.example.projetlogitrack.repository;
 
-import model.Produit;
+import org.example.projetlogitrack.model.Produit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import java.util.List;
