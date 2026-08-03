@@ -3,6 +3,7 @@ package org.example.projetlogitrack.controller;
 
 import org.example.projetlogitrack.model.Client;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.example.projetlogitrack.repository.ClientRepository;
 
@@ -17,24 +18,28 @@ public class ClientController {
 
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
     public Client addClient(@RequestBody Client client) {
         return clientRepository.save(client);
     }
 
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','AGENT')")
     public List<Client> getAllClients() {
         return clientRepository.findAll();
     }
 
 
-    @GetMapping("/{ida}")
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','AGENT')")
     public Client getClient(@PathVariable Long id) {
         return clientRepository.findById(id).orElse(null);
     }
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteClient(@PathVariable Long id) {
         clientRepository.deleteById(id);
     }

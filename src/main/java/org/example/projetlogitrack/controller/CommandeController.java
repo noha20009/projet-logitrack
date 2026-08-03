@@ -7,6 +7,7 @@ import org.example.projetlogitrack.repository.CommandeLigneRepository;
 import org.example.projetlogitrack.repository.CommandeRepository;
 import org.example.projetlogitrack.repository.ProduitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -30,6 +31,7 @@ public class CommandeController {
 
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
     public Commande createCommande(@RequestParam Long clientId) {
         Client client = clientRepository.findById(clientId).orElse(null);
 
@@ -43,6 +45,7 @@ public class CommandeController {
 
 
     @PostMapping("/{orderId}/products")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
     public CommandeLigne addProduitToCommande(
             @PathVariable Long orderId,
             @RequestParam Long produitId,
@@ -61,18 +64,21 @@ public class CommandeController {
 
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','AGENT')")
     public List<Commande> getAll() {
         return commandeRepository.findAll();
     }
 
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','AGENT')")
     public Commande getOne(@PathVariable Long id) {
         return commandeRepository.findById(id).orElse(null);
     }
 
 
     @PutMapping("/{id}/status")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','AGENT')")
     public Commande updateStatus(
             @PathVariable Long id,
             @RequestParam String status) {
@@ -85,12 +91,14 @@ public class CommandeController {
 
 
     @GetMapping("/client/{clientId}")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','AGENT')")
     public List<Commande> getByClient(@PathVariable Long clientId) {
         return commandeRepository.findByClientId(clientId);
     }
 
 
     @GetMapping("/count")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
     public long count() {
         return commandeRepository.countCommandes();
     }
