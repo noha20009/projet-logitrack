@@ -1,5 +1,9 @@
 package org.example.projetlogitrack.service;
 
+import org.example.projetlogitrack.dto.RegisterRequest;
+import org.example.projetlogitrack.dto.UserDTO;
+import org.example.projetlogitrack.exception.ResourceNotFoundException;
+import org.example.projetlogitrack.mapper.UserMapper;
 import org.example.projetlogitrack.model.Role;
 import org.example.projetlogitrack.model.User;
 import org.example.projetlogitrack.repository.UserRepository;
@@ -18,24 +22,45 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    @Autowired
+    private UserMapper userMapper;
+
+    public List<UserDTO> findAll() {
+        return userRepository.findAll().stream().map(userMapper::toDto).toList();
     }
 
-    public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public UserDTO findById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur introuvable avec l'id " + id));
+        return userMapper.toDto(user);
     }
 
-    public User updateRole(Long id, Role role) {
-        User user = userRepository.findById(id).orElse(null);
-        if (user == null) {
-            return null;
+    public UserDTO create(RegisterRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new IllegalArgumentException("Un utilisateur avec cet email existe déjà.");
         }
+        Role role = request.getRole() != null ? request.getRole() : Role.AGENT;
+        User user = new User(
+                request.getNom(),
+                request.getPrenom(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                role
+        );
+        return userMapper.toDto(userRepository.save(user));
+    }
+
+    public UserDTO updateRole(Long id, Role role) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur introuvable avec l'id " + id));
         user.setRole(role);
-        return userRepository.save(user);
+        return userMapper.toDto(userRepository.save(user));
     }
 
     public void delete(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Utilisateur introuvable avec l'id " + id);
+        }
         userRepository.deleteById(id);
     }
 }

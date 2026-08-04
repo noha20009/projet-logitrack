@@ -1,15 +1,21 @@
 package org.example.projetlogitrack.service;
 
+import org.example.projetlogitrack.dto.CommandeDTO;
+import org.example.projetlogitrack.dto.CommandeLigneDTO;
+import org.example.projetlogitrack.exception.ResourceNotFoundException;
+import org.example.projetlogitrack.mapper.CommandeLigneMapper;
+import org.example.projetlogitrack.mapper.CommandeMapper;
 import org.example.projetlogitrack.model.*;
 import org.example.projetlogitrack.repository.ClientRepository;
 import org.example.projetlogitrack.repository.CommandeLigneRepository;
 import org.example.projetlogitrack.repository.CommandeRepository;
 import org.example.projetlogitrack.repository.ProduitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class CommandeService {
@@ -26,53 +32,83 @@ public class CommandeService {
     @Autowired
     private CommandeLigneRepository ligneRepository;
 
+    @Autowired
+    private CommandeMapper commandeMapper;
 
-    public Commande createCommande(Long clientId) {
-        Client client = clientRepository.findById(clientId).orElse(null);
+    @Autowired
+    private CommandeLigneMapper commandeLigneMapper;
+
+    public Page<CommandeDTO> findAll(String statut, Pageable pageable) {
+        if (statut != null && !statut.isBlank()) {
+            return commandeRepository.findByStatut(parseStatut(statut), pageable).map(commandeMapper::toDto);
+        }
+        return commandeRepository.findAll(pageable).map(commandeMapper::toDto);
+    }
+
+    public CommandeDTO findById(Long id) {
+        Commande commande = commandeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Commande introuvable avec l'id " + id));
+        return commandeMapper.toDto(commande);
+    }
+
+    public Page<CommandeDTO> findByClient(Long clientId, Pageable pageable) {
+        return commandeRepository.findByClientId(clientId, pageable).map(commandeMapper::toDto);
+    }
+
+    public CommandeDTO createCommande(Long clientId) {
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new ResourceNotFoundException("Client introuvable avec l'id " + clientId));
 
         Commande commande = new Commande();
         commande.setClient(client);
         commande.setDateCommande(LocalDate.now());
         commande.setStatut(StatutCommande.EN_ATTENTE);
 
-        return commandeRepository.save(commande);
+        return commandeMapper.toDto(commandeRepository.save(commande));
     }
 
+    public CommandeLigneDTO addProduit(Long orderId, Long produitId, int quantite) {
+        if (quantite <= 0) {
+            throw new IllegalArgumentException("La quantité doit être supérieure à 0.");
+        }
 
-    public CommandeLigne addProduit(Long orderId, Long produitId, int quantite) {
-        Commande commande = commandeRepository.findById(orderId).orElse(null);
-        Produit produit = produitRepository.findById(produitId).orElse(null);
+        Commande commande = commandeRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Commande introuvable avec l'id " + orderId));
+        Produit produit = produitRepository.findById(produitId)
+                .orElseThrow(() -> new ResourceNotFoundException("Produit introuvable avec l'id " + produitId));
 
         CommandeLigne ligne = new CommandeLigne();
         ligne.setCommande(commande);
         ligne.setProduit(produit);
         ligne.setQuantite(quantite);
 
-        return ligneRepository.save(ligne);
+        return commandeLigneMapper.toDto(ligneRepository.save(ligne));
     }
 
-    public List<Commande> findAll() {
-        return commandeRepository.findAll();
+    public CommandeDTO updateStatus(Long id, String status) {
+        Commande commande = commandeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Commande introuvable avec l'id " + id));
+        commande.setStatut(parseStatut(status));
+        return commandeMapper.toDto(commandeRepository.save(commande));
     }
-
-    public Commande findById(Long id) {
-        return commandeRepository.findById(id).orElse(null);
-    }
-
-
-    public Commande updateStatus(Long id, String status) {
-        Commande commande = commandeRepository.findById(id).orElse(null);
-        commande.setStatut(StatutCommande.valueOf(status));
-        return commandeRepository.save(commande);
-    }
-
-
-    public List<Commande> findByClient(Long clientId) {
-        return commandeRepository.findByClientId(clientId);
-    }
-
 
     public long count() {
         return commandeRepository.countCommandes();
+    }
+
+    public void delete(Long id) {
+        if (!commandeRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Commande introuvable avec l'id " + id);
+        }
+        commandeRepository.deleteById(id);
+    }
+
+    private StatutCommande parseStatut(String status) {
+        try {
+            return StatutCommande.valueOf(status);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Statut invalide : " + status
+                    + " (valeurs acceptées : EN_ATTENTE, EXPEDIEE, LIVREE)");
+        }
     }
 }

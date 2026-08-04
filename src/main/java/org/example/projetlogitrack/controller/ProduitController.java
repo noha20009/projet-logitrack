@@ -1,80 +1,83 @@
 package org.example.projetlogitrack.controller;
 
-
-
-import org.example.projetlogitrack.model.Produit;
+import org.example.projetlogitrack.dto.ProduitDTO;
+import org.example.projetlogitrack.service.ProduitService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.example.projetlogitrack.repository.ProduitRepository;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProduitController {
 
     @Autowired
-    private ProduitRepository produitRepository;
-
-
-    @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
-    public Produit addProduit(@RequestBody Produit produit) {
-        return produitRepository.save(produit);
-    }
-
+    private ProduitService produitService;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER','AGENT')")
-    public List<Produit> getAllProduits() {
-        return produitRepository.findAll();
+    public Page<ProduitDTO> getAllProduits(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "nom") String sort) {
+        return produitService.findAll(PageRequest.of(page, size, Sort.by(sort)));
     }
 
+    @GetMapping("/category/{category}")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','AGENT')")
+    public Page<ProduitDTO> getByCategorie(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "nom") String sort) {
+        return produitService.findByCategorie(category, PageRequest.of(page, size, Sort.by(sort)));
+    }
+
+    @GetMapping("/price/{price}")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','AGENT')")
+    public Page<ProduitDTO> getByPrix(
+            @PathVariable double price,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "prix") String sort) {
+        return produitService.findByPrix(price, PageRequest.of(page, size, Sort.by(sort)));
+    }
+
+    @GetMapping("/low-stock")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
+    public Page<ProduitDTO> lowStock(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "quantiteStock") String sort) {
+        return produitService.lowStock(PageRequest.of(page, size, Sort.by(sort)));
+    }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER','AGENT')")
-    public Produit getProduit(@PathVariable Long id) {
-        return produitRepository.findById(id).orElse(null);
+    public ProduitDTO getProduit(@PathVariable Long id) {
+        return produitService.findById(id);
     }
 
+    @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProduitDTO addProduit(@RequestBody ProduitDTO produitDTO) {
+        return produitService.save(produitDTO);
+    }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
-    public Produit updateProduit(@PathVariable Long id, @RequestBody Produit updatedProduit) {
-        return produitRepository.findById(id).map(produit -> {
-            produit.setNom(updatedProduit.getNom());
-            produit.setCategorie(updatedProduit.getCategorie());
-            produit.setPrix(updatedProduit.getPrix());
-            produit.setQuantiteStock(updatedProduit.getQuantiteStock());
-            return produitRepository.save(produit);
-        }).orElse(null);
+    public ProduitDTO updateProduit(@PathVariable Long id, @RequestBody ProduitDTO produitDTO) {
+        return produitService.update(id, produitDTO);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduit(@PathVariable Long id) {
-        produitRepository.deleteById(id);
-    }
-
-
-    @GetMapping("/category/{category}")
-    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','AGENT')")
-    public List<Produit> getByCategorie(@PathVariable String category) {
-        return produitRepository.findByCategorie(category);
-    }
-
-
-    @GetMapping("/price/{price}")
-    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','AGENT')")
-    public List<Produit> getByPrix(@PathVariable double price) {
-        return produitRepository.findByPrixLessThan(price);
-    }
-
-
-    @GetMapping("/low-stock")
-    @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
-    public List<Produit> lowStock() {
-        return produitRepository.findLowStockProducts();
+        produitService.delete(id);
     }
 }
