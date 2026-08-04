@@ -39,6 +39,18 @@ public class ProduitController {
     }
 
 
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
+    public Produit updateProduit(@PathVariable Long id, @RequestBody Produit updatedProduit) {
+        return produitRepository.findById(id).map(produit -> {
+            produit.setNom(updatedProduit.getNom());
+            produit.setCategorie(updatedProduit.getCategorie());
+            produit.setPrix(updatedProduit.getPrix());
+            produit.setQuantiteStock(updatedProduit.getQuantiteStock());
+            return produitRepository.save(produit);
+        }).orElse(null);
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteProduit(@PathVariable Long id) {

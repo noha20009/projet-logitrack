@@ -38,6 +38,18 @@ public class ClientController {
     }
 
 
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
+    public Client updateClient(@PathVariable Long id, @RequestBody Client updatedClient) {
+        return clientRepository.findById(id).map(client -> {
+            client.setNom(updatedClient.getNom());
+            client.setEmail(updatedClient.getEmail());
+            client.setTelephone(updatedClient.getTelephone());
+            client.setVille(updatedClient.getVille());
+            return clientRepository.save(client);
+        }).orElse(null);
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteClient(@PathVariable Long id) {

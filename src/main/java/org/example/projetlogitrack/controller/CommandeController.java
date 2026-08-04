@@ -102,4 +102,10 @@ public class CommandeController {
     public long count() {
         return commandeRepository.countCommandes();
     }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteCommande(@PathVariable Long id) {
+        commandeRepository.deleteById(id);
+    }
 }
