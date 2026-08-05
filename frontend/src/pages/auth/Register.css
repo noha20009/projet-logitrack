@@ -1,0 +1,50 @@
+.register-bg {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1d4ed8 0%, #0f766e 100%);
+  padding: 16px;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 440px;
+}
+
+.register-card-content.MuiCardContent-root {
+  padding: 32px;
+}
+
+.register-subtitle {
+  color: rgba(0, 0, 0, 0.6);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.register-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.register-name-row {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.register-error {
+  margin-bottom: 16px;
+}
+
+.register-links {
+  margin-top: 16px;
+  text-align: center;
+}
+
+@media (min-width: 600px) {
+  .register-name-row {
+    flex-direction: row;
+  }
+}

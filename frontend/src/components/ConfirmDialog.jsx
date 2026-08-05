@@ -1,4 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
+import './ConfirmDialog.css'
 
 export default function ConfirmDialog({ open, title, message, confirmLabel = 'Supprimer', onConfirm, onClose, loading = false }) {
   return (
@@ -7,7 +8,7 @@ export default function ConfirmDialog({ open, title, message, confirmLabel = 'Su
       <DialogContent>
         <DialogContentText>{message}</DialogContentText>
       </DialogContent>
-      <DialogActions>
+      <DialogActions className="confirm-dialog-actions">
         <Button onClick={onClose} color="inherit">
           Annuler
         </Button>

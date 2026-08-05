@@ -1,6 +1,7 @@
-import { Avatar, Box, Card, CardContent, Chip, List, ListItem, ListItemText, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Card, CardContent, Chip, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { useAuth } from '../context/AuthContext'
 import { ROLE_LABELS } from '../utils/constants'
+import './Profile.css'
 
 export default function Profile() {
   const { user } = useAuth()
@@ -14,15 +15,15 @@ export default function Profile() {
   ]
 
   return (
-    <Box sx={{ maxWidth: 560 }}>
+    <Box className="profile-page">
       <Typography variant="h4" gutterBottom>
         Mon profil
       </Typography>
 
       <Card>
         <CardContent>
-          <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
-            <Avatar sx={{ width: 64, height: 64, bgcolor: 'primary.main', fontSize: 28 }}>
+          <div className="profile-header">
+            <Avatar className="profile-avatar">
               {`${user.prenom?.charAt(0) || ''}${user.nom?.charAt(0) || ''}`}
             </Avatar>
             <Box>
@@ -35,7 +36,7 @@ export default function Profile() {
                 size="small"
               />
             </Box>
-          </Stack>
+          </div>
 
           <List dense>
             {rows.map((row) => (

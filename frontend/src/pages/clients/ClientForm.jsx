@@ -1,12 +1,13 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Alert, Box, Button, Card, CardContent, Stack, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Card, CardContent, TextField, Typography } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { createClient, getClient, updateClient } from '../../api/clientApi'
 import Loader from '../../components/Loader'
+import './ClientForm.css'
 
 const schema = yup.object({
   nom: yup.string().required('Le nom est obligatoire'),
@@ -67,8 +68,8 @@ export default function ClientForm() {
   if (loading) return <Loader />
 
   return (
-    <Box sx={{ maxWidth: 640 }}>
-      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/clients')} sx={{ mb: 2 }}>
+    <Box className="form-page">
+      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/clients')} className="form-back-button">
         Retour aux clients
       </Button>
       <Typography variant="h4" gutterBottom>
@@ -76,14 +77,14 @@ export default function ClientForm() {
       </Typography>
 
       <Card>
-        <CardContent sx={{ p: 3 }}>
+        <CardContent className="form-card-content">
           {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert severity="error" className="form-error">
               {error}
             </Alert>
           )}
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <Stack spacing={2}>
+            <div className="form-fields">
               <TextField
                 label="Nom"
                 {...register('nom')}
@@ -109,15 +110,15 @@ export default function ClientForm() {
                 error={Boolean(errors.ville)}
                 helperText={errors.ville?.message}
               />
-              <Stack direction="row" spacing={2} justifyContent="flex-end">
+              <div className="form-actions">
                 <Button onClick={() => navigate('/clients')} color="inherit">
                   Annuler
                 </Button>
                 <Button type="submit" variant="contained" disabled={submitting}>
                   {submitting ? 'Enregistrement...' : isEdit ? 'Enregistrer' : 'Créer'}
                 </Button>
-              </Stack>
-            </Stack>
+              </div>
+            </div>
           </form>
         </CardContent>
       </Card>

@@ -1,0 +1,42 @@
+.dashboard-card {
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dashboard-card-avatar.MuiAvatar-root {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  color: #ffffff;
+}
+
+.dashboard-card-avatar--primary.MuiAvatar-root {
+  background-color: #1d4ed8;
+}
+
+.dashboard-card-avatar--secondary.MuiAvatar-root {
+  background-color: #0f766e;
+}
+
+.dashboard-card-avatar--warning.MuiAvatar-root {
+  background-color: #d97706;
+}
+
+.dashboard-card-avatar--info.MuiAvatar-root {
+  background-color: #0284c7;
+}
+
+.dashboard-card-avatar--success.MuiAvatar-root {
+  background-color: #16a34a;
+}
+
+.dashboard-card-value {
+  line-height: 1;
+}
+
+.dashboard-card-title {
+  color: #64748b;
+}

@@ -1,0 +1,29 @@
+.users-error {
+  margin-bottom: 16px;
+}
+
+.users-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.users-name-row {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.users-role-select {
+  max-width: 180px;
+}
+
+.users-you-chip {
+  margin-left: 8px;
+}
+
+@media (min-width: 600px) {
+  .users-name-row {
+    flex-direction: row;
+  }
+}

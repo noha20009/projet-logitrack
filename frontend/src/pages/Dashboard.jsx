@@ -5,7 +5,6 @@ import {
   CardContent,
   Chip,
   Grid,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -31,6 +30,7 @@ import { getProduits } from '../api/produitApi'
 import { getCommandes } from '../api/commandeApi'
 import { useAuth } from '../context/AuthContext'
 import { STATUT_COLORS, STATUT_LABELS, formatDate } from '../utils/constants'
+import './Dashboard.css'
 
 export default function Dashboard() {
   const { role } = useAuth()
@@ -72,7 +72,7 @@ function StatsDashboard() {
         {cards.map((card) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={card.title}>
             {card.to ? (
-              <Link to={card.to} style={{ display: 'block', height: '100%' }}>
+              <Link to={card.to} className="dashboard-card-link">
                 <DashboardCard {...card} />
               </Link>
             ) : (
@@ -82,7 +82,7 @@ function StatsDashboard() {
         ))}
       </Grid>
 
-      <Grid container spacing={3} sx={{ mt: 1 }}>
+      <Grid container spacing={3} className="dashboard-bottom-cards">
         {stats.mostOrderedProduct && (
           <Grid item xs={12} md={6}>
             <Card>
@@ -90,17 +90,17 @@ function StatsDashboard() {
                 <Typography variant="h6" gutterBottom>
                   Produit le plus commandé
                 </Typography>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <div className="dashboard-section-stack">
                   <StarIcon color="warning" fontSize="large" />
                   <Box>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                    <Typography variant="subtitle1" className="dashboard-product-name">
                       {stats.mostOrderedProduct.nom}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       {stats.mostOrderedProduct.quantiteTotale} unité(s) commandée(s)
                     </Typography>
                   </Box>
-                </Stack>
+                </div>
               </CardContent>
             </Card>
           </Grid>
@@ -174,7 +174,7 @@ function AgentDashboard() {
         {cards.map((card) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={card.title}>
             {card.to ? (
-              <Link to={card.to} style={{ display: 'block', height: '100%' }}>
+              <Link to={card.to} className="dashboard-card-link">
                 <DashboardCard {...card} />
               </Link>
             ) : (
@@ -192,7 +192,7 @@ function RecentOrders({ orders }) {
   if (!orders || orders.length === 0) return null
 
   return (
-    <Card sx={{ mt: 3 }}>
+    <Card className="dashboard-recent-orders">
       <CardContent>
         <Typography variant="h6" gutterBottom>
           Commandes récentes
@@ -224,7 +224,7 @@ function RecentOrders({ orders }) {
                     />
                   </TableCell>
                   <TableCell>
-                    <Link to={`/orders/${order.id}`} style={{ color: 'primary.main' }}>
+                    <Link to={`/orders/${order.id}`} className="dashboard-order-link">
                       Voir
                     </Link>
                   </TableCell>

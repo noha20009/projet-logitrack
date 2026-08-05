@@ -1,5 +1,6 @@
 import { MenuItem, TextField } from '@mui/material'
 import { STATUTS, STATUT_LABELS } from '../utils/constants'
+import './StatusFilter.css'
 
 export default function StatusFilter({ value, onChange, withAll = true }) {
   return (
@@ -8,7 +9,7 @@ export default function StatusFilter({ value, onChange, withAll = true }) {
       label="Statut"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      sx={{ minWidth: 180 }}
+      className="status-filter"
     >
       {withAll && <MenuItem value="">Tous les statuts</MenuItem>}
       {STATUTS.map((s) => (

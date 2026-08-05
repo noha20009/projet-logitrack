@@ -1,0 +1,69 @@
+.sidebar-drawer .MuiDrawer-paper {
+  width: 260px;
+  box-sizing: border-box;
+  background-color: #173ead;
+  color: #ffffff;
+}
+
+.sidebar-drawer--temporary {
+  display: block;
+}
+
+.sidebar-drawer--permanent {
+  display: none;
+}
+
+.sidebar-toolbar {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-logo-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background-color: #1d4ed8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.sidebar-brand {
+  font-weight: 800;
+}
+
+.sidebar-nav {
+  padding: 16px;
+}
+
+.sidebar-item.MuiButton-root {
+  justify-content: flex-start;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.sidebar-item.MuiButton-root:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-item--active.MuiButton-root,
+.sidebar-item--active.MuiButton-root:hover {
+  background-color: #1d4ed8;
+}
+
+@media (min-width: 900px) {
+  .sidebar-drawer--temporary {
+    display: none;
+  }
+
+  .sidebar-drawer--permanent {
+    display: block;
+  }
+}

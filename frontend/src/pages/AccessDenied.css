@@ -1,0 +1,15 @@
+.access-denied {
+  text-align: center;
+  padding: 64px 0;
+}
+
+.access-denied-icon.MuiSvgIcon-root {
+  font-size: 72px;
+  margin-bottom: 16px;
+  color: #d32f2f;
+}
+
+.access-denied-message {
+  margin-bottom: 24px;
+  color: rgba(0, 0, 0, 0.6);
+}

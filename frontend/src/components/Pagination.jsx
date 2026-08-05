@@ -1,5 +1,6 @@
 import { Box, MenuItem, Pagination as MuiPagination, Select, Typography } from '@mui/material'
 import { PAGE_SIZES } from '../utils/constants'
+import './Pagination.css'
 
 export default function Pagination({ page, size, totalElements, totalPages, onPageChange, onSizeChange, showSize = true }) {
   if (!totalElements) return null
@@ -8,20 +9,11 @@ export default function Pagination({ page, size, totalElements, totalPages, onPa
   const end = Math.min((page + 1) * size, totalElements)
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 2,
-        mt: 3,
-      }}
-    >
+    <Box className="pagination-bar">
       <Typography variant="body2" color="text.secondary">
         {start} - {end} sur {totalElements} élément(s)
       </Typography>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Box className="pagination-controls">
         {showSize && (
           <Select value={size} onChange={(e) => onSizeChange(Number(e.target.value))} size="small">
             {PAGE_SIZES.map((s) => (

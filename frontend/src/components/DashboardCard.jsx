@@ -1,24 +1,17 @@
 import { Avatar, Box, Card, Typography } from '@mui/material'
+import './DashboardCard.css'
 
 export default function DashboardCard({ title, value, icon, color = 'primary' }) {
   return (
-    <Card sx={{ p: 2.5, height: '100%', display: 'flex', alignItems: 'center', gap: 2 }}>
-      <Avatar
-        variant="rounded"
-        sx={{
-          width: 48,
-          height: 48,
-          bgcolor: `${color}.main`,
-          color: 'white',
-        }}
-      >
+    <Card className="dashboard-card">
+      <Avatar variant="rounded" className={`dashboard-card-avatar dashboard-card-avatar--${color}`}>
         {icon}
       </Avatar>
       <Box>
-        <Typography variant="h4" sx={{ lineHeight: 1 }}>
+        <Typography variant="h4" className="dashboard-card-value">
           {value}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" className="dashboard-card-title">
           {title}
         </Typography>
       </Box>

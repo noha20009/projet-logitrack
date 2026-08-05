@@ -1,0 +1,17 @@
+.profile-page {
+  max-width: 560px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.profile-avatar.MuiAvatar-root {
+  width: 64px;
+  height: 64px;
+  background-color: #1d4ed8;
+  font-size: 28px;
+}

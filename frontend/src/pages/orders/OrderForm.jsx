@@ -9,7 +9,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Stack,
   Typography,
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
@@ -18,6 +17,7 @@ import { useNavigate } from 'react-router-dom'
 import { getClients } from '../../api/clientApi'
 import { createCommande } from '../../api/commandeApi'
 import Loader from '../../components/Loader'
+import './OrderForm.css'
 
 export default function OrderForm() {
   const navigate = useNavigate()
@@ -51,8 +51,8 @@ export default function OrderForm() {
   if (loading) return <Loader />
 
   return (
-    <Box sx={{ maxWidth: 640 }}>
-      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/orders')} sx={{ mb: 2 }}>
+    <Box className="form-page">
+      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/orders')} className="form-back-button">
         Retour aux commandes
       </Button>
       <Typography variant="h4" gutterBottom>
@@ -60,17 +60,17 @@ export default function OrderForm() {
       </Typography>
 
       <Card>
-        <CardContent sx={{ p: 3 }}>
+        <CardContent className="form-card-content">
           {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert severity="error" className="form-error">
               {error}
             </Alert>
           )}
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          <Typography variant="body2" className="form-help">
             Sélectionnez le client puis créez la commande. Vous pourrez ensuite ajouter des produits dans le détail de la
             commande.
           </Typography>
-          <Stack spacing={2}>
+          <div className="form-fields">
             <FormControl fullWidth>
               <InputLabel id="client-select-label">Client</InputLabel>
               <Select
@@ -87,7 +87,7 @@ export default function OrderForm() {
                 ))}
               </Select>
             </FormControl>
-            <Stack direction="row" spacing={2} justifyContent="flex-end">
+            <div className="form-actions">
               <Button onClick={() => navigate('/orders')} color="inherit">
                 Annuler
               </Button>
@@ -99,8 +99,8 @@ export default function OrderForm() {
               >
                 {submitting ? 'Création...' : 'Créer la commande'}
               </Button>
-            </Stack>
-          </Stack>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </Box>

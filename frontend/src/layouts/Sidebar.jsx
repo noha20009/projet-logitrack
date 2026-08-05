@@ -7,6 +7,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import PersonIcon from '@mui/icons-material/Person'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import './Sidebar.css'
 
 export const SIDEBAR_WIDTH = 260
 
@@ -26,29 +27,15 @@ export default function Sidebar({ mobileOpen, onClose }) {
 
   const content = (
     <>
-      <Toolbar sx={{ bgcolor: 'rgba(0,0,0,0.2)' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Box
-            sx={{
-              width: 36,
-              height: 36,
-              borderRadius: 2,
-              bgcolor: 'primary.main',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 800,
-              fontSize: 18,
-            }}
-          >
-            LT
-          </Box>
-          <Typography variant="h6" color="inherit" sx={{ fontWeight: 800 }}>
+      <Toolbar className="sidebar-toolbar">
+        <Box className="sidebar-logo-row">
+          <Box className="sidebar-logo-box">LT</Box>
+          <Typography variant="h6" className="sidebar-brand">
             LogiTrack
           </Typography>
         </Box>
       </Toolbar>
-      <Box sx={{ p: 2 }}>
+      <Box className="sidebar-nav">
         {items.map((item) => {
           const active = location.pathname === item.path || location.pathname.startsWith(item.path + '/')
           return (
@@ -60,13 +47,7 @@ export default function Sidebar({ mobileOpen, onClose }) {
                 navigate(item.path)
               }}
               startIcon={item.icon}
-              sx={{
-                justifyContent: 'flex-start',
-                color: 'white',
-                mb: 0.5,
-                bgcolor: active ? 'primary.main' : 'transparent',
-                '&:hover': { bgcolor: active ? 'primary.main' : 'rgba(255,255,255,0.1)' },
-              }}
+              className={`sidebar-item${active ? ' sidebar-item--active' : ''}`}
             >
               {item.label}
             </Button>
@@ -83,21 +64,11 @@ export default function Sidebar({ mobileOpen, onClose }) {
         open={mobileOpen}
         onClose={onClose}
         ModalProps={{ keepMounted: true }}
-        sx={{
-          display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': { width: SIDEBAR_WIDTH, boxSizing: 'border-box', bgcolor: 'primary.dark', color: 'white' },
-        }}
+        className="sidebar-drawer sidebar-drawer--temporary"
       >
         {content}
       </Drawer>
-      <Drawer
-        variant="permanent"
-        open
-        sx={{
-          display: { xs: 'none', md: 'block' },
-          '& .MuiDrawer-paper': { width: SIDEBAR_WIDTH, boxSizing: 'border-box', bgcolor: 'primary.dark', color: 'white' },
-        }}
-      >
+      <Drawer variant="permanent" open className="sidebar-drawer sidebar-drawer--permanent">
         {content}
       </Drawer>
     </>

@@ -15,6 +15,7 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { ROLE_LABELS } from '../utils/constants'
+import './Navbar.css'
 
 export default function Navbar({ onMenuClick }) {
   const { user, logout } = useAuth()
@@ -30,48 +31,42 @@ export default function Navbar({ onMenuClick }) {
   }
 
   return (
-    <AppBar
-      position="sticky"
-      elevation={0}
-      sx={{ bgcolor: 'background.paper', color: 'text.primary', borderBottom: '1px solid #e2e8f0' }}
-    >
+    <AppBar position="sticky" className="navbar-appbar">
       <Toolbar>
-        <IconButton edge="start" color="inherit" onClick={onMenuClick} sx={{ mr: 1, display: { md: 'none' } }}>
+        <IconButton edge="start" color="inherit" onClick={onMenuClick} className="navbar-menu-button">
           <MenuIcon />
         </IconButton>
-        <Box sx={{ flexGrow: 1 }}>
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>
+        <Box className="navbar-spacer">
+          <Typography variant="h6" className="navbar-brand">
             LogiTrack
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <Box className="navbar-actions">
           {user?.role && (
             <Chip
               label={ROLE_LABELS[user.role] || user.role}
               color={user.role === 'ADMIN' ? 'error' : user.role === 'MANAGER' ? 'secondary' : 'info'}
               size="small"
-              sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
+              className="navbar-role-chip"
             />
           )}
           <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
-            <Avatar sx={{ bgcolor: 'primary.main', width: 32, height: 32 }}>
-              {fullName.charAt(0) || 'U'}
-            </Avatar>
+            <Avatar className="navbar-avatar">{fullName.charAt(0) || 'U'}</Avatar>
           </IconButton>
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
-            <MenuItem disabled sx={{ minWidth: 180 }}>
+            <MenuItem disabled className="navbar-menu-user">
               <Box>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                <Typography variant="body2" className="navbar-user-name">
                   {fullName}
                 </Typography>
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="caption" className="navbar-user-email">
                   {user?.email}
                 </Typography>
               </Box>
             </MenuItem>
             <MenuItem onClick={() => { setAnchorEl(null); navigate('/profile') }}>Mon profil</MenuItem>
             <MenuItem onClick={handleLogout}>
-              <LogoutIcon fontSize="small" sx={{ mr: 1 }} /> Déconnexion
+              <LogoutIcon fontSize="small" className="navbar-logout-icon" /> Déconnexion
             </MenuItem>
           </Menu>
         </Box>

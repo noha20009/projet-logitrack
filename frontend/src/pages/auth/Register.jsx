@@ -1,11 +1,12 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Alert, Box, Button, Card, CardContent, Link, MenuItem, Stack, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Card, CardContent, Link, MenuItem, TextField, Typography } from '@mui/material'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { ROLE_LABELS, ROLES } from '../../utils/constants'
+import './Register.css'
 
 const schema = yup.object({
   nom: yup.string().required('Le nom est obligatoire'),
@@ -47,25 +48,25 @@ export default function Register() {
   }
 
   return (
-    <Box className="auth-bg">
-      <Card className="auth-card">
-        <CardContent sx={{ p: 4 }}>
+    <Box className="register-bg">
+      <Card className="register-card">
+        <CardContent className="register-card-content">
           <Typography variant="h4" align="center" gutterBottom>
             LogiTrack
           </Typography>
-          <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
+          <Typography variant="body2" className="register-subtitle">
             Créez votre compte
           </Typography>
 
           {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert severity="error" className="register-error">
               {error}
             </Alert>
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <Stack spacing={2}>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+            <div className="register-fields">
+              <div className="register-name-row">
                 <TextField
                   label="Prénom"
                   {...register('prenom')}
@@ -78,7 +79,7 @@ export default function Register() {
                   error={Boolean(errors.nom)}
                   helperText={errors.nom?.message}
                 />
-              </Stack>
+              </div>
               <TextField
                 label="Email"
                 type="email"
@@ -109,10 +110,10 @@ export default function Register() {
               <Button type="submit" variant="contained" size="large" disabled={submitting}>
                 {submitting ? 'Création...' : 'Créer le compte'}
               </Button>
-            </Stack>
+            </div>
           </form>
 
-          <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+          <Typography variant="body2" className="register-links">
             Déjà un compte ?{' '}
             <Link component={RouterLink} to="/login">
               Se connecter

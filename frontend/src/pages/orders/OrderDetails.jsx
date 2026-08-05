@@ -13,7 +13,6 @@ import {
   ListItemText,
   MenuItem,
   Select,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -33,6 +32,7 @@ import Loader from '../../components/Loader'
 import ConfirmDialog from '../../components/ConfirmDialog'
 import { useAuth } from '../../context/AuthContext'
 import { STATUT_LABELS, STATUTS, formatDate, formatPrice } from '../../utils/constants'
+import './OrderDetails.css'
 
 export default function OrderDetails() {
   const { id } = useParams()
@@ -119,21 +119,21 @@ export default function OrderDetails() {
 
   return (
     <Box>
-      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/orders')} sx={{ mb: 2 }}>
+      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/orders')} className="orders-back-button">
         Retour aux commandes
       </Button>
 
-      <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+      <div className="order-details-header">
         <Typography variant="h4">Commande #{order.id}</Typography>
         {canDelete && (
           <Button variant="contained" color="error" startIcon={<DeleteIcon />} onClick={() => setToDelete(true)}>
             Supprimer
           </Button>
         )}
-      </Stack>
+      </div>
 
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
+        <Alert severity="error" className="order-error">
           {error}
         </Alert>
       )}
@@ -162,7 +162,7 @@ export default function OrderDetails() {
                   <ListItemText
                     primary="Statut"
                     secondary={
-                      <FormControl fullWidth size="small" sx={{ mt: 0.5 }}>
+                      <FormControl fullWidth size="small" className="order-info-status">
                         <Select value={status} onChange={(e) => handleStatusChange(e.target.value)} disabled={updatingStatus}>
                           {STATUTS.map((s) => (
                             <MenuItem key={s} value={s}>
@@ -182,12 +182,12 @@ export default function OrderDetails() {
         <Grid item xs={12} md={8}>
           <Card>
             <CardContent>
-              <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+              <div className="order-articles-header">
                 <Typography variant="h6">Articles</Typography>
                 <Typography variant="h6">
                   Total : {formatPrice(total)}
                 </Typography>
-              </Stack>
+              </div>
 
               <TableContainer>
                 <Table size="small">
@@ -220,11 +220,11 @@ export default function OrderDetails() {
               </TableContainer>
 
               {canWrite && (
-                <Box sx={{ mt: 3, p: 2, bgcolor: 'background.default', borderRadius: 2 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
+                <div className="order-add-product">
+                  <Typography variant="subtitle1" className="order-add-title">
                     Ajouter un produit
                   </Typography>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                  <div className="order-add-row">
                     <FormControl fullWidth size="small">
                       <InputLabel id="produit-select-label">Produit</InputLabel>
                       <Select
@@ -245,7 +245,7 @@ export default function OrderDetails() {
                       type="number"
                       value={quantite}
                       onChange={(e) => setQuantite(e.target.value)}
-                      sx={{ maxWidth: 120 }}
+                      className="order-quantity"
                     />
                     <Button
                       variant="contained"
@@ -255,8 +255,8 @@ export default function OrderDetails() {
                     >
                       Ajouter
                     </Button>
-                  </Stack>
-                </Box>
+                  </div>
+                </div>
               )}
             </CardContent>
           </Card>

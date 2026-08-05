@@ -8,7 +8,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Stack,
   Typography,
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
@@ -20,6 +19,7 @@ import Loader from '../../components/Loader'
 import ConfirmDialog from '../../components/ConfirmDialog'
 import { useAuth } from '../../context/AuthContext'
 import { formatPrice } from '../../utils/constants'
+import './ProductDetails.css'
 
 export default function ProductDetails() {
   const { id } = useParams()
@@ -66,13 +66,13 @@ export default function ProductDetails() {
 
   return (
     <Box>
-      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/products')} sx={{ mb: 2 }}>
+      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/products')} className="products-back-button">
         Retour aux produits
       </Button>
 
-      <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+      <div className="product-details-header">
         <Typography variant="h4">{product.nom}</Typography>
-        <Stack direction="row" spacing={1}>
+        <div className="product-details-actions">
           {canWrite && (
             <Button variant="contained" startIcon={<EditIcon />} onClick={() => navigate(`/products/${id}/edit`)}>
               Modifier
@@ -83,10 +83,10 @@ export default function ProductDetails() {
               Supprimer
             </Button>
           )}
-        </Stack>
-      </Stack>
+        </div>
+      </div>
 
-      <Card sx={{ maxWidth: 560 }}>
+      <Card className="product-details-card">
         <CardContent>
           <List dense>
             {rows.map((row) => (

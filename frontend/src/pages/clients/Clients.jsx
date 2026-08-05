@@ -5,7 +5,6 @@ import {
   Card,
   Chip,
   IconButton,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -27,6 +26,7 @@ import Pagination from '../../components/Pagination'
 import Loader from '../../components/Loader'
 import ConfirmDialog from '../../components/ConfirmDialog'
 import { useAuth } from '../../context/AuthContext'
+import './Clients.css'
 
 export default function Clients() {
   const { role } = useAuth()
@@ -78,17 +78,17 @@ export default function Clients() {
 
   return (
     <Box>
-      <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+      <div className="clients-header">
         <Typography variant="h4">Clients</Typography>
         {canWrite && (
           <Button component={Link} to="/clients/new" variant="contained" startIcon={<AddIcon />}>
             Ajouter un client
           </Button>
         )}
-      </Stack>
+      </div>
 
-      <Card sx={{ p: 2 }}>
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 2 }}>
+      <Card className="clients-card">
+        <div className="clients-filters">
           <SearchBar
             value={search}
             onChange={setSearch}
@@ -99,7 +99,7 @@ export default function Clients() {
           <Button variant="outlined" onClick={() => { setSearch(''); setPage(0); setTimeout(load, 0) }}>
             Réinitialiser
           </Button>
-        </Stack>
+        </div>
 
         {loading ? (
           <Loader />
@@ -133,7 +133,7 @@ export default function Clients() {
                     <TableRow key={client.id} hover>
                       <TableCell>{client.id}</TableCell>
                       <TableCell>
-                        <Link to={`/clients/${client.id}`} style={{ fontWeight: 600, color: 'primary.main' }}>
+                        <Link to={`/clients/${client.id}`} className="clients-table-link">
                           {client.nom}
                         </Link>
                       </TableCell>
@@ -182,7 +182,7 @@ export default function Clients() {
       </Card>
 
       {!canWrite && data?.content?.length > 0 && (
-        <Chip label="Seuls ADMIN et MANAGER peuvent créer ou modifier des clients." sx={{ mt: 2 }} />
+        <Chip label="Seuls ADMIN et MANAGER peuvent créer ou modifier des clients." className="clients-info-chip" />
       )}
 
       <ConfirmDialog

@@ -5,7 +5,6 @@ import {
   Card,
   Chip,
   IconButton,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -38,6 +37,7 @@ import Loader from '../../components/Loader'
 import ConfirmDialog from '../../components/ConfirmDialog'
 import { useAuth } from '../../context/AuthContext'
 import { formatPrice } from '../../utils/constants'
+import './Products.css'
 
 export default function Products() {
   const { role } = useAuth()
@@ -99,17 +99,17 @@ export default function Products() {
 
   return (
     <Box>
-      <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+      <div className="products-header">
         <Typography variant="h4">Produits</Typography>
         {canWrite && (
           <Button component={Link} to="/products/new" variant="contained" startIcon={<AddIcon />}>
             Ajouter un produit
           </Button>
         )}
-      </Stack>
+      </div>
 
-      <Card sx={{ p: 2 }}>
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ mb: 2 }} alignItems="center">
+      <Card className="products-card">
+        <div className="products-filters">
           <SearchBar
             value={category}
             onChange={(v) => changeFilter(() => setCategory(v))}
@@ -122,7 +122,7 @@ export default function Products() {
             type="number"
             value={price}
             onChange={(e) => changeFilter(() => setPrice(e.target.value))}
-            sx={{ maxWidth: 160 }}
+            className="product-price-input"
           />
           {canSeeLowStock && (
             <ToggleButtonGroup
@@ -132,14 +132,14 @@ export default function Products() {
               size="small"
             >
               <ToggleButton value="low">
-                <WarningIcon fontSize="small" sx={{ mr: 0.5 }} /> Stock faible
+                <WarningIcon fontSize="small" className="product-toggle-icon" /> Stock faible
               </ToggleButton>
             </ToggleButtonGroup>
           )}
           <Button variant="outlined" onClick={() => { resetFilters(); setTimeout(load, 0) }}>
             Réinitialiser
           </Button>
-        </Stack>
+        </div>
 
         {loading ? (
           <Loader />
@@ -193,7 +193,7 @@ export default function Products() {
                     <TableRow key={product.id} hover>
                       <TableCell>{product.id}</TableCell>
                       <TableCell>
-                        <Link to={`/products/${product.id}`} style={{ fontWeight: 600, color: 'primary.main' }}>
+                        <Link to={`/products/${product.id}`} className="product-table-link">
                           {product.nom}
                         </Link>
                       </TableCell>

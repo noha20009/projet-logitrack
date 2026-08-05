@@ -10,7 +10,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -30,6 +29,7 @@ import Loader from '../../components/Loader'
 import ConfirmDialog from '../../components/ConfirmDialog'
 import { useAuth } from '../../context/AuthContext'
 import { STATUT_COLORS, STATUT_LABELS, formatDate } from '../../utils/constants'
+import './ClientDetails.css'
 
 export default function ClientDetails() {
   const { id } = useParams()
@@ -81,13 +81,13 @@ export default function ClientDetails() {
 
   return (
     <Box>
-      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/clients')} sx={{ mb: 2 }}>
+      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/clients')} className="clients-back-button">
         Retour aux clients
       </Button>
 
-      <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+      <div className="client-details-header">
         <Typography variant="h4">{client.nom}</Typography>
-        <Stack direction="row" spacing={1}>
+        <div className="client-details-actions">
           {canWrite && (
             <Button variant="contained" startIcon={<EditIcon />} onClick={() => navigate(`/clients/${id}/edit`)}>
               Modifier
@@ -98,8 +98,8 @@ export default function ClientDetails() {
               Supprimer
             </Button>
           )}
-        </Stack>
-      </Stack>
+        </div>
+      </div>
 
       <Grid container spacing={3}>
         <Grid item xs={12} md={5}>

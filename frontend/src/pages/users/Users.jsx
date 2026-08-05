@@ -11,7 +11,6 @@ import {
   IconButton,
   MenuItem,
   Select,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -32,6 +31,7 @@ import Loader from '../../components/Loader'
 import ConfirmDialog from '../../components/ConfirmDialog'
 import { ROLE_LABELS, ROLES } from '../../utils/constants'
 import { useAuth } from '../../context/AuthContext'
+import './Users.css'
 
 const schema = yup.object({
   nom: yup.string().required('Le nom est obligatoire'),
@@ -108,7 +108,7 @@ export default function Users() {
       </Typography>
 
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+        <Alert severity="error" className="users-error" onClose={() => setError(null)}>
           {error}
         </Alert>
       )}
@@ -121,11 +121,11 @@ export default function Users() {
                 Ajouter un utilisateur
               </Typography>
               <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                <Stack spacing={2}>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                <div className="users-form-fields">
+                  <div className="users-name-row">
                     <TextField label="Prénom" {...register('prenom')} error={Boolean(errors.prenom)} helperText={errors.prenom?.message} />
                     <TextField label="Nom" {...register('nom')} error={Boolean(errors.nom)} helperText={errors.nom?.message} />
-                  </Stack>
+                  </div>
                   <TextField label="Email" type="email" {...register('email')} error={Boolean(errors.email)} helperText={errors.email?.message} />
                   <TextField label="Mot de passe" type="password" {...register('password')} error={Boolean(errors.password)} helperText={errors.password?.message} />
                   <TextField select label="Rôle" {...register('role')} error={Boolean(errors.role)} helperText={errors.role?.message}>
@@ -138,7 +138,7 @@ export default function Users() {
                   <Button type="submit" variant="contained" startIcon={<PersonAddIcon />}>
                     Créer l'utilisateur
                   </Button>
-                </Stack>
+                </div>
               </form>
             </CardContent>
           </Card>
@@ -172,11 +172,11 @@ export default function Users() {
                       <TableRow key={user.id} hover>
                         <TableCell>
                           {user.prenom} {user.nom}
-                          {user.id === me?.id && <Chip label="Vous" size="small" color="primary" sx={{ ml: 1 }} />}
+                          {user.id === me?.id && <Chip label="Vous" size="small" color="primary" className="users-you-chip" />}
                         </TableCell>
                         <TableCell>{user.email}</TableCell>
                         <TableCell>
-                          <FormControl fullWidth size="small" sx={{ maxWidth: 180 }}>
+                          <FormControl fullWidth size="small" className="users-role-select">
                             <Select value={user.role} onChange={(e) => changeRole(user, e.target.value)} disabled={user.id === me?.id}>
                               {Object.keys(ROLES).map((r) => (
                                 <MenuItem key={r} value={r}>

@@ -1,0 +1,62 @@
+.navbar-appbar.MuiAppBar-root {
+  background-color: #ffffff;
+  color: rgba(0, 0, 0, 0.87);
+  box-shadow: none;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.navbar-spacer {
+  flex-grow: 1;
+}
+
+.navbar-menu-button {
+  margin-right: 8px;
+}
+
+.navbar-brand {
+  font-weight: 700;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-role-chip {
+  display: none;
+}
+
+.navbar-avatar.MuiAvatar-root {
+  width: 32px;
+  height: 32px;
+  background-color: #1d4ed8;
+}
+
+.navbar-menu-user {
+  min-width: 180px;
+}
+
+.navbar-user-name {
+  font-weight: 600;
+}
+
+.navbar-user-email {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.navbar-logout-icon {
+  margin-right: 8px;
+}
+
+@media (min-width: 600px) {
+  .navbar-role-chip {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 900px) {
+  .navbar-menu-button {
+    display: none;
+  }
+}

@@ -1,0 +1,41 @@
+.orders-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.orders-card {
+  padding: 16px;
+}
+
+.orders-filters {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.order-client-id {
+  max-width: 160px;
+}
+
+.order-table-link {
+  font-weight: 600;
+  color: #1d4ed8;
+}
+
+@media (min-width: 600px) {
+  .orders-header {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 900px) {
+  .orders-filters {
+    flex-direction: row;
+  }
+}

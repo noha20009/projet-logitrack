@@ -1,5 +1,6 @@
 import { InputAdornment, TextField } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
+import './SearchBar.css'
 
 export default function SearchBar({ value, onChange, onSearch, placeholder = 'Rechercher...', label }) {
   const handleKeyDown = (e) => {
@@ -22,10 +23,7 @@ export default function SearchBar({ value, onChange, onSearch, placeholder = 'Re
           ),
           endAdornment: value ? (
             <InputAdornment position="end">
-              <SearchIcon
-                onClick={onSearch}
-                sx={{ cursor: 'pointer', color: 'primary.main' }}
-              />
+              <SearchIcon className="search-bar-submit-icon" onClick={onSearch} />
             </InputAdornment>
           ) : null,
         },

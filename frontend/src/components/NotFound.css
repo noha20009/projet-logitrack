@@ -1,0 +1,18 @@
+.not-found {
+  text-align: center;
+  padding: 64px 0;
+}
+
+.not-found-code.MuiTypography-root {
+  font-weight: 800;
+  color: #1d4ed8;
+}
+
+.not-found-title {
+  margin-bottom: 8px;
+}
+
+.not-found-message {
+  margin-bottom: 24px;
+  color: rgba(0, 0, 0, 0.6);
+}

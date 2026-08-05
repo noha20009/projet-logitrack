@@ -1,0 +1,32 @@
+.form-page {
+  max-width: 640px;
+}
+
+.form-back-button {
+  margin-bottom: 16px;
+}
+
+.form-card-content.MuiCardContent-root {
+  padding: 24px;
+}
+
+.form-error {
+  margin-bottom: 16px;
+}
+
+.form-help {
+  margin-bottom: 16px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}

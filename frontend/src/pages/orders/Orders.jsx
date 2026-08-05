@@ -5,7 +5,6 @@ import {
   Card,
   Chip,
   IconButton,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -28,6 +27,7 @@ import Loader from '../../components/Loader'
 import ConfirmDialog from '../../components/ConfirmDialog'
 import { useAuth } from '../../context/AuthContext'
 import { STATUT_COLORS, STATUT_LABELS, formatDate } from '../../utils/constants'
+import './Orders.css'
 
 export default function Orders() {
   const { role } = useAuth()
@@ -76,24 +76,24 @@ export default function Orders() {
 
   return (
     <Box>
-      <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+      <div className="orders-header">
         <Typography variant="h4">Commandes</Typography>
         {canWrite && (
           <Button component={Link} to="/orders/new" variant="contained" startIcon={<AddIcon />}>
             Nouvelle commande
           </Button>
         )}
-      </Stack>
+      </div>
 
-      <Card sx={{ p: 2 }}>
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ mb: 2 }} alignItems="center">
+      <Card className="orders-card">
+        <div className="orders-filters">
           <StatusFilter value={statut} onChange={(v) => changeFilter(() => setStatut(v))} />
           <TextField
             label="ID du client"
             type="number"
             value={clientId}
             onChange={(e) => changeFilter(() => setClientId(e.target.value))}
-            sx={{ maxWidth: 160 }}
+            className="order-client-id"
           />
           <Button
             variant="outlined"
@@ -106,7 +106,7 @@ export default function Orders() {
           >
             Réinitialiser
           </Button>
-        </Stack>
+        </div>
 
         {loading ? (
           <Loader />
@@ -151,7 +151,7 @@ export default function Orders() {
                     <TableRow key={order.id} hover>
                       <TableCell>#{order.id}</TableCell>
                       <TableCell>
-                        <Link to={`/orders/${order.id}`} style={{ fontWeight: 600, color: 'primary.main' }}>
+                        <Link to={`/orders/${order.id}`} className="order-table-link">
                           {order.client?.nom || '-'}
                         </Link>
                       </TableCell>
