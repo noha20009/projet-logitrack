@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -44,20 +44,19 @@ export default function Clients() {
   const canWrite = role === 'ADMIN' || role === 'MANAGER'
   const canDelete = role === 'ADMIN'
 
-  const load = useCallback(() => {
+  const load = () => {
     setLoading(true)
     const params = { page, size, sort }
     const request = search.trim() ? searchClients({ ...params, nom: search.trim() }) : getClients(params)
     request.then(setData).finally(() => setLoading(false))
-  }, [page, size, sort, search])
+  }
 
   useEffect(() => {
     load()
-  }, [load])
+  }, [page, size, sort, search])
 
   const handleSearch = () => {
     setPage(0)
-    load()
   }
 
   const handleSortChange = () => {
@@ -96,7 +95,7 @@ export default function Clients() {
             placeholder="Rechercher par nom..."
             label="Rechercher un client"
           />
-          <Button variant="outlined" onClick={() => { setSearch(''); setPage(0); setTimeout(load, 0) }}>
+          <Button variant="outlined" onClick={() => { setSearch(''); setPage(0) }}>
             Réinitialiser
           </Button>
         </div>
