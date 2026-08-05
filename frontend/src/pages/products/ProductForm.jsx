@@ -1,74 +1,83 @@
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { useState } from 'react'
 import { Alert, Box, Button, Card, CardContent, TextField, Typography } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { createProduit, getProduit, updateProduit } from '../../api/produitApi'
 import Loader from '../../components/Loader'
 import './ProductForm.css'
-
-const schema = yup.object({
-  nom: yup.string().required('Le nom est obligatoire'),
-  categorie: yup.string().required('La catégorie est obligatoire'),
-  prix: yup
-    .number()
-    .typeError('Le prix doit être un nombre')
-    .min(0, 'Le prix ne peut pas être négatif')
-    .required('Le prix est obligatoire'),
-  quantiteStock: yup
-    .number()
-    .typeError('La quantité doit être un nombre')
-    .min(0, 'La quantité ne peut pas être négative')
-    .integer('La quantité doit être un entier')
-    .required('La quantité est obligatoire'),
-})
 
 export default function ProductForm() {
   const { id } = useParams()
   const isEdit = Boolean(id)
   const navigate = useNavigate()
 
+  const [form, setForm] = useState({ nom: '', categorie: '', prix: '', quantiteStock: '' })
+  const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(isEdit)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) })
-
   useEffect(() => {
     if (!isEdit) return
     getProduit(id)
-      .then((product) =>
-        reset({
+      .then((product) => {
+        setForm({
           nom: product.nom,
           categorie: product.categorie,
           prix: product.prix,
           quantiteStock: product.quantiteStock,
         })
-      )
+      })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false))
-  }, [id, isEdit, reset])
+  }, [id, isEdit])
 
-  const onSubmit = async (values) => {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  const validate = () => {
+    const newErrors = {}
+    if (!form.nom.trim()) newErrors.nom = 'Le nom est obligatoire'
+    if (!form.categorie.trim()) newErrors.categorie = 'La catégorie est obligatoire'
+    if (form.prix === '' || isNaN(Number(form.prix))) {
+      newErrors.prix = 'Le prix doit être un nombre'
+    } else if (Number(form.prix) < 0) {
+      newErrors.prix = 'Le prix ne peut pas être négatif'
+    }
+    if (form.quantiteStock === '' || isNaN(Number(form.quantiteStock))) {
+      newErrors.quantiteStock = 'La quantité doit être un nombre'
+    } else if (!Number.isInteger(Number(form.quantiteStock))) {
+      newErrors.quantiteStock = 'La quantité doit être un entier'
+    } else if (Number(form.quantiteStock) < 0) {
+      newErrors.quantiteStock = 'La quantité ne peut pas être négative'
+    }
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    if (!validate()) return
     setSubmitting(true)
     setError(null)
+    const payload = {
+      nom: form.nom,
+      categorie: form.categorie,
+      prix: Number(form.prix),
+      quantiteStock: Number(form.quantiteStock),
+    }
     try {
       if (isEdit) {
-        const updated = await updateProduit(id, values)
+        const updated = await updateProduit(id, payload)
         navigate(`/products/${updated.id}`, { replace: true })
       } else {
-        const created = await createProduit(values)
+        const created = await createProduit(payload)
         navigate(`/products/${created.id}`, { replace: true })
       }
-    } catch (e) {
-      setError(e.message)
+    } catch (err) {
+      setError(err.message)
     } finally {
       setSubmitting(false)
     }
@@ -92,34 +101,41 @@ export default function ProductForm() {
               {error}
             </Alert>
           )}
-          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <form onSubmit={onSubmit} noValidate>
             <div className="form-fields">
               <TextField
                 label="Nom"
-                {...register('nom')}
+                name="nom"
+                value={form.nom}
+                onChange={handleChange}
                 error={Boolean(errors.nom)}
-                helperText={errors.nom?.message}
+                helperText={errors.nom}
               />
               <TextField
                 label="Catégorie"
-                {...register('categorie')}
+                name="categorie"
+                value={form.categorie}
+                onChange={handleChange}
                 error={Boolean(errors.categorie)}
-                helperText={errors.categorie?.message}
+                helperText={errors.categorie}
               />
               <TextField
                 label="Prix (€)"
                 type="number"
-                inputProps={{ step: '0.01' }}
-                {...register('prix')}
+                name="prix"
+                value={form.prix}
+                onChange={handleChange}
                 error={Boolean(errors.prix)}
-                helperText={errors.prix?.message}
+                helperText={errors.prix}
               />
               <TextField
                 label="Quantité en stock"
                 type="number"
-                {...register('quantiteStock')}
+                name="quantiteStock"
+                value={form.quantiteStock}
+                onChange={handleChange}
                 error={Boolean(errors.quantiteStock)}
-                helperText={errors.quantiteStock?.message}
+                helperText={errors.quantiteStock}
               />
               <div className="form-actions">
                 <Button onClick={() => navigate('/products')} color="inherit">
