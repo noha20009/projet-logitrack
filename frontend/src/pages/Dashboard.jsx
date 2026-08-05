@@ -20,7 +20,6 @@ import PendingIcon from '@mui/icons-material/Schedule'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import WarningIcon from '@mui/icons-material/Warning'
-import StarIcon from '@mui/icons-material/Star'
 import { Link } from 'react-router-dom'
 import DashboardCard from '../components/DashboardCard'
 import Loader from '../components/Loader'
@@ -80,40 +79,6 @@ function StatsDashboard() {
             )}
           </Grid>
         ))}
-      </Grid>
-
-      <Grid container spacing={3} className="dashboard-bottom-cards">
-        {stats.mostOrderedProduct && (
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Produit le plus commandé
-                </Typography>
-                <div className="dashboard-section-stack">
-                  <StarIcon color="warning" fontSize="large" />
-                  <Box>
-                    <Typography variant="subtitle1" className="dashboard-product-name">
-                      {stats.mostOrderedProduct.nom}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {stats.mostOrderedProduct.quantiteTotale} unité(s) commandée(s)
-                    </Typography>
-                  </Box>
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
-        )}
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                {stats.totalUsers > 0 ? `Utilisateurs enregistrés : ${stats.totalUsers}` : ''}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
       </Grid>
 
       <RecentOrders orders={stats.recentOrders} />

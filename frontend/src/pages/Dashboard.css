@@ -3,20 +3,6 @@
   height: 100%;
 }
 
-.dashboard-bottom-cards {
-  margin-top: 8px;
-}
-
-.dashboard-section-stack {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.dashboard-product-name {
-  font-weight: 600;
-}
-
 .dashboard-recent-orders {
   margin-top: 24px;
 }
