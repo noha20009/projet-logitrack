@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -46,16 +46,16 @@ export default function Orders() {
   const canWrite = role === 'ADMIN' || role === 'MANAGER'
   const canDelete = role === 'ADMIN'
 
-  const load = useCallback(() => {
+  const load = () => {
     setLoading(true)
     const params = { page, size, sort, ...(statut ? { statut } : {}) }
     const request = clientId.trim() ? getCommandesByClient(clientId.trim(), params) : getCommandes(params)
     request.then(setData).finally(() => setLoading(false))
-  }, [page, size, sort, statut, clientId])
+  }
 
   useEffect(() => {
     load()
-  }, [load])
+  }, [page, size, sort, statut, clientId])
 
   const changeFilter = (fn) => {
     setPage(0)
@@ -101,7 +101,6 @@ export default function Orders() {
               setStatut('')
               setClientId('')
               setPage(0)
-              setTimeout(load, 0)
             }}
           >
             Réinitialiser
