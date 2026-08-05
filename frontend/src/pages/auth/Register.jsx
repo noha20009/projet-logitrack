@@ -1,47 +1,58 @@
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { useState } from 'react'
 import { Alert, Box, Button, Card, CardContent, Link, MenuItem, TextField, Typography } from '@mui/material'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { ROLE_LABELS, ROLES } from '../../utils/constants'
 import './Register.css'
 
-const schema = yup.object({
-  nom: yup.string().required('Le nom est obligatoire'),
-  prenom: yup.string().required('Le prénom est obligatoire'),
-  email: yup.string().email('Email invalide').required('L’email est obligatoire'),
-  password: yup
-    .string()
-    .min(6, 'Au moins 6 caractères')
-    .required('Le mot de passe est obligatoire'),
-  role: yup.string().required('Le rôle est obligatoire'),
-})
-
 export default function Register() {
   const { register: registerUser } = useAuth()
   const navigate = useNavigate()
+
+  const [form, setForm] = useState({
+    nom: '',
+    prenom: '',
+    email: '',
+    password: '',
+    role: ROLES.AGENT,
+  })
+  const [errors, setErrors] = useState({})
   const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: { role: ROLES.AGENT },
-  })
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
 
-  const onSubmit = async (values) => {
+  const validate = () => {
+    const newErrors = {}
+    if (!form.nom.trim()) newErrors.nom = 'Le nom est obligatoire'
+    if (!form.prenom.trim()) newErrors.prenom = 'Le prénom est obligatoire'
+    if (!form.email.trim()) {
+      newErrors.email = 'L’email est obligatoire'
+    } else if (!form.email.includes('@')) {
+      newErrors.email = 'Email invalide'
+    }
+    if (!form.password) {
+      newErrors.password = 'Le mot de passe est obligatoire'
+    } else if (form.password.length < 6) {
+      newErrors.password = 'Au moins 6 caractères'
+    }
+    if (!form.role) newErrors.role = 'Le rôle est obligatoire'
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    if (!validate()) return
     setError(null)
     setSubmitting(true)
     try {
-      await registerUser(values)
+      await registerUser(form)
       navigate('/dashboard', { replace: true })
-    } catch (e) {
-      setError(e.message)
+    } catch (err) {
+      setError(err.message)
     } finally {
       setSubmitting(false)
     }
@@ -64,42 +75,52 @@ export default function Register() {
             </Alert>
           )}
 
-          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <form onSubmit={onSubmit} noValidate>
             <div className="register-fields">
               <div className="register-name-row">
                 <TextField
                   label="Prénom"
-                  {...register('prenom')}
+                  name="prenom"
+                  value={form.prenom}
+                  onChange={handleChange}
                   error={Boolean(errors.prenom)}
-                  helperText={errors.prenom?.message}
+                  helperText={errors.prenom}
                 />
                 <TextField
                   label="Nom"
-                  {...register('nom')}
+                  name="nom"
+                  value={form.nom}
+                  onChange={handleChange}
                   error={Boolean(errors.nom)}
-                  helperText={errors.nom?.message}
+                  helperText={errors.nom}
                 />
               </div>
               <TextField
                 label="Email"
                 type="email"
-                {...register('email')}
+                name="email"
+                value={form.email}
+                onChange={handleChange}
                 error={Boolean(errors.email)}
-                helperText={errors.email?.message}
+                helperText={errors.email}
               />
               <TextField
                 label="Mot de passe"
                 type="password"
-                {...register('password')}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
                 error={Boolean(errors.password)}
-                helperText={errors.password?.message}
+                helperText={errors.password}
               />
               <TextField
                 select
                 label="Rôle"
-                {...register('role')}
+                name="role"
+                value={form.role}
+                onChange={handleChange}
                 error={Boolean(errors.role)}
-                helperText={errors.role?.message}
+                helperText={errors.role}
               >
                 {Object.keys(ROLES).map((role) => (
                   <MenuItem key={role} value={role}>
