@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import { clearSession, getStoredUser, getToken, setSession } from '../api/axios'
 import * as authApi from '../api/authApi'
 
@@ -44,22 +44,21 @@ export function AuthProvider({ children }) {
     setToken(null)
   }
 
-  const value = useMemo(() => {
-    const hasRole = (...roles) => user && roles.includes(user.role)
-    return {
-      user,
-      token,
-      isAuthenticated,
-      role: user?.role || null,
-      hasRole,
-      login,
-      register,
-      logout,
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, token, isAuthenticated])
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        isAuthenticated,
+        role: user?.role || null,
+        login,
+        register,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  )
 }
 
 export function useAuth() {
