@@ -23,23 +23,12 @@ import {
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import { createUser, deleteUser, getUsers, updateUserRole } from '../../api/userApi'
 import Loader from '../../components/Loader'
 import ConfirmDialog from '../../components/ConfirmDialog'
 import { ROLE_LABELS, ROLES } from '../../utils/constants'
 import { useAuth } from '../../context/AuthContext'
 import './Users.css'
-
-const schema = yup.object({
-  nom: yup.string().required('Le nom est obligatoire'),
-  prenom: yup.string().required('Le prénom est obligatoire'),
-  email: yup.string().email('Email invalide').required('L’email est obligatoire'),
-  password: yup.string().min(6, 'Au moins 6 caractères').required('Le mot de passe est obligatoire'),
-  role: yup.string().required('Le rôle est obligatoire'),
-})
 
 export default function Users() {
   const { user: me } = useAuth()
@@ -49,12 +38,8 @@ export default function Users() {
   const [toDelete, setToDelete] = useState(null)
   const [deleting, setDeleting] = useState(false)
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(schema), defaultValues: { role: ROLES.AGENT } })
+  const [form, setForm] = useState({ nom: '', prenom: '', email: '', password: '', role: ROLES.AGENT })
+  const [errors, setErrors] = useState({})
 
   const load = () => {
     setLoading(true)
@@ -68,14 +53,40 @@ export default function Users() {
     load()
   }, [])
 
-  const onSubmit = async (values) => {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  const validate = () => {
+    const newErrors = {}
+    if (!form.nom.trim()) newErrors.nom = 'Le nom est obligatoire'
+    if (!form.prenom.trim()) newErrors.prenom = 'Le prénom est obligatoire'
+    if (!form.email.trim()) {
+      newErrors.email = 'L’email est obligatoire'
+    } else if (!form.email.includes('@')) {
+      newErrors.email = 'Email invalide'
+    }
+    if (!form.password) {
+      newErrors.password = 'Le mot de passe est obligatoire'
+    } else if (form.password.length < 6) {
+      newErrors.password = 'Au moins 6 caractères'
+    }
+    if (!form.role) newErrors.role = 'Le rôle est obligatoire'
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    if (!validate()) return
     setError(null)
     try {
-      await createUser(values)
-      reset({ nom: '', prenom: '', email: '', password: '', role: ROLES.AGENT })
+      await createUser(form)
+      setForm({ nom: '', prenom: '', email: '', password: '', role: ROLES.AGENT })
+      setErrors({})
       load()
-    } catch (e) {
-      setError(e.message)
+    } catch (err) {
+      setError(err.message)
     }
   }
 
@@ -120,15 +131,53 @@ export default function Users() {
               <Typography variant="h6" gutterBottom>
                 Ajouter un utilisateur
               </Typography>
-              <form onSubmit={handleSubmit(onSubmit)} noValidate>
+              <form onSubmit={onSubmit} noValidate>
                 <div className="users-form-fields">
                   <div className="users-name-row">
-                    <TextField label="Prénom" {...register('prenom')} error={Boolean(errors.prenom)} helperText={errors.prenom?.message} />
-                    <TextField label="Nom" {...register('nom')} error={Boolean(errors.nom)} helperText={errors.nom?.message} />
+                    <TextField
+                      label="Prénom"
+                      name="prenom"
+                      value={form.prenom}
+                      onChange={handleChange}
+                      error={Boolean(errors.prenom)}
+                      helperText={errors.prenom}
+                    />
+                    <TextField
+                      label="Nom"
+                      name="nom"
+                      value={form.nom}
+                      onChange={handleChange}
+                      error={Boolean(errors.nom)}
+                      helperText={errors.nom}
+                    />
                   </div>
-                  <TextField label="Email" type="email" {...register('email')} error={Boolean(errors.email)} helperText={errors.email?.message} />
-                  <TextField label="Mot de passe" type="password" {...register('password')} error={Boolean(errors.password)} helperText={errors.password?.message} />
-                  <TextField select label="Rôle" {...register('role')} error={Boolean(errors.role)} helperText={errors.role?.message}>
+                  <TextField
+                    label="Email"
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    error={Boolean(errors.email)}
+                    helperText={errors.email}
+                  />
+                  <TextField
+                    label="Mot de passe"
+                    type="password"
+                    name="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    error={Boolean(errors.password)}
+                    helperText={errors.password}
+                  />
+                  <TextField
+                    select
+                    label="Rôle"
+                    name="role"
+                    value={form.role}
+                    onChange={handleChange}
+                    error={Boolean(errors.role)}
+                    helperText={errors.role}
+                  >
                     {Object.keys(ROLES).map((r) => (
                       <MenuItem key={r} value={r}>
                         {ROLE_LABELS[r]}
