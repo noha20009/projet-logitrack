@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -58,7 +58,7 @@ export default function Products() {
   const canDelete = role === 'ADMIN'
   const canSeeLowStock = role === 'ADMIN' || role === 'MANAGER'
 
-  const load = useCallback(() => {
+  const load = () => {
     setLoading(true)
     const params = { page, size, sort }
     let request
@@ -67,11 +67,11 @@ export default function Products() {
     else if (price !== '') request = getByPrix(price, params)
     else request = getProduits(params)
     request.then(setData).finally(() => setLoading(false))
-  }, [page, size, sort, category, price, lowStock])
+  }
 
   useEffect(() => {
     load()
-  }, [load])
+  }, [page, size, sort, category, price, lowStock])
 
   const resetFilters = () => {
     setCategory('')
@@ -136,7 +136,7 @@ export default function Products() {
               </ToggleButton>
             </ToggleButtonGroup>
           )}
-          <Button variant="outlined" onClick={() => { resetFilters(); setTimeout(load, 0) }}>
+          <Button variant="outlined" onClick={resetFilters}>
             Réinitialiser
           </Button>
         </div>
