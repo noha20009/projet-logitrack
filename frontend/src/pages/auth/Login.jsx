@@ -1,39 +1,48 @@
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { useState } from 'react'
 import { Alert, Box, Button, Card, CardContent, Link, TextField, Typography } from '@mui/material'
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import './Login.css'
-
-const schema = yup.object({
-  email: yup.string().email('Email invalide').required('L’email est obligatoire'),
-  password: yup.string().required('Le mot de passe est obligatoire'),
-})
 
 export default function Login() {
   const { login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+
+  const [form, setForm] = useState({ email: '', password: '' })
+  const [errors, setErrors] = useState({})
   const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) })
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
 
-  const onSubmit = async (values) => {
+  const validate = () => {
+    const newErrors = {}
+    if (!form.email.trim()) {
+      newErrors.email = "L'email est obligatoire"
+    } else if (!form.email.includes('@')) {
+      newErrors.email = 'Email invalide'
+    }
+    if (!form.password) {
+      newErrors.password = 'Le mot de passe est obligatoire'
+    }
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    if (!validate()) return
     setError(null)
     setSubmitting(true)
     try {
-      await login(values)
+      await login(form)
       const from = location.state?.from?.pathname || '/dashboard'
       navigate(from, { replace: true })
-    } catch (e) {
-      setError(e.message)
+    } catch (err) {
+      setError(err.message)
     } finally {
       setSubmitting(false)
     }
@@ -56,21 +65,25 @@ export default function Login() {
             </Alert>
           )}
 
-          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <form onSubmit={onSubmit} noValidate>
             <div className="login-fields">
               <TextField
                 label="Email"
                 type="email"
-                {...register('email')}
+                name="email"
+                value={form.email}
+                onChange={handleChange}
                 error={Boolean(errors.email)}
-                helperText={errors.email?.message}
+                helperText={errors.email}
               />
               <TextField
                 label="Mot de passe"
                 type="password"
-                {...register('password')}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
                 error={Boolean(errors.password)}
-                helperText={errors.password?.message}
+                helperText={errors.password}
               />
               <Button type="submit" variant="contained" size="large" disabled={submitting}>
                 {submitting ? 'Connexion...' : 'Se connecter'}
