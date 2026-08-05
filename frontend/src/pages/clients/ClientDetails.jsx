@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -45,7 +45,7 @@ export default function ClientDetails() {
   const canWrite = role === 'ADMIN' || role === 'MANAGER'
   const canDelete = role === 'ADMIN'
 
-  const load = useCallback(() => {
+  const load = () => {
     setLoading(true)
     Promise.all([getClient(id), getCommandesByClient(id, { page: 0, size: 50 })])
       .then(([clientData, ordersData]) => {
@@ -53,11 +53,11 @@ export default function ClientDetails() {
         setOrders(ordersData)
       })
       .finally(() => setLoading(false))
-  }, [id])
+  }
 
   useEffect(() => {
     load()
-  }, [load])
+  }, [])
 
   const confirmDelete = async () => {
     setDeleting(true)
