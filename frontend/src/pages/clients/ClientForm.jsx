@@ -1,65 +1,69 @@
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { useState } from 'react'
 import { Alert, Box, Button, Card, CardContent, TextField, Typography } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { createClient, getClient, updateClient } from '../../api/clientApi'
 import Loader from '../../components/Loader'
 import './ClientForm.css'
-
-const schema = yup.object({
-  nom: yup.string().required('Le nom est obligatoire'),
-  email: yup.string().email('Email invalide').required('L’email est obligatoire'),
-  telephone: yup.string().nullable(),
-  ville: yup.string().nullable(),
-})
 
 export default function ClientForm() {
   const { id } = useParams()
   const isEdit = Boolean(id)
   const navigate = useNavigate()
 
+  const [form, setForm] = useState({ nom: '', email: '', telephone: '', ville: '' })
+  const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(isEdit)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) })
-
   useEffect(() => {
     if (!isEdit) return
     getClient(id)
-      .then((client) =>
-        reset({
+      .then((client) => {
+        setForm({
           nom: client.nom,
           email: client.email,
           telephone: client.telephone || '',
           ville: client.ville || '',
         })
-      )
+      })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false))
-  }, [id, isEdit, reset])
+  }, [id, isEdit])
 
-  const onSubmit = async (values) => {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  const validate = () => {
+    const newErrors = {}
+    if (!form.nom.trim()) newErrors.nom = 'Le nom est obligatoire'
+    if (!form.email.trim()) {
+      newErrors.email = 'L’email est obligatoire'
+    } else if (!form.email.includes('@')) {
+      newErrors.email = 'Email invalide'
+    }
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    if (!validate()) return
     setSubmitting(true)
     setError(null)
     try {
       if (isEdit) {
-        const updated = await updateClient(id, values)
+        const updated = await updateClient(id, form)
         navigate(`/clients/${updated.id}`, { replace: true })
       } else {
-        const created = await createClient(values)
+        const created = await createClient(form)
         navigate(`/clients/${created.id}`, { replace: true })
       }
-    } catch (e) {
-      setError(e.message)
+    } catch (err) {
+      setError(err.message)
     } finally {
       setSubmitting(false)
     }
@@ -83,32 +87,40 @@ export default function ClientForm() {
               {error}
             </Alert>
           )}
-          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <form onSubmit={onSubmit} noValidate>
             <div className="form-fields">
               <TextField
                 label="Nom"
-                {...register('nom')}
+                name="nom"
+                value={form.nom}
+                onChange={handleChange}
                 error={Boolean(errors.nom)}
-                helperText={errors.nom?.message}
+                helperText={errors.nom}
               />
               <TextField
                 label="Email"
                 type="email"
-                {...register('email')}
+                name="email"
+                value={form.email}
+                onChange={handleChange}
                 error={Boolean(errors.email)}
-                helperText={errors.email?.message}
+                helperText={errors.email}
               />
               <TextField
                 label="Téléphone"
-                {...register('telephone')}
+                name="telephone"
+                value={form.telephone}
+                onChange={handleChange}
                 error={Boolean(errors.telephone)}
-                helperText={errors.telephone?.message}
+                helperText={errors.telephone}
               />
               <TextField
                 label="Ville"
-                {...register('ville')}
+                name="ville"
+                value={form.ville}
+                onChange={handleChange}
                 error={Boolean(errors.ville)}
-                helperText={errors.ville?.message}
+                helperText={errors.ville}
               />
               <div className="form-actions">
                 <Button onClick={() => navigate('/clients')} color="inherit">
