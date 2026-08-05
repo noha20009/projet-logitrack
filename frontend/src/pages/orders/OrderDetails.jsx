@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Alert,
   Box,
@@ -54,7 +54,7 @@ export default function OrderDetails() {
   const canWrite = role === 'ADMIN' || role === 'MANAGER'
   const canDelete = role === 'ADMIN'
 
-  const load = useCallback(() => {
+  const load = () => {
     setLoading(true)
     getCommande(id)
       .then((data) => {
@@ -63,14 +63,14 @@ export default function OrderDetails() {
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false))
-  }, [id])
+  }
 
   useEffect(() => {
     load()
     if (canWrite) {
       getProduits({ page: 0, size: 100 }).then((data) => setProducts(data.content))
     }
-  }, [load, canWrite])
+  }, [])
 
   const handleStatusChange = async (newStatus) => {
     setUpdatingStatus(true)
