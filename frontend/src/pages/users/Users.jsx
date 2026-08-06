@@ -1,28 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Chip,
-  FormControl,
-  Grid,
-  IconButton,
-  MenuItem,
-  Select,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@mui/material'
-import DeleteIcon from '@mui/icons-material/Delete'
-import PersonAddIcon from '@mui/icons-material/PersonAdd'
+import { DeleteIcon, PersonAddIcon, CloseIcon } from '../../components/Icons'
 import { createUser, deleteUser, getUsers, updateUserRole } from '../../api/userApi'
 import Loader from '../../components/Loader'
 import ConfirmDialog from '../../components/ConfirmDialog'
@@ -112,152 +89,133 @@ export default function Users() {
 
   if (loading) return <Loader />
 
+  const fieldClass = (name) => `field${errors[name] ? ' field--error' : ''}`
+
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
-        Gestion des utilisateurs
-      </Typography>
+    <div>
+      <h1 className="page-title">Gestion des utilisateurs</h1>
 
       {error && (
-        <Alert severity="error" className="users-error" onClose={() => setError(null)}>
-          {error}
-        </Alert>
+        <div className="alert alert--error users-error">
+          <span>{error}</span>
+          <button type="button" className="alert-close" onClick={() => setError(null)} title="Fermer">
+            <CloseIcon size="sm" />
+          </button>
+        </div>
       )}
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} lg={4}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Ajouter un utilisateur
-              </Typography>
+      <div className="grid">
+        <div className="col-xs-12 col-lg-4">
+          <div className="ui-card">
+            <div className="ui-card--pad">
+              <h2 className="section-title">Ajouter un utilisateur</h2>
               <form onSubmit={onSubmit} noValidate>
                 <div className="users-form-fields">
                   <div className="users-name-row">
-                    <TextField
-                      label="Prénom"
-                      name="prenom"
-                      value={form.prenom}
-                      onChange={handleChange}
-                      error={Boolean(errors.prenom)}
-                      helperText={errors.prenom}
-                    />
-                    <TextField
-                      label="Nom"
-                      name="nom"
-                      value={form.nom}
-                      onChange={handleChange}
-                      error={Boolean(errors.nom)}
-                      helperText={errors.nom}
-                    />
+                    <div className={fieldClass('prenom')}>
+                      <label htmlFor="user-prenom">Prénom</label>
+                      <input id="user-prenom" name="prenom" value={form.prenom} onChange={handleChange} />
+                      {errors.prenom && <span className="field-helper field-helper--error">{errors.prenom}</span>}
+                    </div>
+                    <div className={fieldClass('nom')}>
+                      <label htmlFor="user-nom">Nom</label>
+                      <input id="user-nom" name="nom" value={form.nom} onChange={handleChange} />
+                      {errors.nom && <span className="field-helper field-helper--error">{errors.nom}</span>}
+                    </div>
                   </div>
-                  <TextField
-                    label="Email"
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
-                    error={Boolean(errors.email)}
-                    helperText={errors.email}
-                  />
-                  <TextField
-                    label="Mot de passe"
-                    type="password"
-                    name="password"
-                    value={form.password}
-                    onChange={handleChange}
-                    error={Boolean(errors.password)}
-                    helperText={errors.password}
-                  />
-                  <TextField
-                    select
-                    label="Rôle"
-                    name="role"
-                    value={form.role}
-                    onChange={handleChange}
-                    error={Boolean(errors.role)}
-                    helperText={errors.role}
-                  >
-                    {Object.keys(ROLES).map((r) => (
-                      <MenuItem key={r} value={r}>
-                        {ROLE_LABELS[r]}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                  <Button type="submit" variant="contained" startIcon={<PersonAddIcon />}>
-                    Créer l'utilisateur
-                  </Button>
+                  <div className={fieldClass('email')}>
+                    <label htmlFor="user-email">Email</label>
+                    <input id="user-email" type="email" name="email" value={form.email} onChange={handleChange} />
+                    {errors.email && <span className="field-helper field-helper--error">{errors.email}</span>}
+                  </div>
+                  <div className={fieldClass('password')}>
+                    <label htmlFor="user-password">Mot de passe</label>
+                    <input id="user-password" type="password" name="password" value={form.password} onChange={handleChange} />
+                    {errors.password && <span className="field-helper field-helper--error">{errors.password}</span>}
+                  </div>
+                  <div className={fieldClass('role')}>
+                    <label htmlFor="user-role">Rôle</label>
+                    <select id="user-role" name="role" value={form.role} onChange={handleChange}>
+                      {Object.keys(ROLES).map((r) => (
+                        <option key={r} value={r}>
+                          {ROLE_LABELS[r]}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.role && <span className="field-helper field-helper--error">{errors.role}</span>}
+                  </div>
+                  <button type="submit" className="btn btn--primary">
+                    <PersonAddIcon size="sm" /> Créer l'utilisateur
+                  </button>
                 </div>
               </form>
-            </CardContent>
-          </Card>
-        </Grid>
+            </div>
+          </div>
+        </div>
 
-        <Grid item xs={12} lg={8}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Liste des utilisateurs ({users?.length || 0})
-              </Typography>
-              <TableContainer>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Nom</TableCell>
-                      <TableCell>Email</TableCell>
-                      <TableCell>Rôle</TableCell>
-                      <TableCell align="right">Actions</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
+        <div className="col-xs-12 col-lg-8">
+          <div className="ui-card">
+            <div className="ui-card--pad">
+              <h2 className="section-title">Liste des utilisateurs ({users?.length || 0})</h2>
+              <div className="table-wrap">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>Email</th>
+                      <th>Rôle</th>
+                      <th className="text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
                     {users?.length === 0 && (
-                      <TableRow>
-                        <TableCell colSpan={4} align="center">
+                      <tr>
+                        <td colSpan={4} className="text-center">
                           Aucun utilisateur.
-                        </TableCell>
-                      </TableRow>
+                        </td>
+                      </tr>
                     )}
                     {users?.map((user) => (
-                      <TableRow key={user.id} hover>
-                        <TableCell>
+                      <tr key={user.id}>
+                        <td>
                           {user.prenom} {user.nom}
-                          {user.id === me?.id && <Chip label="Vous" size="small" color="primary" className="users-you-chip" />}
-                        </TableCell>
-                        <TableCell>{user.email}</TableCell>
-                        <TableCell>
-                          <FormControl fullWidth size="small" className="users-role-select">
-                            <Select value={user.role} onChange={(e) => changeRole(user, e.target.value)} disabled={user.id === me?.id}>
-                              {Object.keys(ROLES).map((r) => (
-                                <MenuItem key={r} value={r}>
-                                  {ROLE_LABELS[r]}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </FormControl>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Tooltip title={user.id === me?.id ? 'Impossible de se supprimer soi-même' : 'Supprimer'}>
-                            <span>
-                              <IconButton
-                                size="small"
-                                color="error"
-                                disabled={user.id === me?.id}
-                                onClick={() => setToDelete(user)}
-                              >
-                                <DeleteIcon fontSize="small" />
-                              </IconButton>
-                            </span>
-                          </Tooltip>
-                        </TableCell>
-                      </TableRow>
+                          {user.id === me?.id && <span className="chip chip--primary users-you-chip">Vous</span>}
+                        </td>
+                        <td>{user.email}</td>
+                        <td>
+                          <select
+                            className="users-role-select"
+                            value={user.role}
+                            onChange={(e) => changeRole(user, e.target.value)}
+                            disabled={user.id === me?.id}
+                          >
+                            {Object.keys(ROLES).map((r) => (
+                              <option key={r} value={r}>
+                                {ROLE_LABELS[r]}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
+                        <td className="text-right">
+                          <button
+                            type="button"
+                            className="icon-btn icon-btn--danger"
+                            title={user.id === me?.id ? 'Impossible de se supprimer soi-même' : 'Supprimer'}
+                            disabled={user.id === me?.id}
+                            onClick={() => setToDelete(user)}
+                          >
+                            <DeleteIcon size="sm" />
+                          </button>
+                        </td>
+                      </tr>
                     ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <ConfirmDialog
         open={Boolean(toDelete)}
@@ -267,6 +225,6 @@ export default function Users() {
         onClose={() => setToDelete(null)}
         loading={deleting}
       />
-    </Box>
+    </div>
   )
 }
