@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Alert, Box, Button, Card, CardContent, Link, MenuItem, TextField, Typography } from '@mui/material'
-import { Link as RouterLink, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { ROLE_LABELS, ROLES } from '../../utils/constants'
 import './Register.css'
@@ -58,90 +57,66 @@ export default function Register() {
     }
   }
 
-  return (
-    <Box className="register-bg">
-      <Card className="register-card">
-        <CardContent className="register-card-content">
-          <Typography variant="h4" align="center" gutterBottom>
-            LogiTrack
-          </Typography>
-          <Typography variant="body2" className="register-subtitle">
-            Créez votre compte
-          </Typography>
+  const fieldClass = (name) => `field${errors[name] ? ' field--error' : ''}`
 
-          {error && (
-            <Alert severity="error" className="register-error">
-              {error}
-            </Alert>
-          )}
+  return (
+    <div className="register-bg">
+      <div className="ui-card register-card">
+        <div className="register-card-content">
+          <h1 className="page-title register-title">LogiTrack</h1>
+          <p className="subtitle register-subtitle">Créez votre compte</p>
+
+          {error && <div className="alert alert--error register-error">{error}</div>}
 
           <form onSubmit={onSubmit} noValidate>
             <div className="register-fields">
               <div className="register-name-row">
-                <TextField
-                  label="Prénom"
-                  name="prenom"
-                  value={form.prenom}
-                  onChange={handleChange}
-                  error={Boolean(errors.prenom)}
-                  helperText={errors.prenom}
-                />
-                <TextField
-                  label="Nom"
-                  name="nom"
-                  value={form.nom}
-                  onChange={handleChange}
-                  error={Boolean(errors.nom)}
-                  helperText={errors.nom}
-                />
+                <div className={fieldClass('prenom')}>
+                  <label htmlFor="register-prenom">Prénom</label>
+                  <input id="register-prenom" name="prenom" value={form.prenom} onChange={handleChange} />
+                  {errors.prenom && <span className="field-helper field-helper--error">{errors.prenom}</span>}
+                </div>
+                <div className={fieldClass('nom')}>
+                  <label htmlFor="register-nom">Nom</label>
+                  <input id="register-nom" name="nom" value={form.nom} onChange={handleChange} />
+                  {errors.nom && <span className="field-helper field-helper--error">{errors.nom}</span>}
+                </div>
               </div>
-              <TextField
-                label="Email"
-                type="email"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                error={Boolean(errors.email)}
-                helperText={errors.email}
-              />
-              <TextField
-                label="Mot de passe"
-                type="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                error={Boolean(errors.password)}
-                helperText={errors.password}
-              />
-              <TextField
-                select
-                label="Rôle"
-                name="role"
-                value={form.role}
-                onChange={handleChange}
-                error={Boolean(errors.role)}
-                helperText={errors.role}
-              >
-                {Object.keys(ROLES).map((role) => (
-                  <MenuItem key={role} value={role}>
-                    {ROLE_LABELS[role]}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <Button type="submit" variant="contained" size="large" disabled={submitting}>
+              <div className={fieldClass('email')}>
+                <label htmlFor="register-email">Email</label>
+                <input id="register-email" type="email" name="email" value={form.email} onChange={handleChange} />
+                {errors.email && <span className="field-helper field-helper--error">{errors.email}</span>}
+              </div>
+              <div className={fieldClass('password')}>
+                <label htmlFor="register-password">Mot de passe</label>
+                <input id="register-password" type="password" name="password" value={form.password} onChange={handleChange} />
+                {errors.password && <span className="field-helper field-helper--error">{errors.password}</span>}
+              </div>
+              <div className={fieldClass('role')}>
+                <label htmlFor="register-role">Rôle</label>
+                <select id="register-role" name="role" value={form.role} onChange={handleChange}>
+                  {Object.keys(ROLES).map((role) => (
+                    <option key={role} value={role}>
+                      {ROLE_LABELS[role]}
+                    </option>
+                  ))}
+                </select>
+                {errors.role && <span className="field-helper field-helper--error">{errors.role}</span>}
+              </div>
+              <button type="submit" className="btn btn--primary btn--lg" disabled={submitting}>
                 {submitting ? 'Création...' : 'Créer le compte'}
-              </Button>
+              </button>
             </div>
           </form>
 
-          <Typography variant="body2" className="register-links">
+          <p className="register-links">
             Déjà un compte ?{' '}
-            <Link component={RouterLink} to="/login">
+            <Link to="/login" className="auth-link">
               Se connecter
             </Link>
-          </Typography>
-        </CardContent>
-      </Card>
-    </Box>
+          </p>
+        </div>
+      </div>
+    </div>
   )
 }
