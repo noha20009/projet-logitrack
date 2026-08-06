@@ -1,28 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  Box,
-  Button,
-  Card,
-  Chip,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  TextField,
-  Tooltip,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from '@mui/material'
-import AddIcon from '@mui/icons-material/Add'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import WarningIcon from '@mui/icons-material/Warning'
+import { AddIcon, EditIcon, DeleteIcon, VisibilityIcon, WarningIcon } from '../../components/Icons'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   deleteProduit,
@@ -98,17 +75,17 @@ export default function Products() {
   }
 
   return (
-    <Box>
+    <div>
       <div className="products-header">
-        <Typography variant="h4">Produits</Typography>
+        <h1 className="page-title">Produits</h1>
         {canWrite && (
-          <Button component={Link} to="/products/new" variant="contained" startIcon={<AddIcon />}>
-            Ajouter un produit
-          </Button>
+          <Link to="/products/new" className="btn btn--primary">
+            <AddIcon size="sm" /> Ajouter un produit
+          </Link>
         )}
       </div>
 
-      <Card className="products-card">
+      <div className="ui-card products-card">
         <div className="products-filters">
           <SearchBar
             value={category}
@@ -117,123 +94,114 @@ export default function Products() {
             placeholder="Rechercher par catégorie..."
             label="Catégorie"
           />
-          <TextField
-            label="Prix exact (€)"
-            type="number"
-            value={price}
-            onChange={(e) => changeFilter(() => setPrice(e.target.value))}
-            className="product-price-input"
-          />
+          <div className="field product-price-input">
+            <label htmlFor="product-price">Prix exact (€)</label>
+            <input
+              id="product-price"
+              type="number"
+              value={price}
+              onChange={(e) => changeFilter(() => setPrice(e.target.value))}
+            />
+          </div>
           {canSeeLowStock && (
-            <ToggleButtonGroup
-              value={lowStock ? 'low' : ''}
-              exclusive
-              onChange={(_, v) => changeFilter(() => setLowStock(v === 'low'))}
-              size="small"
+            <button
+              type="button"
+              className={`toggle-btn${lowStock ? ' toggle-btn--active' : ''}`}
+              onClick={() => changeFilter(() => setLowStock((v) => !v))}
             >
-              <ToggleButton value="low">
-                <WarningIcon fontSize="small" className="product-toggle-icon" /> Stock faible
-              </ToggleButton>
-            </ToggleButtonGroup>
+              <WarningIcon size="sm" className="product-toggle-icon" /> Stock faible
+            </button>
           )}
-          <Button variant="outlined" onClick={resetFilters}>
+          <button type="button" className="btn btn--outlined" onClick={resetFilters}>
             Réinitialiser
-          </Button>
+          </button>
         </div>
 
         {loading ? (
           <Loader />
         ) : (
           <>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>ID</TableCell>
-                    <TableCell>
-                      <TableSortLabel
-                        active={sort === 'nom'}
-                        direction={sort === 'nom' ? 'asc' : 'desc'}
-                        onClick={() => setSort('nom')}
-                      >
+            <div className="table-wrap">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>
+                      <button type="button" className={`sort-btn${sort === 'nom' ? ' sort-btn--active' : ''}`} onClick={() => setSort('nom')}>
                         Nom
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell>Catégorie</TableCell>
-                    <TableCell>
-                      <TableSortLabel
-                        active={sort === 'prix'}
-                        direction={sort === 'prix' ? 'asc' : 'desc'}
-                        onClick={() => setSort('prix')}
-                      >
+                      </button>
+                    </th>
+                    <th>Catégorie</th>
+                    <th>
+                      <button type="button" className={`sort-btn${sort === 'prix' ? ' sort-btn--active' : ''}`} onClick={() => setSort('prix')}>
                         Prix
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell>
-                      <TableSortLabel
-                        active={sort === 'quantiteStock'}
-                        direction={sort === 'quantiteStock' ? 'asc' : 'desc'}
+                      </button>
+                    </th>
+                    <th>
+                      <button
+                        type="button"
+                        className={`sort-btn${sort === 'quantiteStock' ? ' sort-btn--active' : ''}`}
                         onClick={() => setSort('quantiteStock')}
                       >
                         Stock
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell align="right">Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
+                      </button>
+                    </th>
+                    <th className="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
                   {data?.content?.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={6} align="center">
+                    <tr>
+                      <td colSpan={6} className="text-center">
                         Aucun produit trouvé.
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   )}
                   {data?.content?.map((product) => (
-                    <TableRow key={product.id} hover>
-                      <TableCell>{product.id}</TableCell>
-                      <TableCell>
-                        <Link to={`/products/${product.id}`} className="product-table-link">
+                    <tr key={product.id}>
+                      <td>{product.id}</td>
+                      <td>
+                        <Link to={`/products/${product.id}`} className="table-link">
                           {product.nom}
                         </Link>
-                      </TableCell>
-                      <TableCell>
-                        <Chip label={product.categorie} size="small" />
-                      </TableCell>
-                      <TableCell>{formatPrice(product.prix)}</TableCell>
-                      <TableCell>
-                        <Chip
-                          label={product.quantiteStock}
-                          size="small"
-                          color={product.quantiteStock <= 5 ? 'error' : 'default'}
-                        />
-                      </TableCell>
-                      <TableCell align="right">
-                        <Tooltip title="Voir">
-                          <IconButton size="small" onClick={() => navigate(`/products/${product.id}`)}>
-                            <VisibilityIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
+                      </td>
+                      <td>
+                        <span className="chip">{product.categorie}</span>
+                      </td>
+                      <td>{formatPrice(product.prix)}</td>
+                      <td>
+                        <span className={`chip${product.quantiteStock <= 5 ? ' chip--error' : ''}`}>{product.quantiteStock}</span>
+                      </td>
+                      <td className="text-right">
+                        <button type="button" className="icon-btn" title="Voir" onClick={() => navigate(`/products/${product.id}`)}>
+                          <VisibilityIcon size="sm" />
+                        </button>
                         {canWrite && (
-                          <Tooltip title="Modifier">
-                            <IconButton size="small" onClick={() => navigate(`/products/${product.id}/edit`)}>
-                              <EditIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
+                          <button
+                            type="button"
+                            className="icon-btn"
+                            title="Modifier"
+                            onClick={() => navigate(`/products/${product.id}/edit`)}
+                          >
+                            <EditIcon size="sm" />
+                          </button>
                         )}
                         {canDelete && (
-                          <Tooltip title="Supprimer">
-                            <IconButton size="small" color="error" onClick={() => setToDelete(product)}>
-                              <DeleteIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
+                          <button
+                            type="button"
+                            className="icon-btn icon-btn--danger"
+                            title="Supprimer"
+                            onClick={() => setToDelete(product)}
+                          >
+                            <DeleteIcon size="sm" />
+                          </button>
                         )}
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                </tbody>
+              </table>
+            </div>
 
             {data && (
               <Pagination
@@ -242,12 +210,15 @@ export default function Products() {
                 totalElements={data.totalElements}
                 totalPages={data.totalPages}
                 onPageChange={setPage}
-                onSizeChange={(s) => { setSize(s); setPage(0) }}
+                onSizeChange={(s) => {
+                  setSize(s)
+                  setPage(0)
+                }}
               />
             )}
           </>
         )}
-      </Card>
+      </div>
 
       <ConfirmDialog
         open={Boolean(toDelete)}
@@ -257,6 +228,6 @@ export default function Products() {
         onClose={() => setToDelete(null)}
         loading={deleting}
       />
-    </Box>
+    </div>
   )
 }

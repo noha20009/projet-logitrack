@@ -1,18 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Chip,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-} from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
+import { ArrowBackIcon, EditIcon, DeleteIcon } from '../../components/Icons'
 import { useNavigate, useParams } from 'react-router-dom'
 import { deleteProduit, getProduit } from '../../api/produitApi'
 import Loader from '../../components/Loader'
@@ -51,7 +38,7 @@ export default function ProductDetails() {
   }
 
   if (loading) return <Loader />
-  if (!product) return <Typography>Produit introuvable.</Typography>
+  if (!product) return <p>Produit introuvable.</p>
 
   const rows = [
     { label: 'Nom', value: product.nom },
@@ -65,39 +52,42 @@ export default function ProductDetails() {
   ]
 
   return (
-    <Box>
-      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/products')} className="products-back-button">
-        Retour aux produits
-      </Button>
+    <div>
+      <button type="button" className="btn btn--ghost products-back-button" onClick={() => navigate('/products')}>
+        <ArrowBackIcon size="sm" /> Retour aux produits
+      </button>
 
       <div className="product-details-header">
-        <Typography variant="h4">{product.nom}</Typography>
+        <h1 className="page-title">{product.nom}</h1>
         <div className="product-details-actions">
           {canWrite && (
-            <Button variant="contained" startIcon={<EditIcon />} onClick={() => navigate(`/products/${id}/edit`)}>
-              Modifier
-            </Button>
+            <button type="button" className="btn btn--primary" onClick={() => navigate(`/products/${id}/edit`)}>
+              <EditIcon size="sm" /> Modifier
+            </button>
           )}
           {canDelete && (
-            <Button variant="contained" color="error" startIcon={<DeleteIcon />} onClick={() => setToDelete(true)}>
-              Supprimer
-            </Button>
+            <button type="button" className="btn btn--danger" onClick={() => setToDelete(true)}>
+              <DeleteIcon size="sm" /> Supprimer
+            </button>
           )}
         </div>
       </div>
 
-      <Card className="product-details-card">
-        <CardContent>
-          <List dense>
+      <div className="ui-card product-details-card">
+        <div className="ui-card--pad">
+          <ul className="ui-list">
             {rows.map((row) => (
-              <ListItem key={row.label} divider>
-                <ListItemText primary={row.label} secondary={row.value} />
-                {row.chip && <Chip label="Stock faible" color="error" size="small" />}
-              </ListItem>
+              <li key={row.label}>
+                <span className="list-label">{row.label}</span>
+                <span className="list-value">
+                  {row.value}
+                  {row.chip && <span className="chip chip--error">Stock faible</span>}
+                </span>
+              </li>
             ))}
-          </List>
-        </CardContent>
-      </Card>
+          </ul>
+        </div>
+      </div>
 
       <ConfirmDialog
         open={toDelete}
@@ -107,6 +97,6 @@ export default function ProductDetails() {
         onClose={() => setToDelete(false)}
         loading={deleting}
       />
-    </Box>
+    </div>
   )
 }

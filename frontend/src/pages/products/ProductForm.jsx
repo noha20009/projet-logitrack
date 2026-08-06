@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Alert, Box, Button, Card, CardContent, TextField, Typography } from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { ArrowBackIcon } from '../../components/Icons'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { createProduit, getProduit, updateProduit } from '../../api/produitApi'
@@ -85,70 +84,60 @@ export default function ProductForm() {
 
   if (loading) return <Loader />
 
-  return (
-    <Box className="form-page">
-      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/products')} className="form-back-button">
-        Retour aux produits
-      </Button>
-      <Typography variant="h4" gutterBottom>
-        {isEdit ? 'Modifier le produit' : 'Nouveau produit'}
-      </Typography>
+  const fieldClass = (name) => `field${errors[name] ? ' field--error' : ''}`
 
-      <Card>
-        <CardContent className="form-card-content">
-          {error && (
-            <Alert severity="error" className="form-error">
-              {error}
-            </Alert>
-          )}
+  return (
+    <div className="form-page">
+      <button type="button" className="btn btn--ghost form-back-button" onClick={() => navigate('/products')}>
+        <ArrowBackIcon size="sm" /> Retour aux produits
+      </button>
+      <h1 className="page-title">{isEdit ? 'Modifier le produit' : 'Nouveau produit'}</h1>
+
+      <div className="ui-card">
+        <div className="ui-card--pad form-card-content">
+          {error && <div className="alert alert--error form-error">{error}</div>}
           <form onSubmit={onSubmit} noValidate>
             <div className="form-fields">
-              <TextField
-                label="Nom"
-                name="nom"
-                value={form.nom}
-                onChange={handleChange}
-                error={Boolean(errors.nom)}
-                helperText={errors.nom}
-              />
-              <TextField
-                label="Catégorie"
-                name="categorie"
-                value={form.categorie}
-                onChange={handleChange}
-                error={Boolean(errors.categorie)}
-                helperText={errors.categorie}
-              />
-              <TextField
-                label="Prix (€)"
-                type="number"
-                name="prix"
-                value={form.prix}
-                onChange={handleChange}
-                error={Boolean(errors.prix)}
-                helperText={errors.prix}
-              />
-              <TextField
-                label="Quantité en stock"
-                type="number"
-                name="quantiteStock"
-                value={form.quantiteStock}
-                onChange={handleChange}
-                error={Boolean(errors.quantiteStock)}
-                helperText={errors.quantiteStock}
-              />
+              <div className={fieldClass('nom')}>
+                <label htmlFor="product-nom">Nom</label>
+                <input id="product-nom" name="nom" value={form.nom} onChange={handleChange} />
+                {errors.nom && <span className="field-helper field-helper--error">{errors.nom}</span>}
+              </div>
+              <div className={fieldClass('categorie')}>
+                <label htmlFor="product-categorie">Catégorie</label>
+                <input id="product-categorie" name="categorie" value={form.categorie} onChange={handleChange} />
+                {errors.categorie && <span className="field-helper field-helper--error">{errors.categorie}</span>}
+              </div>
+              <div className={fieldClass('prix')}>
+                <label htmlFor="product-prix">Prix (€)</label>
+                <input id="product-prix" type="number" name="prix" value={form.prix} onChange={handleChange} />
+                {errors.prix && <span className="field-helper field-helper--error">{errors.prix}</span>}
+              </div>
+              <div className={fieldClass('quantiteStock')}>
+                <label htmlFor="product-quantite">Quantité en stock</label>
+                <input
+                  id="product-quantite"
+                  type="number"
+                  name="quantiteStock"
+                  value={form.quantiteStock}
+                  onChange={handleChange}
+                />
+                {errors.quantiteStock && (
+                  <span className="field-helper field-helper--error">{errors.quantiteStock}</span>
+                )}
+              </div>
               <div className="form-actions">
-                <Button onClick={() => navigate('/products')} color="inherit">
+                <button type="button" className="btn btn--ghost" onClick={() => navigate('/products')}>
                   Annuler
-                </Button>
-                <Button type="submit" variant="contained" disabled={submitting}>
+                </button>
+                <button type="submit" className="btn btn--primary" disabled={submitting}>
                   {submitting ? 'Enregistrement...' : isEdit ? 'Enregistrer' : 'Créer'}
-                </Button>
+                </button>
               </div>
             </div>
           </form>
-        </CardContent>
-      </Card>
-    </Box>
+        </div>
+      </div>
+    </div>
   )
 }

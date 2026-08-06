@@ -7,6 +7,10 @@
   margin-bottom: 16px;
 }
 
+.products-header .page-title {
+  margin-bottom: 0;
+}
+
 .products-card {
   padding: 16px;
 }
@@ -27,9 +31,31 @@
   margin-right: 4px;
 }
 
-.product-table-link {
+.toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--surface);
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.toggle-btn:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.toggle-btn--active {
+  border-color: var(--primary);
+  background-color: rgba(29, 78, 216, 0.08);
+  color: var(--primary);
   font-weight: 600;
-  color: #1d4ed8;
 }
 
 @media (min-width: 600px) {
