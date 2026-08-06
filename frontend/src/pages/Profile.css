@@ -9,9 +9,15 @@
   margin-bottom: 16px;
 }
 
-.profile-avatar.MuiAvatar-root {
+.profile-avatar {
   width: 64px;
   height: 64px;
   background-color: #1d4ed8;
   font-size: 28px;
+}
+
+.profile-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 4px;
 }

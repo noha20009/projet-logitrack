@@ -9,4 +9,9 @@
 
 .dashboard-order-link {
   color: #1d4ed8;
+  font-weight: 600;
+}
+
+.dashboard-error {
+  color: var(--danger);
 }

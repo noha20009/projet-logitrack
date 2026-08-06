@@ -1,7 +1,12 @@
-import { Avatar, Box, Card, CardContent, Chip, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { useAuth } from '../context/AuthContext'
 import { ROLE_LABELS } from '../utils/constants'
 import './Profile.css'
+
+function roleColor(role) {
+  if (role === 'ADMIN') return 'error'
+  if (role === 'MANAGER') return 'secondary'
+  return 'info'
+}
 
 export default function Profile() {
   const { user } = useAuth()
@@ -15,38 +20,31 @@ export default function Profile() {
   ]
 
   return (
-    <Box className="profile-page">
-      <Typography variant="h4" gutterBottom>
-        Mon profil
-      </Typography>
+    <div className="profile-page">
+      <h1 className="page-title">Mon profil</h1>
 
-      <Card>
-        <CardContent>
-          <div className="profile-header">
-            <Avatar className="profile-avatar">
-              {`${user.prenom?.charAt(0) || ''}${user.nom?.charAt(0) || ''}`}
-            </Avatar>
-            <Box>
-              <Typography variant="h6">
-                {user.prenom} {user.nom}
-              </Typography>
-              <Chip
-                label={ROLE_LABELS[user.role] || user.role}
-                color={user.role === 'ADMIN' ? 'error' : user.role === 'MANAGER' ? 'secondary' : 'info'}
-                size="small"
-              />
-            </Box>
+      <div className="ui-card ui-card--pad">
+        <div className="profile-header">
+          <div className="avatar profile-avatar">
+            {`${user.prenom?.charAt(0) || ''}${user.nom?.charAt(0) || ''}`}
           </div>
+          <div>
+            <h2 className="profile-name">
+              {user.prenom} {user.nom}
+            </h2>
+            <span className={`chip chip--${roleColor(user.role)}`}>{ROLE_LABELS[user.role] || user.role}</span>
+          </div>
+        </div>
 
-          <List dense>
-            {rows.map((row) => (
-              <ListItem key={row.label} divider>
-                <ListItemText primary={row.label} secondary={row.value} />
-              </ListItem>
-            ))}
-          </List>
-        </CardContent>
-      </Card>
-    </Box>
+        <ul className="ui-list">
+          {rows.map((row) => (
+            <li key={row.label}>
+              <span className="list-label">{row.label}</span>
+              <span className="list-value">{row.value}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   )
 }

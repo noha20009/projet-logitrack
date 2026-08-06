@@ -1,25 +1,13 @@
 import { useEffect, useState } from 'react'
 import {
-  Box,
-  Card,
-  CardContent,
-  Chip,
-  Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material'
-import PeopleIcon from '@mui/icons-material/People'
-import InventoryIcon from '@mui/icons-material/Inventory'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import PendingIcon from '@mui/icons-material/Schedule'
-import LocalShippingIcon from '@mui/icons-material/LocalShipping'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import WarningIcon from '@mui/icons-material/Warning'
+  PeopleIcon,
+  InventoryIcon,
+  ShoppingCartIcon,
+  ScheduleIcon,
+  LocalShippingIcon,
+  CheckCircleIcon,
+  WarningIcon,
+} from '../components/Icons'
 import { Link } from 'react-router-dom'
 import DashboardCard from '../components/DashboardCard'
 import Loader from '../components/Loader'
@@ -49,27 +37,25 @@ function StatsDashboard() {
   }, [])
 
   if (loading) return <Loader />
-  if (error || !stats) return <Typography color="error">{error || 'Impossible de charger les statistiques.'}</Typography>
+  if (error || !stats) return <p className="dashboard-error">{error || 'Impossible de charger les statistiques.'}</p>
 
   const cards = [
     { title: 'Clients', value: stats.totalClients, icon: <PeopleIcon />, color: 'primary', to: '/clients' },
     { title: 'Produits', value: stats.totalProduits, icon: <InventoryIcon />, color: 'secondary', to: '/products' },
     { title: 'Commandes', value: stats.totalCommandes, icon: <ShoppingCartIcon />, color: 'primary', to: '/orders' },
-    { title: 'En attente', value: stats.pendingOrders, icon: <PendingIcon />, color: 'warning' },
+    { title: 'En attente', value: stats.pendingOrders, icon: <ScheduleIcon />, color: 'warning' },
     { title: 'Expédiées', value: stats.shippedOrders, icon: <LocalShippingIcon />, color: 'info' },
     { title: 'Livrées', value: stats.deliveredOrders, icon: <CheckCircleIcon />, color: 'success' },
     { title: 'Stock faible', value: stats.lowStockCount, icon: <WarningIcon />, color: 'warning', to: '/products' },
   ]
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
-        Tableau de bord
-      </Typography>
+    <div>
+      <h1 className="page-title">Tableau de bord</h1>
 
-      <Grid container spacing={3}>
+      <div className="grid">
         {cards.map((card) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={card.title}>
+          <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3" key={card.title}>
             {card.to ? (
               <Link to={card.to} className="dashboard-card-link">
                 <DashboardCard {...card} />
@@ -77,12 +63,12 @@ function StatsDashboard() {
             ) : (
               <DashboardCard {...card} />
             )}
-          </Grid>
+          </div>
         ))}
-      </Grid>
+      </div>
 
       <RecentOrders orders={stats.recentOrders} />
-    </Box>
+    </div>
   )
 }
 
@@ -119,25 +105,23 @@ function AgentDashboard() {
   }, [])
 
   if (loading) return <Loader />
-  if (error || !counts) return <Typography color="error">{error || 'Impossible de charger le tableau de bord.'}</Typography>
+  if (error || !counts) return <p className="dashboard-error">{error || 'Impossible de charger le tableau de bord.'}</p>
 
   const cards = [
     { title: 'Clients', value: counts.totalClients, icon: <PeopleIcon />, color: 'primary', to: '/clients' },
     { title: 'Produits', value: counts.totalProduits, icon: <InventoryIcon />, color: 'secondary', to: '/products' },
     { title: 'Commandes', value: counts.totalCommandes, icon: <ShoppingCartIcon />, color: 'primary', to: '/orders' },
-    { title: 'En attente', value: counts.pendingOrders, icon: <PendingIcon />, color: 'warning' },
+    { title: 'En attente', value: counts.pendingOrders, icon: <ScheduleIcon />, color: 'warning' },
     { title: 'Expédiées', value: counts.shippedOrders, icon: <LocalShippingIcon />, color: 'info' },
     { title: 'Livrées', value: counts.deliveredOrders, icon: <CheckCircleIcon />, color: 'success' },
   ]
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
-        Tableau de bord
-      </Typography>
-      <Grid container spacing={3}>
+    <div>
+      <h1 className="page-title">Tableau de bord</h1>
+      <div className="grid">
         {cards.map((card) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={card.title}>
+          <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3" key={card.title}>
             {card.to ? (
               <Link to={card.to} className="dashboard-card-link">
                 <DashboardCard {...card} />
@@ -145,11 +129,11 @@ function AgentDashboard() {
             ) : (
               <DashboardCard {...card} />
             )}
-          </Grid>
+          </div>
         ))}
-      </Grid>
+      </div>
       <RecentOrders orders={recentOrders} />
-    </Box>
+    </div>
   )
 }
 
@@ -157,48 +141,40 @@ function RecentOrders({ orders }) {
   if (!orders || orders.length === 0) return null
 
   return (
-    <Card className="dashboard-recent-orders">
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Commandes récentes
-        </Typography>
-        <TableContainer>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>N°</TableCell>
-                <TableCell>Client</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Statut</TableCell>
-                <TableCell>Détails</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {orders.map((order) => (
-                <TableRow key={order.id} hover>
-                  <TableCell>#{order.id}</TableCell>
-                  <TableCell>
-                    {order.client ? `${order.client.nom} (${order.client.ville || '-'})` : '-'}
-                  </TableCell>
-                  <TableCell>{formatDate(order.dateCommande)}</TableCell>
-                  <TableCell>
-                    <Chip
-                      label={STATUT_LABELS[order.statut] || order.statut}
-                      color={STATUT_COLORS[order.statut] || 'default'}
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Link to={`/orders/${order.id}`} className="dashboard-order-link">
-                      Voir
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </CardContent>
-    </Card>
+    <div className="ui-card ui-card--pad dashboard-recent-orders">
+      <h2 className="section-title">Commandes récentes</h2>
+      <div className="table-wrap">
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th>Client</th>
+              <th>Date</th>
+              <th>Statut</th>
+              <th>Détails</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order.id}>
+                <td>#{order.id}</td>
+                <td>{order.client ? `${order.client.nom} (${order.client.ville || '-'})` : '-'}</td>
+                <td>{formatDate(order.dateCommande)}</td>
+                <td>
+                  <span className={`chip chip--${STATUT_COLORS[order.statut] || 'default'}`}>
+                    {STATUT_LABELS[order.statut] || order.statut}
+                  </span>
+                </td>
+                <td>
+                  <Link to={`/orders/${order.id}`} className="dashboard-order-link">
+                    Voir
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   )
 }
