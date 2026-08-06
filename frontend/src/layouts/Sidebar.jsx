@@ -1,4 +1,4 @@
-import { DashboardIcon, PeopleIcon, InventoryIcon, ShoppingCartIcon, AdminPanelSettingsIcon, PersonIcon } from '../components/Icons'
+import { HiViewGrid, HiUsers, HiCube, HiShoppingCart, HiShieldCheck, HiUser } from 'react-icons/hi'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import './Sidebar.css'
@@ -11,12 +11,12 @@ export default function Sidebar({ mobileOpen, onClose }) {
   const location = useLocation()
 
   const items = [
-    { label: 'Tableau de bord', path: '/dashboard', icon: <DashboardIcon /> },
-    { label: 'Clients', path: '/clients', icon: <PeopleIcon /> },
-    { label: 'Produits', path: '/products', icon: <InventoryIcon /> },
-    { label: 'Commandes', path: '/orders', icon: <ShoppingCartIcon /> },
-    ...(role === 'ADMIN' ? [{ label: 'Utilisateurs', path: '/users', icon: <AdminPanelSettingsIcon /> }] : []),
-    { label: 'Mon profil', path: '/profile', icon: <PersonIcon /> },
+    { label: 'Tableau de bord', path: '/dashboard', icon: <HiViewGrid size={20} /> },
+    { label: 'Clients', path: '/clients', icon: <HiUsers size={20} /> },
+    { label: 'Produits', path: '/products', icon: <HiCube size={20} /> },
+    { label: 'Commandes', path: '/orders', icon: <HiShoppingCart size={20} /> },
+    ...(role === 'ADMIN' ? [{ label: 'Utilisateurs', path: '/users', icon: <HiShieldCheck size={20} /> }] : []),
+    { label: 'Mon profil', path: '/profile', icon: <HiUser size={20} /> },
   ]
 
   const content = (

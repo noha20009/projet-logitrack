@@ -1,4 +1,4 @@
-import { SearchIcon } from './Icons'
+import { HiSearch } from 'react-icons/hi'
 import './SearchBar.css'
 
 export default function SearchBar({ value, onChange, onSearch, placeholder = 'Rechercher...', label }) {
@@ -11,7 +11,7 @@ export default function SearchBar({ value, onChange, onSearch, placeholder = 'Re
       {label && <label htmlFor="search-bar-input">{label}</label>}
       <div className="search-bar-input-wrap">
         <span className="search-bar-start-icon">
-          <SearchIcon size="sm" />
+          <HiSearch size={18} />
         </span>
         <input
           id="search-bar-input"
@@ -23,7 +23,7 @@ export default function SearchBar({ value, onChange, onSearch, placeholder = 'Re
         />
         {value && (
           <button type="button" className="search-bar-submit" onClick={onSearch} title="Rechercher">
-            <SearchIcon size="sm" className="search-bar-submit-icon" />
+            <HiSearch size={18} className="search-bar-submit-icon" />
           </button>
         )}
       </div>

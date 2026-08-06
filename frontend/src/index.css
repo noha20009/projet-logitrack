@@ -211,19 +211,6 @@ h6 {
   cursor: not-allowed;
 }
 
-/* ---------- Icônes SVG ---------- */
-.svg-icon {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-}
-
-.svg-icon--sm {
-  width: 18px;
-  height: 18px;
-}
-
 /* ---------- Champs de formulaire ---------- */
 .field {
   display: flex;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowBackIcon, EditIcon, DeleteIcon } from '../../components/Icons'
+import { HiArrowLeft, HiPencil, HiTrash } from 'react-icons/hi'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { deleteClient, getClient } from '../../api/clientApi'
 import { getCommandesByClient } from '../../api/commandeApi'
@@ -60,7 +60,7 @@ export default function ClientDetails() {
   return (
     <div>
       <button type="button" className="btn btn--ghost clients-back-button" onClick={() => navigate('/clients')}>
-        <ArrowBackIcon size="sm" /> Retour aux clients
+        <HiArrowLeft size={18} /> Retour aux clients
       </button>
 
       <div className="client-details-header">
@@ -68,12 +68,12 @@ export default function ClientDetails() {
         <div className="client-details-actions">
           {canWrite && (
             <button type="button" className="btn btn--primary" onClick={() => navigate(`/clients/${id}/edit`)}>
-              <EditIcon size="sm" /> Modifier
+              <HiPencil size={18} /> Modifier
             </button>
           )}
           {canDelete && (
             <button type="button" className="btn btn--danger" onClick={() => setToDelete(true)}>
-              <DeleteIcon size="sm" /> Supprimer
+              <HiTrash size={18} /> Supprimer
             </button>
           )}
         </div>
@@ -129,7 +129,7 @@ export default function ClientDetails() {
                         </td>
                         <td className="text-right">
                           <Link to={`/orders/${order.id}`} className="icon-btn" title="Voir la commande">
-                            <EditIcon size="sm" />
+                            <HiPencil size={18} />
                           </Link>
                         </td>
                       </tr>

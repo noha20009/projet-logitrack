@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AddIcon, EditIcon, DeleteIcon, VisibilityIcon, WarningIcon } from '../../components/Icons'
+import { HiPlus, HiPencil, HiTrash, HiEye, HiExclamationCircle } from 'react-icons/hi'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   deleteProduit,
@@ -80,7 +80,7 @@ export default function Products() {
         <h1 className="page-title">Produits</h1>
         {canWrite && (
           <Link to="/products/new" className="btn btn--primary">
-            <AddIcon size="sm" /> Ajouter un produit
+            <HiPlus size={18} /> Ajouter un produit
           </Link>
         )}
       </div>
@@ -109,7 +109,7 @@ export default function Products() {
               className={`toggle-btn${lowStock ? ' toggle-btn--active' : ''}`}
               onClick={() => changeFilter(() => setLowStock((v) => !v))}
             >
-              <WarningIcon size="sm" className="product-toggle-icon" /> Stock faible
+              <HiExclamationCircle size={18} className="product-toggle-icon" /> Stock faible
             </button>
           )}
           <button type="button" className="btn btn--outlined" onClick={resetFilters}>
@@ -174,7 +174,7 @@ export default function Products() {
                       </td>
                       <td className="text-right">
                         <button type="button" className="icon-btn" title="Voir" onClick={() => navigate(`/products/${product.id}`)}>
-                          <VisibilityIcon size="sm" />
+                          <HiEye size={18} />
                         </button>
                         {canWrite && (
                           <button
@@ -183,7 +183,7 @@ export default function Products() {
                             title="Modifier"
                             onClick={() => navigate(`/products/${product.id}/edit`)}
                           >
-                            <EditIcon size="sm" />
+                            <HiPencil size={18} />
                           </button>
                         )}
                         {canDelete && (
@@ -193,7 +193,7 @@ export default function Products() {
                             title="Supprimer"
                             onClick={() => setToDelete(product)}
                           >
-                            <DeleteIcon size="sm" />
+                            <HiTrash size={18} />
                           </button>
                         )}
                       </td>

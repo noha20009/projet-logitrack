@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AddIcon, EditIcon, DeleteIcon, VisibilityIcon } from '../../components/Icons'
+import { HiPlus, HiPencil, HiTrash, HiEye } from 'react-icons/hi'
 import { Link, useNavigate } from 'react-router-dom'
 import { getClients, searchClients, deleteClient } from '../../api/clientApi'
 import SearchBar from '../../components/SearchBar'
@@ -62,7 +62,7 @@ export default function Clients() {
         <h1 className="page-title">Clients</h1>
         {canWrite && (
           <Link to="/clients/new" className="btn btn--primary">
-            <AddIcon size="sm" /> Ajouter un client
+            <HiPlus size={18} /> Ajouter un client
           </Link>
         )}
       </div>
@@ -129,7 +129,7 @@ export default function Clients() {
                       <td>{client.ville || '-'}</td>
                       <td className="text-right">
                         <button type="button" className="icon-btn" title="Voir" onClick={() => navigate(`/clients/${client.id}`)}>
-                          <VisibilityIcon size="sm" />
+                          <HiEye size={18} />
                         </button>
                         {canWrite && (
                           <button
@@ -138,7 +138,7 @@ export default function Clients() {
                             title="Modifier"
                             onClick={() => navigate(`/clients/${client.id}/edit`)}
                           >
-                            <EditIcon size="sm" />
+                            <HiPencil size={18} />
                           </button>
                         )}
                         {canDelete && (
@@ -148,7 +148,7 @@ export default function Clients() {
                             title="Supprimer"
                             onClick={() => setToDelete(client)}
                           >
-                            <DeleteIcon size="sm" />
+                            <HiTrash size={18} />
                           </button>
                         )}
                       </td>

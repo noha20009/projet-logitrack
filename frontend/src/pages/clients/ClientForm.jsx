@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowBackIcon } from '../../components/Icons'
+import { HiArrowLeft } from 'react-icons/hi'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { createClient, getClient, updateClient } from '../../api/clientApi'
@@ -75,7 +75,7 @@ export default function ClientForm() {
   return (
     <div className="form-page">
       <button type="button" className="btn btn--ghost form-back-button" onClick={() => navigate('/clients')}>
-        <ArrowBackIcon size="sm" /> Retour aux clients
+        <HiArrowLeft size={18} /> Retour aux clients
       </button>
       <h1 className="page-title">{isEdit ? 'Modifier le client' : 'Nouveau client'}</h1>
 

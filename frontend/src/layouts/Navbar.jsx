@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { MenuIcon, LogoutIcon } from '../components/Icons'
+import { HiMenu, HiLogout } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { ROLE_LABELS } from '../utils/constants'
@@ -42,7 +42,7 @@ export default function Navbar({ onMenuClick }) {
     <header className="navbar-appbar">
       <div className="navbar-toolbar">
         <button type="button" className="icon-btn navbar-menu-button" onClick={onMenuClick} title="Menu">
-          <MenuIcon />
+          <HiMenu size={24} />
         </button>
         <div className="navbar-spacer">
           <span className="navbar-brand">LogiTrack</span>
@@ -67,7 +67,7 @@ export default function Navbar({ onMenuClick }) {
                   Mon profil
                 </button>
                 <button type="button" className="navbar-dropdown-item" onClick={handleLogout}>
-                  <LogoutIcon size="sm" className="navbar-logout-icon" /> Déconnexion
+                  <HiLogout size={18} className="navbar-logout-icon" /> Déconnexion
                 </button>
               </div>
             )}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowBackIcon, DeleteIcon, AddIcon } from '../../components/Icons'
+import { HiArrowLeft, HiTrash, HiPlus } from 'react-icons/hi'
 import { useNavigate, useParams } from 'react-router-dom'
 import { addProduitToCommande, deleteCommande, getCommande, updateStatut } from '../../api/commandeApi'
 import { getProduits } from '../../api/produitApi'
@@ -95,14 +95,14 @@ export default function OrderDetails() {
   return (
     <div>
       <button type="button" className="btn btn--ghost orders-back-button" onClick={() => navigate('/orders')}>
-        <ArrowBackIcon size="sm" /> Retour aux commandes
+        <HiArrowLeft size={18} /> Retour aux commandes
       </button>
 
       <div className="order-details-header">
         <h1 className="page-title">Commande #{order.id}</h1>
         {canDelete && (
           <button type="button" className="btn btn--danger" onClick={() => setToDelete(true)}>
-            <DeleteIcon size="sm" /> Supprimer
+            <HiTrash size={18} /> Supprimer
           </button>
         )}
       </div>
@@ -216,7 +216,7 @@ export default function OrderDetails() {
                       />
                     </div>
                     <button type="button" className="btn btn--primary" onClick={handleAddProduct} disabled={adding || !produitId}>
-                      <AddIcon size="sm" /> Ajouter
+                      <HiPlus size={18} /> Ajouter
                     </button>
                   </div>
                 </div>

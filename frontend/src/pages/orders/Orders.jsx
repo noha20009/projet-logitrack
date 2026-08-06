@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AddIcon, DeleteIcon, VisibilityIcon } from '../../components/Icons'
+import { HiPlus, HiTrash, HiEye } from 'react-icons/hi'
 import { Link, useNavigate } from 'react-router-dom'
 import { deleteCommande, getCommandes, getCommandesByClient } from '../../api/commandeApi'
 import StatusFilter from '../../components/StatusFilter'
@@ -61,7 +61,7 @@ export default function Orders() {
         <h1 className="page-title">Commandes</h1>
         {canWrite && (
           <Link to="/orders/new" className="btn btn--primary">
-            <AddIcon size="sm" /> Nouvelle commande
+            <HiPlus size={18} /> Nouvelle commande
           </Link>
         )}
       </div>
@@ -146,7 +146,7 @@ export default function Orders() {
                       </td>
                       <td className="text-right">
                         <button type="button" className="icon-btn" title="Voir" onClick={() => navigate(`/orders/${order.id}`)}>
-                          <VisibilityIcon size="sm" />
+                          <HiEye size={18} />
                         </button>
                         {canDelete && (
                           <button
@@ -155,7 +155,7 @@ export default function Orders() {
                             title="Supprimer"
                             onClick={() => setToDelete(order)}
                           >
-                            <DeleteIcon size="sm" />
+                            <HiTrash size={18} />
                           </button>
                         )}
                       </td>

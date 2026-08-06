@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowBackIcon, ShoppingCartIcon } from '../../components/Icons'
+import { HiArrowLeft, HiShoppingCart } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 import { getClients } from '../../api/clientApi'
 import { createCommande } from '../../api/commandeApi'
@@ -40,7 +40,7 @@ export default function OrderForm() {
   return (
     <div className="form-page">
       <button type="button" className="btn btn--ghost form-back-button" onClick={() => navigate('/orders')}>
-        <ArrowBackIcon size="sm" /> Retour aux commandes
+        <HiArrowLeft size={18} /> Retour aux commandes
       </button>
       <h1 className="page-title">Nouvelle commande</h1>
 
@@ -68,7 +68,7 @@ export default function OrderForm() {
                 Annuler
               </button>
               <button type="button" className="btn btn--primary" onClick={handleCreate} disabled={submitting || !clientId}>
-                <ShoppingCartIcon size="sm" /> {submitting ? 'Création...' : 'Créer la commande'}
+                <HiShoppingCart size={18} /> {submitting ? 'Création...' : 'Créer la commande'}
               </button>
             </div>
           </div>

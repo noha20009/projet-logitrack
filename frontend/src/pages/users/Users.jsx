@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { DeleteIcon, PersonAddIcon, CloseIcon } from '../../components/Icons'
+import { HiTrash, HiUserAdd, HiX } from 'react-icons/hi'
 import { createUser, deleteUser, getUsers, updateUserRole } from '../../api/userApi'
 import Loader from '../../components/Loader'
 import ConfirmDialog from '../../components/ConfirmDialog'
@@ -99,7 +99,7 @@ export default function Users() {
         <div className="alert alert--error users-error">
           <span>{error}</span>
           <button type="button" className="alert-close" onClick={() => setError(null)} title="Fermer">
-            <CloseIcon size="sm" />
+            <HiX size={18} />
           </button>
         </div>
       )}
@@ -145,7 +145,7 @@ export default function Users() {
                     {errors.role && <span className="field-helper field-helper--error">{errors.role}</span>}
                   </div>
                   <button type="submit" className="btn btn--primary">
-                    <PersonAddIcon size="sm" /> Créer l'utilisateur
+                    <HiUserAdd size={18} /> Créer l'utilisateur
                   </button>
                 </div>
               </form>
@@ -204,7 +204,7 @@ export default function Users() {
                             disabled={user.id === me?.id}
                             onClick={() => setToDelete(user)}
                           >
-                            <DeleteIcon size="sm" />
+                            <HiTrash size={18} />
                           </button>
                         </td>
                       </tr>

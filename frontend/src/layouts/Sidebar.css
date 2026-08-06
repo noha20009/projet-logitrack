@@ -95,11 +95,6 @@
   background-color: #1d4ed8;
 }
 
-.sidebar-item .svg-icon {
-  width: 20px;
-  height: 20px;
-}
-
 @media (min-width: 900px) {
   .sidebar-drawer--temporary,
   .sidebar-backdrop {

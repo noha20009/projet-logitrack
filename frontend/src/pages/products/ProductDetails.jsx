@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowBackIcon, EditIcon, DeleteIcon } from '../../components/Icons'
+import { HiArrowLeft, HiPencil, HiTrash } from 'react-icons/hi'
 import { useNavigate, useParams } from 'react-router-dom'
 import { deleteProduit, getProduit } from '../../api/produitApi'
 import Loader from '../../components/Loader'
@@ -54,7 +54,7 @@ export default function ProductDetails() {
   return (
     <div>
       <button type="button" className="btn btn--ghost products-back-button" onClick={() => navigate('/products')}>
-        <ArrowBackIcon size="sm" /> Retour aux produits
+        <HiArrowLeft size={18} /> Retour aux produits
       </button>
 
       <div className="product-details-header">
@@ -62,12 +62,12 @@ export default function ProductDetails() {
         <div className="product-details-actions">
           {canWrite && (
             <button type="button" className="btn btn--primary" onClick={() => navigate(`/products/${id}/edit`)}>
-              <EditIcon size="sm" /> Modifier
+              <HiPencil size={18} /> Modifier
             </button>
           )}
           {canDelete && (
             <button type="button" className="btn btn--danger" onClick={() => setToDelete(true)}>
-              <DeleteIcon size="sm" /> Supprimer
+              <HiTrash size={18} /> Supprimer
             </button>
           )}
         </div>

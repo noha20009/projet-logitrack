@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import {
-  PeopleIcon,
-  InventoryIcon,
-  ShoppingCartIcon,
-  ScheduleIcon,
-  LocalShippingIcon,
-  CheckCircleIcon,
-  WarningIcon,
-} from '../components/Icons'
+  HiUsers,
+  HiCube,
+  HiShoppingCart,
+  HiClock,
+  HiTruck,
+  HiCheckCircle,
+  HiExclamationCircle,
+} from 'react-icons/hi'
 import { Link } from 'react-router-dom'
 import DashboardCard from '../components/DashboardCard'
 import Loader from '../components/Loader'
@@ -40,13 +40,13 @@ function StatsDashboard() {
   if (error || !stats) return <p className="dashboard-error">{error || 'Impossible de charger les statistiques.'}</p>
 
   const cards = [
-    { title: 'Clients', value: stats.totalClients, icon: <PeopleIcon />, color: 'primary', to: '/clients' },
-    { title: 'Produits', value: stats.totalProduits, icon: <InventoryIcon />, color: 'secondary', to: '/products' },
-    { title: 'Commandes', value: stats.totalCommandes, icon: <ShoppingCartIcon />, color: 'primary', to: '/orders' },
-    { title: 'En attente', value: stats.pendingOrders, icon: <ScheduleIcon />, color: 'warning' },
-    { title: 'Expédiées', value: stats.shippedOrders, icon: <LocalShippingIcon />, color: 'info' },
-    { title: 'Livrées', value: stats.deliveredOrders, icon: <CheckCircleIcon />, color: 'success' },
-    { title: 'Stock faible', value: stats.lowStockCount, icon: <WarningIcon />, color: 'warning', to: '/products' },
+    { title: 'Clients', value: stats.totalClients, icon: <HiUsers size={24} />, color: 'primary', to: '/clients' },
+    { title: 'Produits', value: stats.totalProduits, icon: <HiCube size={24} />, color: 'secondary', to: '/products' },
+    { title: 'Commandes', value: stats.totalCommandes, icon: <HiShoppingCart size={24} />, color: 'primary', to: '/orders' },
+    { title: 'En attente', value: stats.pendingOrders, icon: <HiClock size={24} />, color: 'warning' },
+    { title: 'Expédiées', value: stats.shippedOrders, icon: <HiTruck size={24} />, color: 'info' },
+    { title: 'Livrées', value: stats.deliveredOrders, icon: <HiCheckCircle size={24} />, color: 'success' },
+    { title: 'Stock faible', value: stats.lowStockCount, icon: <HiExclamationCircle size={24} />, color: 'warning', to: '/products' },
   ]
 
   return (
@@ -108,12 +108,12 @@ function AgentDashboard() {
   if (error || !counts) return <p className="dashboard-error">{error || 'Impossible de charger le tableau de bord.'}</p>
 
   const cards = [
-    { title: 'Clients', value: counts.totalClients, icon: <PeopleIcon />, color: 'primary', to: '/clients' },
-    { title: 'Produits', value: counts.totalProduits, icon: <InventoryIcon />, color: 'secondary', to: '/products' },
-    { title: 'Commandes', value: counts.totalCommandes, icon: <ShoppingCartIcon />, color: 'primary', to: '/orders' },
-    { title: 'En attente', value: counts.pendingOrders, icon: <ScheduleIcon />, color: 'warning' },
-    { title: 'Expédiées', value: counts.shippedOrders, icon: <LocalShippingIcon />, color: 'info' },
-    { title: 'Livrées', value: counts.deliveredOrders, icon: <CheckCircleIcon />, color: 'success' },
+    { title: 'Clients', value: counts.totalClients, icon: <HiUsers size={24} />, color: 'primary', to: '/clients' },
+    { title: 'Produits', value: counts.totalProduits, icon: <HiCube size={24} />, color: 'secondary', to: '/products' },
+    { title: 'Commandes', value: counts.totalCommandes, icon: <HiShoppingCart size={24} />, color: 'primary', to: '/orders' },
+    { title: 'En attente', value: counts.pendingOrders, icon: <HiClock size={24} />, color: 'warning' },
+    { title: 'Expédiées', value: counts.shippedOrders, icon: <HiTruck size={24} />, color: 'info' },
+    { title: 'Livrées', value: counts.deliveredOrders, icon: <HiCheckCircle size={24} />, color: 'success' },
   ]
 
   return (

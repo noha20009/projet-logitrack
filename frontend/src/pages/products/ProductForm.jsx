@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowBackIcon } from '../../components/Icons'
+import { HiArrowLeft } from 'react-icons/hi'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { createProduit, getProduit, updateProduit } from '../../api/produitApi'
@@ -89,7 +89,7 @@ export default function ProductForm() {
   return (
     <div className="form-page">
       <button type="button" className="btn btn--ghost form-back-button" onClick={() => navigate('/products')}>
-        <ArrowBackIcon size="sm" /> Retour aux produits
+        <HiArrowLeft size={18} /> Retour aux produits
       </button>
       <h1 className="page-title">{isEdit ? 'Modifier le produit' : 'Nouveau produit'}</h1>
 
