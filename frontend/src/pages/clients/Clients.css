@@ -7,6 +7,10 @@
   margin-bottom: 16px;
 }
 
+.clients-header .page-title {
+  margin-bottom: 0;
+}
+
 .clients-card {
   padding: 16px;
 }
@@ -18,13 +22,8 @@
   margin-bottom: 16px;
 }
 
-.clients-table-link {
-  font-weight: 600;
-  color: #1d4ed8;
-}
-
 .clients-info-chip {
-  margin-top: 16px;
+  margin: 16px 0 0;
 }
 
 @media (min-width: 600px) {

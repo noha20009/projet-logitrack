@@ -1,24 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  Box,
-  Button,
-  Card,
-  Chip,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  Tooltip,
-  Typography,
-} from '@mui/material'
-import AddIcon from '@mui/icons-material/Add'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
-import VisibilityIcon from '@mui/icons-material/Visibility'
+import { AddIcon, EditIcon, DeleteIcon, VisibilityIcon } from '../../components/Icons'
 import { Link, useNavigate } from 'react-router-dom'
 import { getClients, searchClients, deleteClient } from '../../api/clientApi'
 import SearchBar from '../../components/SearchBar'
@@ -76,17 +57,17 @@ export default function Clients() {
   }
 
   return (
-    <Box>
+    <div>
       <div className="clients-header">
-        <Typography variant="h4">Clients</Typography>
+        <h1 className="page-title">Clients</h1>
         {canWrite && (
-          <Button component={Link} to="/clients/new" variant="contained" startIcon={<AddIcon />}>
-            Ajouter un client
-          </Button>
+          <Link to="/clients/new" className="btn btn--primary">
+            <AddIcon size="sm" /> Ajouter un client
+          </Link>
         )}
       </div>
 
-      <Card className="clients-card">
+      <div className="ui-card clients-card">
         <div className="clients-filters">
           <SearchBar
             value={search}
@@ -95,76 +76,87 @@ export default function Clients() {
             placeholder="Rechercher par nom..."
             label="Rechercher un client"
           />
-          <Button variant="outlined" onClick={() => { setSearch(''); setPage(0) }}>
+          <button
+            type="button"
+            className="btn btn--outlined"
+            onClick={() => {
+              setSearch('')
+              setPage(0)
+            }}
+          >
             Réinitialiser
-          </Button>
+          </button>
         </div>
 
         {loading ? (
           <Loader />
         ) : (
           <>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>ID</TableCell>
-                    <TableCell sortDirection={sort}>
-                      <TableSortLabel active={sort === 'nom'} direction={sort === 'nom' ? 'asc' : 'desc'} onClick={handleSortChange}>
+            <div className="table-wrap">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>
+                      <button type="button" className={`sort-btn${sort === 'nom' ? ' sort-btn--active' : ''}`} onClick={handleSortChange}>
                         Nom
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Téléphone</TableCell>
-                    <TableCell>Ville</TableCell>
-                    <TableCell align="right">Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
+                      </button>
+                    </th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Ville</th>
+                    <th className="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
                   {data?.content?.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={6} align="center">
+                    <tr>
+                      <td colSpan={6} className="text-center">
                         Aucun client trouvé.
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   )}
                   {data?.content?.map((client) => (
-                    <TableRow key={client.id} hover>
-                      <TableCell>{client.id}</TableCell>
-                      <TableCell>
-                        <Link to={`/clients/${client.id}`} className="clients-table-link">
+                    <tr key={client.id}>
+                      <td>{client.id}</td>
+                      <td>
+                        <Link to={`/clients/${client.id}`} className="table-link">
                           {client.nom}
                         </Link>
-                      </TableCell>
-                      <TableCell>{client.email}</TableCell>
-                      <TableCell>{client.telephone || '-'}</TableCell>
-                      <TableCell>{client.ville || '-'}</TableCell>
-                      <TableCell align="right">
-                        <Tooltip title="Voir">
-                          <IconButton size="small" onClick={() => navigate(`/clients/${client.id}`)}>
-                            <VisibilityIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
+                      </td>
+                      <td>{client.email}</td>
+                      <td>{client.telephone || '-'}</td>
+                      <td>{client.ville || '-'}</td>
+                      <td className="text-right">
+                        <button type="button" className="icon-btn" title="Voir" onClick={() => navigate(`/clients/${client.id}`)}>
+                          <VisibilityIcon size="sm" />
+                        </button>
                         {canWrite && (
-                          <Tooltip title="Modifier">
-                            <IconButton size="small" onClick={() => navigate(`/clients/${client.id}/edit`)}>
-                              <EditIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
+                          <button
+                            type="button"
+                            className="icon-btn"
+                            title="Modifier"
+                            onClick={() => navigate(`/clients/${client.id}/edit`)}
+                          >
+                            <EditIcon size="sm" />
+                          </button>
                         )}
                         {canDelete && (
-                          <Tooltip title="Supprimer">
-                            <IconButton size="small" color="error" onClick={() => setToDelete(client)}>
-                              <DeleteIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
+                          <button
+                            type="button"
+                            className="icon-btn icon-btn--danger"
+                            title="Supprimer"
+                            onClick={() => setToDelete(client)}
+                          >
+                            <DeleteIcon size="sm" />
+                          </button>
                         )}
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                </tbody>
+              </table>
+            </div>
 
             {data && (
               <Pagination
@@ -173,15 +165,20 @@ export default function Clients() {
                 totalElements={data.totalElements}
                 totalPages={data.totalPages}
                 onPageChange={setPage}
-                onSizeChange={(s) => { setSize(s); setPage(0) }}
+                onSizeChange={(s) => {
+                  setSize(s)
+                  setPage(0)
+                }}
               />
             )}
           </>
         )}
-      </Card>
+      </div>
 
       {!canWrite && data?.content?.length > 0 && (
-        <Chip label="Seuls ADMIN et MANAGER peuvent créer ou modifier des clients." className="clients-info-chip" />
+        <p className="clients-info-chip">
+          <span className="chip chip--info">Seuls ADMIN et MANAGER peuvent créer ou modifier des clients.</span>
+        </p>
       )}
 
       <ConfirmDialog
@@ -192,6 +189,6 @@ export default function Clients() {
         onClose={() => setToDelete(null)}
         loading={deleting}
       />
-    </Box>
+    </div>
   )
 }

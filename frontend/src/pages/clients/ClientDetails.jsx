@@ -1,27 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Chip,
-  Grid,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Tooltip,
-  Typography,
-} from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
+import { ArrowBackIcon, EditIcon, DeleteIcon } from '../../components/Icons'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { deleteClient, getClient } from '../../api/clientApi'
 import { getCommandesByClient } from '../../api/commandeApi'
@@ -70,7 +48,7 @@ export default function ClientDetails() {
   }
 
   if (loading) return <Loader />
-  if (!client) return <Typography>Client introuvable.</Typography>
+  if (!client) return <p>Client introuvable.</p>
 
   const rows = [
     { label: 'Nom', value: client.nom },
@@ -80,96 +58,89 @@ export default function ClientDetails() {
   ]
 
   return (
-    <Box>
-      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/clients')} className="clients-back-button">
-        Retour aux clients
-      </Button>
+    <div>
+      <button type="button" className="btn btn--ghost clients-back-button" onClick={() => navigate('/clients')}>
+        <ArrowBackIcon size="sm" /> Retour aux clients
+      </button>
 
       <div className="client-details-header">
-        <Typography variant="h4">{client.nom}</Typography>
+        <h1 className="page-title">{client.nom}</h1>
         <div className="client-details-actions">
           {canWrite && (
-            <Button variant="contained" startIcon={<EditIcon />} onClick={() => navigate(`/clients/${id}/edit`)}>
-              Modifier
-            </Button>
+            <button type="button" className="btn btn--primary" onClick={() => navigate(`/clients/${id}/edit`)}>
+              <EditIcon size="sm" /> Modifier
+            </button>
           )}
           {canDelete && (
-            <Button variant="contained" color="error" startIcon={<DeleteIcon />} onClick={() => setToDelete(true)}>
-              Supprimer
-            </Button>
+            <button type="button" className="btn btn--danger" onClick={() => setToDelete(true)}>
+              <DeleteIcon size="sm" /> Supprimer
+            </button>
           )}
         </div>
       </div>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={5}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Informations
-              </Typography>
-              <List dense>
+      <div className="grid">
+        <div className="col-xs-12 col-md-5">
+          <div className="ui-card">
+            <div className="ui-card--pad">
+              <h2 className="section-title">Informations</h2>
+              <ul className="ui-list">
                 {rows.map((row) => (
-                  <ListItem key={row.label} divider>
-                    <ListItemText primary={row.label} secondary={row.value} />
-                  </ListItem>
+                  <li key={row.label}>
+                    <span className="list-label">{row.label}</span>
+                    <span className="list-value">{row.value}</span>
+                  </li>
                 ))}
-              </List>
-            </CardContent>
-          </Card>
-        </Grid>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-        <Grid item xs={12} md={7}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Commandes du client ({orders?.totalElements || 0})
-              </Typography>
-              <TableContainer>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>N°</TableCell>
-                      <TableCell>Date</TableCell>
-                      <TableCell>Statut</TableCell>
-                      <TableCell align="right">Détails</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
+        <div className="col-xs-12 col-md-7">
+          <div className="ui-card">
+            <div className="ui-card--pad">
+              <h2 className="section-title">Commandes du client ({orders?.totalElements || 0})</h2>
+              <div className="table-wrap">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>N°</th>
+                      <th>Date</th>
+                      <th>Statut</th>
+                      <th className="text-right">Détails</th>
+                    </tr>
+                  </thead>
+                  <tbody>
                     {orders?.content?.length === 0 && (
-                      <TableRow>
-                        <TableCell colSpan={4} align="center">
+                      <tr>
+                        <td colSpan={4} className="text-center">
                           Aucune commande pour ce client.
-                        </TableCell>
-                      </TableRow>
+                        </td>
+                      </tr>
                     )}
                     {orders?.content?.map((order) => (
-                      <TableRow key={order.id} hover>
-                        <TableCell>#{order.id}</TableCell>
-                        <TableCell>{formatDate(order.dateCommande)}</TableCell>
-                        <TableCell>
-                          <Chip
-                            label={STATUT_LABELS[order.statut] || order.statut}
-                            color={STATUT_COLORS[order.statut] || 'default'}
-                            size="small"
-                          />
-                        </TableCell>
-                        <TableCell align="right">
-                          <Tooltip title="Voir la commande">
-                            <IconButton size="small" component={Link} to={`/orders/${order.id}`}>
-                              <EditIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                      </TableRow>
+                      <tr key={order.id}>
+                        <td>#{order.id}</td>
+                        <td>{formatDate(order.dateCommande)}</td>
+                        <td>
+                          <span className={`chip chip--${STATUT_COLORS[order.statut] || 'default'}`}>
+                            {STATUT_LABELS[order.statut] || order.statut}
+                          </span>
+                        </td>
+                        <td className="text-right">
+                          <Link to={`/orders/${order.id}`} className="icon-btn" title="Voir la commande">
+                            <EditIcon size="sm" />
+                          </Link>
+                        </td>
+                      </tr>
                     ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <ConfirmDialog
         open={toDelete}
@@ -179,6 +150,6 @@ export default function ClientDetails() {
         onClose={() => setToDelete(false)}
         loading={deleting}
       />
-    </Box>
+    </div>
   )
 }

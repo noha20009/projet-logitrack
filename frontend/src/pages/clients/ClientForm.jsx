@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Alert, Box, Button, Card, CardContent, TextField, Typography } from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { ArrowBackIcon } from '../../components/Icons'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { createClient, getClient, updateClient } from '../../api/clientApi'
@@ -71,69 +70,52 @@ export default function ClientForm() {
 
   if (loading) return <Loader />
 
-  return (
-    <Box className="form-page">
-      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/clients')} className="form-back-button">
-        Retour aux clients
-      </Button>
-      <Typography variant="h4" gutterBottom>
-        {isEdit ? 'Modifier le client' : 'Nouveau client'}
-      </Typography>
+  const fieldClass = (name) => `field${errors[name] ? ' field--error' : ''}`
 
-      <Card>
-        <CardContent className="form-card-content">
-          {error && (
-            <Alert severity="error" className="form-error">
-              {error}
-            </Alert>
-          )}
+  return (
+    <div className="form-page">
+      <button type="button" className="btn btn--ghost form-back-button" onClick={() => navigate('/clients')}>
+        <ArrowBackIcon size="sm" /> Retour aux clients
+      </button>
+      <h1 className="page-title">{isEdit ? 'Modifier le client' : 'Nouveau client'}</h1>
+
+      <div className="ui-card">
+        <div className="ui-card--pad form-card-content">
+          {error && <div className="alert alert--error form-error">{error}</div>}
           <form onSubmit={onSubmit} noValidate>
             <div className="form-fields">
-              <TextField
-                label="Nom"
-                name="nom"
-                value={form.nom}
-                onChange={handleChange}
-                error={Boolean(errors.nom)}
-                helperText={errors.nom}
-              />
-              <TextField
-                label="Email"
-                type="email"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                error={Boolean(errors.email)}
-                helperText={errors.email}
-              />
-              <TextField
-                label="Téléphone"
-                name="telephone"
-                value={form.telephone}
-                onChange={handleChange}
-                error={Boolean(errors.telephone)}
-                helperText={errors.telephone}
-              />
-              <TextField
-                label="Ville"
-                name="ville"
-                value={form.ville}
-                onChange={handleChange}
-                error={Boolean(errors.ville)}
-                helperText={errors.ville}
-              />
+              <div className={fieldClass('nom')}>
+                <label htmlFor="client-nom">Nom</label>
+                <input id="client-nom" name="nom" value={form.nom} onChange={handleChange} />
+                {errors.nom && <span className="field-helper field-helper--error">{errors.nom}</span>}
+              </div>
+              <div className={fieldClass('email')}>
+                <label htmlFor="client-email">Email</label>
+                <input id="client-email" type="email" name="email" value={form.email} onChange={handleChange} />
+                {errors.email && <span className="field-helper field-helper--error">{errors.email}</span>}
+              </div>
+              <div className={fieldClass('telephone')}>
+                <label htmlFor="client-telephone">Téléphone</label>
+                <input id="client-telephone" name="telephone" value={form.telephone} onChange={handleChange} />
+                {errors.telephone && <span className="field-helper field-helper--error">{errors.telephone}</span>}
+              </div>
+              <div className={fieldClass('ville')}>
+                <label htmlFor="client-ville">Ville</label>
+                <input id="client-ville" name="ville" value={form.ville} onChange={handleChange} />
+                {errors.ville && <span className="field-helper field-helper--error">{errors.ville}</span>}
+              </div>
               <div className="form-actions">
-                <Button onClick={() => navigate('/clients')} color="inherit">
+                <button type="button" className="btn btn--ghost" onClick={() => navigate('/clients')}>
                   Annuler
-                </Button>
-                <Button type="submit" variant="contained" disabled={submitting}>
+                </button>
+                <button type="submit" className="btn btn--primary" disabled={submitting}>
                   {submitting ? 'Enregistrement...' : isEdit ? 'Enregistrer' : 'Créer'}
-                </Button>
+                </button>
               </div>
             </div>
           </form>
-        </CardContent>
-      </Card>
-    </Box>
+        </div>
+      </div>
+    </div>
   )
 }

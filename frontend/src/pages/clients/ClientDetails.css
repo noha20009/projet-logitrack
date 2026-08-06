@@ -1,5 +1,7 @@
 .clients-back-button {
   margin-bottom: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .client-details-header {
@@ -9,6 +11,10 @@
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 16px;
+}
+
+.client-details-header .page-title {
+  margin-bottom: 0;
 }
 
 .client-details-actions {
