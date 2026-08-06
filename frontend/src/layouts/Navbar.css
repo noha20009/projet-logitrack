@@ -1,8 +1,18 @@
-.navbar-appbar.MuiAppBar-root {
+.navbar-appbar {
+  position: sticky;
+  top: 0;
+  z-index: 1100;
   background-color: #ffffff;
   color: rgba(0, 0, 0, 0.87);
-  box-shadow: none;
   border-bottom: 1px solid #e2e8f0;
+}
+
+.navbar-toolbar {
+  display: flex;
+  align-items: center;
+  min-height: 64px;
+  padding: 0 16px;
+  gap: 8px;
 }
 
 .navbar-spacer {
@@ -14,7 +24,9 @@
 }
 
 .navbar-brand {
+  font-size: 1.25rem;
   font-weight: 700;
+  line-height: 1;
 }
 
 .navbar-actions {
@@ -27,26 +39,72 @@
   display: none;
 }
 
-.navbar-avatar.MuiAvatar-root {
+.navbar-avatar {
   width: 32px;
   height: 32px;
   background-color: #1d4ed8;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+}
+
+.navbar-menu {
+  position: relative;
+}
+
+.navbar-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 200px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  z-index: 1200;
 }
 
 .navbar-menu-user {
   min-width: 180px;
+  padding: 8px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 8px;
+  color: rgba(0, 0, 0, 0.87);
 }
 
 .navbar-user-name {
   font-weight: 600;
+  margin-bottom: 2px;
 }
 
 .navbar-user-email {
+  font-size: 0.75rem;
   color: rgba(0, 0, 0, 0.6);
 }
 
+.navbar-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.87);
+  cursor: pointer;
+}
+
+.navbar-dropdown-item:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
 .navbar-logout-icon {
-  margin-right: 8px;
+  color: inherit;
 }
 
 @media (min-width: 600px) {

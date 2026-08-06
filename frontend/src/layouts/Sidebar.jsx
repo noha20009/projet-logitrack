@@ -1,10 +1,4 @@
-import { Box, Button, Drawer, Toolbar, Typography } from '@mui/material'
-import DashboardIcon from '@mui/icons-material/Dashboard'
-import PeopleIcon from '@mui/icons-material/People'
-import InventoryIcon from '@mui/icons-material/Inventory'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
-import PersonIcon from '@mui/icons-material/Person'
+import { DashboardIcon, PeopleIcon, InventoryIcon, ShoppingCartIcon, AdminPanelSettingsIcon, PersonIcon } from '../components/Icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import './Sidebar.css'
@@ -27,50 +21,39 @@ export default function Sidebar({ mobileOpen, onClose }) {
 
   const content = (
     <>
-      <Toolbar className="sidebar-toolbar">
-        <Box className="sidebar-logo-row">
-          <Box className="sidebar-logo-box">LT</Box>
-          <Typography variant="h6" className="sidebar-brand">
-            LogiTrack
-          </Typography>
-        </Box>
-      </Toolbar>
-      <Box className="sidebar-nav">
+      <div className="sidebar-toolbar">
+        <div className="sidebar-logo-row">
+          <div className="sidebar-logo-box">LT</div>
+          <span className="sidebar-brand">LogiTrack</span>
+        </div>
+      </div>
+      <nav className="sidebar-nav">
         {items.map((item) => {
           const active = location.pathname === item.path || location.pathname.startsWith(item.path + '/')
           return (
-            <Button
+            <button
               key={item.path}
-              fullWidth
+              type="button"
               onClick={() => {
                 onClose?.()
                 navigate(item.path)
               }}
-              startIcon={item.icon}
               className={`sidebar-item${active ? ' sidebar-item--active' : ''}`}
             >
-              {item.label}
-            </Button>
+              {item.icon}
+              <span>{item.label}</span>
+            </button>
           )
         })}
-      </Box>
+      </nav>
     </>
   )
 
   return (
     <>
-      <Drawer
-        variant="temporary"
-        open={mobileOpen}
-        onClose={onClose}
-        ModalProps={{ keepMounted: true }}
-        className="sidebar-drawer sidebar-drawer--temporary"
-      >
-        {content}
-      </Drawer>
-      <Drawer variant="permanent" open className="sidebar-drawer sidebar-drawer--permanent">
-        {content}
-      </Drawer>
+      <aside className={`sidebar-drawer sidebar-drawer--temporary${mobileOpen ? ' sidebar-drawer--open' : ''}`}>{content}</aside>
+      {mobileOpen && <div className="sidebar-backdrop" onClick={onClose} />}
+      <aside className="sidebar-drawer sidebar-drawer--permanent">{content}</aside>
     </>
   )
 }

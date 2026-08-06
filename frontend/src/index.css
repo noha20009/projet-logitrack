@@ -327,6 +327,11 @@ h6 {
   color: var(--primary);
 }
 
+.chip--secondary {
+  background-color: rgba(15, 118, 110, 0.12);
+  color: var(--secondary);
+}
+
 .chip--success {
   background-color: rgba(22, 163, 74, 0.12);
   color: var(--success-dark);
