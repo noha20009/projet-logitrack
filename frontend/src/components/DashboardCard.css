@@ -6,37 +6,48 @@
   gap: 16px;
 }
 
-.dashboard-card-avatar.MuiAvatar-root {
+.dashboard-card-avatar {
   width: 48px;
   height: 48px;
   border-radius: 8px;
   color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.dashboard-card-avatar--primary.MuiAvatar-root {
+.dashboard-card-avatar--primary {
   background-color: #1d4ed8;
 }
 
-.dashboard-card-avatar--secondary.MuiAvatar-root {
+.dashboard-card-avatar--secondary {
   background-color: #0f766e;
 }
 
-.dashboard-card-avatar--warning.MuiAvatar-root {
+.dashboard-card-avatar--warning {
   background-color: #d97706;
 }
 
-.dashboard-card-avatar--info.MuiAvatar-root {
+.dashboard-card-avatar--info {
   background-color: #0284c7;
 }
 
-.dashboard-card-avatar--success.MuiAvatar-root {
+.dashboard-card-avatar--success {
   background-color: #16a34a;
 }
 
+.dashboard-card-avatar--error {
+  background-color: #d32f2f;
+}
+
 .dashboard-card-value {
+  font-size: 2.125rem;
+  font-weight: 700;
   line-height: 1;
 }
 
 .dashboard-card-title {
+  margin-top: 8px;
+  font-size: 0.875rem;
   color: #64748b;
 }

@@ -1,10 +1,9 @@
-import { Box, CircularProgress } from '@mui/material'
 import './Loader.css'
 
 export default function Loader({ fullscreen = false }) {
   return (
-    <Box className={`loader-container${fullscreen ? ' loader-container--fullscreen' : ''}`}>
-      <CircularProgress />
-    </Box>
+    <div className={`loader-container${fullscreen ? ' loader-container--fullscreen' : ''}`}>
+      <span className="spinner" role="status" aria-label="Chargement" />
+    </div>
   )
 }
