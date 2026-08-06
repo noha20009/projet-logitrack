@@ -1,30 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  FormControl,
-  Grid,
-  InputLabel,
-  List,
-  ListItem,
-  ListItemText,
-  MenuItem,
-  Select,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import DeleteIcon from '@mui/icons-material/Delete'
-import AddIcon from '@mui/icons-material/Add'
+import { ArrowBackIcon, DeleteIcon, AddIcon } from '../../components/Icons'
 import { useNavigate, useParams } from 'react-router-dom'
 import { addProduitToCommande, deleteCommande, getCommande, updateStatut } from '../../api/commandeApi'
 import { getProduits } from '../../api/produitApi'
@@ -113,155 +88,143 @@ export default function OrderDetails() {
   }
 
   if (loading) return <Loader />
-  if (!order) return <Typography color="error">{error || 'Commande introuvable.'}</Typography>
+  if (!order) return <p className="text-danger">{error || 'Commande introuvable.'}</p>
 
   const total = order.lignes?.reduce((sum, l) => sum + l.quantite * l.produit.prix, 0) || 0
 
   return (
-    <Box>
-      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/orders')} className="orders-back-button">
-        Retour aux commandes
-      </Button>
+    <div>
+      <button type="button" className="btn btn--ghost orders-back-button" onClick={() => navigate('/orders')}>
+        <ArrowBackIcon size="sm" /> Retour aux commandes
+      </button>
 
       <div className="order-details-header">
-        <Typography variant="h4">Commande #{order.id}</Typography>
+        <h1 className="page-title">Commande #{order.id}</h1>
         {canDelete && (
-          <Button variant="contained" color="error" startIcon={<DeleteIcon />} onClick={() => setToDelete(true)}>
-            Supprimer
-          </Button>
+          <button type="button" className="btn btn--danger" onClick={() => setToDelete(true)}>
+            <DeleteIcon size="sm" /> Supprimer
+          </button>
         )}
       </div>
 
-      {error && (
-        <Alert severity="error" className="order-error">
-          {error}
-        </Alert>
-      )}
+      {error && <div className="alert alert--error order-error">{error}</div>}
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Informations
-              </Typography>
-              <List dense>
-                <ListItem divider>
-                  <ListItemText primary="Client" secondary={order.client?.nom || '-'} />
-                </ListItem>
-                <ListItem divider>
-                  <ListItemText primary="Email" secondary={order.client?.email || '-'} />
-                </ListItem>
-                <ListItem divider>
-                  <ListItemText primary="Ville" secondary={order.client?.ville || '-'} />
-                </ListItem>
-                <ListItem divider>
-                  <ListItemText primary="Date" secondary={formatDate(order.dateCommande)} />
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primary="Statut"
-                    secondary={
-                      <FormControl fullWidth size="small" className="order-info-status">
-                        <Select value={status} onChange={(e) => handleStatusChange(e.target.value)} disabled={updatingStatus}>
-                          {STATUTS.map((s) => (
-                            <MenuItem key={s} value={s}>
-                              {STATUT_LABELS[s]}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    }
-                  />
-                </ListItem>
-              </List>
-            </CardContent>
-          </Card>
-        </Grid>
+      <div className="grid">
+        <div className="col-xs-12 col-md-4">
+          <div className="ui-card">
+            <div className="ui-card--pad">
+              <h2 className="section-title">Informations</h2>
+              <ul className="ui-list">
+                <li>
+                  <span className="list-label">Client</span>
+                  <span className="list-value">{order.client?.nom || '-'}</span>
+                </li>
+                <li>
+                  <span className="list-label">Email</span>
+                  <span className="list-value">{order.client?.email || '-'}</span>
+                </li>
+                <li>
+                  <span className="list-label">Ville</span>
+                  <span className="list-value">{order.client?.ville || '-'}</span>
+                </li>
+                <li>
+                  <span className="list-label">Date</span>
+                  <span className="list-value">{formatDate(order.dateCommande)}</span>
+                </li>
+                <li className="order-info-status">
+                  <span className="list-label">Statut</span>
+                  <div className="field field--small order-info-status-select">
+                    <select
+                      id="order-status"
+                      value={status}
+                      onChange={(e) => handleStatusChange(e.target.value)}
+                      disabled={updatingStatus}
+                    >
+                      {STATUTS.map((s) => (
+                        <option key={s} value={s}>
+                          {STATUT_LABELS[s]}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-        <Grid item xs={12} md={8}>
-          <Card>
-            <CardContent>
+        <div className="col-xs-12 col-md-8">
+          <div className="ui-card">
+            <div className="ui-card--pad">
               <div className="order-articles-header">
-                <Typography variant="h6">Articles</Typography>
-                <Typography variant="h6">
-                  Total : {formatPrice(total)}
-                </Typography>
+                <h2 className="section-title">Articles</h2>
+                <span className="order-total">Total : {formatPrice(total)}</span>
               </div>
 
-              <TableContainer>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Produit</TableCell>
-                      <TableCell>Prix unitaire</TableCell>
-                      <TableCell align="right">Quantité</TableCell>
-                      <TableCell align="right">Sous-total</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
+              <div className="table-wrap">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Produit</th>
+                      <th>Prix unitaire</th>
+                      <th className="text-right">Quantité</th>
+                      <th className="text-right">Sous-total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
                     {order.lignes?.length === 0 && (
-                      <TableRow>
-                        <TableCell colSpan={4} align="center">
+                      <tr>
+                        <td colSpan={4} className="text-center">
                           Aucun article dans cette commande.
-                        </TableCell>
-                      </TableRow>
+                        </td>
+                      </tr>
                     )}
                     {order.lignes?.map((ligne) => (
-                      <TableRow key={ligne.id} hover>
-                        <TableCell>{ligne.produit.nom}</TableCell>
-                        <TableCell>{formatPrice(ligne.produit.prix)}</TableCell>
-                        <TableCell align="right">{ligne.quantite}</TableCell>
-                        <TableCell align="right">{formatPrice(ligne.quantite * ligne.produit.prix)}</TableCell>
-                      </TableRow>
+                      <tr key={ligne.id}>
+                        <td>{ligne.produit.nom}</td>
+                        <td>{formatPrice(ligne.produit.prix)}</td>
+                        <td className="text-right">{ligne.quantite}</td>
+                        <td className="text-right">{formatPrice(ligne.quantite * ligne.produit.prix)}</td>
+                      </tr>
                     ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                  </tbody>
+                </table>
+              </div>
 
               {canWrite && (
                 <div className="order-add-product">
-                  <Typography variant="subtitle1" className="order-add-title">
-                    Ajouter un produit
-                  </Typography>
+                  <h3 className="order-add-title">Ajouter un produit</h3>
                   <div className="order-add-row">
-                    <FormControl fullWidth size="small">
-                      <InputLabel id="produit-select-label">Produit</InputLabel>
-                      <Select
-                        labelId="produit-select-label"
-                        label="Produit"
-                        value={produitId}
-                        onChange={(e) => setProduitId(e.target.value)}
-                      >
+                    <div className="field">
+                      <label htmlFor="order-add-product">Produit</label>
+                      <select id="order-add-product" value={produitId} onChange={(e) => setProduitId(e.target.value)}>
+                        <option value="">—</option>
                         {products.map((p) => (
-                          <MenuItem key={p.id} value={p.id}>
+                          <option key={p.id} value={p.id}>
                             {p.nom} ({formatPrice(p.prix)})
-                          </MenuItem>
+                          </option>
                         ))}
-                      </Select>
-                    </FormControl>
-                    <TextField
-                      label="Quantité"
-                      type="number"
-                      value={quantite}
-                      onChange={(e) => setQuantite(e.target.value)}
-                      className="order-quantity"
-                    />
-                    <Button
-                      variant="contained"
-                      startIcon={<AddIcon />}
-                      onClick={handleAddProduct}
-                      disabled={adding || !produitId}
-                    >
-                      Ajouter
-                    </Button>
+                      </select>
+                    </div>
+                    <div className="field order-quantity">
+                      <label htmlFor="order-add-quantity">Quantité</label>
+                      <input
+                        id="order-add-quantity"
+                        type="number"
+                        value={quantite}
+                        onChange={(e) => setQuantite(e.target.value)}
+                      />
+                    </div>
+                    <button type="button" className="btn btn--primary" onClick={handleAddProduct} disabled={adding || !produitId}>
+                      <AddIcon size="sm" /> Ajouter
+                    </button>
                   </div>
                 </div>
               )}
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <ConfirmDialog
         open={toDelete}
@@ -271,6 +234,6 @@ export default function OrderDetails() {
         onClose={() => setToDelete(false)}
         loading={deleting}
       />
-    </Box>
+    </div>
   )
 }

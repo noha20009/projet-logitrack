@@ -1,24 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  Box,
-  Button,
-  Card,
-  Chip,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@mui/material'
-import AddIcon from '@mui/icons-material/Add'
-import DeleteIcon from '@mui/icons-material/Delete'
-import VisibilityIcon from '@mui/icons-material/Visibility'
+import { AddIcon, DeleteIcon, VisibilityIcon } from '../../components/Icons'
 import { Link, useNavigate } from 'react-router-dom'
 import { deleteCommande, getCommandes, getCommandesByClient } from '../../api/commandeApi'
 import StatusFilter from '../../components/StatusFilter'
@@ -75,28 +56,31 @@ export default function Orders() {
   }
 
   return (
-    <Box>
+    <div>
       <div className="orders-header">
-        <Typography variant="h4">Commandes</Typography>
+        <h1 className="page-title">Commandes</h1>
         {canWrite && (
-          <Button component={Link} to="/orders/new" variant="contained" startIcon={<AddIcon />}>
-            Nouvelle commande
-          </Button>
+          <Link to="/orders/new" className="btn btn--primary">
+            <AddIcon size="sm" /> Nouvelle commande
+          </Link>
         )}
       </div>
 
-      <Card className="orders-card">
+      <div className="ui-card orders-card">
         <div className="orders-filters">
           <StatusFilter value={statut} onChange={(v) => changeFilter(() => setStatut(v))} />
-          <TextField
-            label="ID du client"
-            type="number"
-            value={clientId}
-            onChange={(e) => changeFilter(() => setClientId(e.target.value))}
-            className="order-client-id"
-          />
-          <Button
-            variant="outlined"
+          <div className="field order-client-id">
+            <label htmlFor="order-client-id">ID du client</label>
+            <input
+              id="order-client-id"
+              type="number"
+              value={clientId}
+              onChange={(e) => changeFilter(() => setClientId(e.target.value))}
+            />
+          </div>
+          <button
+            type="button"
+            className="btn btn--outlined"
             onClick={() => {
               setStatut('')
               setClientId('')
@@ -104,83 +88,82 @@ export default function Orders() {
             }}
           >
             Réinitialiser
-          </Button>
+          </button>
         </div>
 
         {loading ? (
           <Loader />
         ) : (
           <>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>N°</TableCell>
-                    <TableCell>Client</TableCell>
-                    <TableCell>
-                      <TableSortLabel
-                        active={sort === 'dateCommande'}
-                        direction={sort === 'dateCommande' ? 'asc' : 'desc'}
+            <div className="table-wrap">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>N°</th>
+                    <th>Client</th>
+                    <th>
+                      <button
+                        type="button"
+                        className={`sort-btn${sort === 'dateCommande' ? ' sort-btn--active' : ''}`}
                         onClick={() => setSort('dateCommande')}
                       >
                         Date
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell>
-                      <TableSortLabel
-                        active={sort === 'statut'}
-                        direction={sort === 'statut' ? 'asc' : 'desc'}
+                      </button>
+                    </th>
+                    <th>
+                      <button
+                        type="button"
+                        className={`sort-btn${sort === 'statut' ? ' sort-btn--active' : ''}`}
                         onClick={() => setSort('statut')}
                       >
                         Statut
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell align="right">Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
+                      </button>
+                    </th>
+                    <th className="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
                   {data?.content?.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={5} align="center">
+                    <tr>
+                      <td colSpan={5} className="text-center">
                         Aucune commande trouvée.
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   )}
                   {data?.content?.map((order) => (
-                    <TableRow key={order.id} hover>
-                      <TableCell>#{order.id}</TableCell>
-                      <TableCell>
-                        <Link to={`/orders/${order.id}`} className="order-table-link">
+                    <tr key={order.id}>
+                      <td>#{order.id}</td>
+                      <td>
+                        <Link to={`/orders/${order.id}`} className="table-link">
                           {order.client?.nom || '-'}
                         </Link>
-                      </TableCell>
-                      <TableCell>{formatDate(order.dateCommande)}</TableCell>
-                      <TableCell>
-                        <Chip
-                          label={STATUT_LABELS[order.statut] || order.statut}
-                          color={STATUT_COLORS[order.statut] || 'default'}
-                          size="small"
-                        />
-                      </TableCell>
-                      <TableCell align="right">
-                        <Tooltip title="Voir">
-                          <IconButton size="small" onClick={() => navigate(`/orders/${order.id}`)}>
-                            <VisibilityIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
+                      </td>
+                      <td>{formatDate(order.dateCommande)}</td>
+                      <td>
+                        <span className={`chip chip--${STATUT_COLORS[order.statut] || 'default'}`}>
+                          {STATUT_LABELS[order.statut] || order.statut}
+                        </span>
+                      </td>
+                      <td className="text-right">
+                        <button type="button" className="icon-btn" title="Voir" onClick={() => navigate(`/orders/${order.id}`)}>
+                          <VisibilityIcon size="sm" />
+                        </button>
                         {canDelete && (
-                          <Tooltip title="Supprimer">
-                            <IconButton size="small" color="error" onClick={() => setToDelete(order)}>
-                              <DeleteIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
+                          <button
+                            type="button"
+                            className="icon-btn icon-btn--danger"
+                            title="Supprimer"
+                            onClick={() => setToDelete(order)}
+                          >
+                            <DeleteIcon size="sm" />
+                          </button>
                         )}
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                </tbody>
+              </table>
+            </div>
 
             {data && (
               <Pagination
@@ -189,12 +172,15 @@ export default function Orders() {
                 totalElements={data.totalElements}
                 totalPages={data.totalPages}
                 onPageChange={setPage}
-                onSizeChange={(s) => { setSize(s); setPage(0) }}
+                onSizeChange={(s) => {
+                  setSize(s)
+                  setPage(0)
+                }}
               />
             )}
           </>
         )}
-      </Card>
+      </div>
 
       <ConfirmDialog
         open={Boolean(toDelete)}
@@ -204,6 +190,6 @@ export default function Orders() {
         onClose={() => setToDelete(null)}
         loading={deleting}
       />
-    </Box>
+    </div>
   )
 }

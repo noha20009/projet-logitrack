@@ -4,10 +4,12 @@
 
 .form-back-button {
   margin-bottom: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
-.form-card-content.MuiCardContent-root {
-  padding: 24px;
+.form-page .page-title {
+  margin-bottom: 16px;
 }
 
 .form-error {
@@ -16,7 +18,6 @@
 
 .form-help {
   margin-bottom: 16px;
-  color: rgba(0, 0, 0, 0.6);
 }
 
 .form-fields {

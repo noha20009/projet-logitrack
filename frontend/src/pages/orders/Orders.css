@@ -7,6 +7,10 @@
   margin-bottom: 16px;
 }
 
+.orders-header .page-title {
+  margin-bottom: 0;
+}
+
 .orders-card {
   padding: 16px;
 }
@@ -21,11 +25,6 @@
 
 .order-client-id {
   max-width: 160px;
-}
-
-.order-table-link {
-  font-weight: 600;
-  color: #1d4ed8;
 }
 
 @media (min-width: 600px) {

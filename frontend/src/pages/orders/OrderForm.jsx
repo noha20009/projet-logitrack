@@ -1,18 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import { ArrowBackIcon, ShoppingCartIcon } from '../../components/Icons'
 import { useNavigate } from 'react-router-dom'
 import { getClients } from '../../api/clientApi'
 import { createCommande } from '../../api/commandeApi'
@@ -51,58 +38,42 @@ export default function OrderForm() {
   if (loading) return <Loader />
 
   return (
-    <Box className="form-page">
-      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/orders')} className="form-back-button">
-        Retour aux commandes
-      </Button>
-      <Typography variant="h4" gutterBottom>
-        Nouvelle commande
-      </Typography>
+    <div className="form-page">
+      <button type="button" className="btn btn--ghost form-back-button" onClick={() => navigate('/orders')}>
+        <ArrowBackIcon size="sm" /> Retour aux commandes
+      </button>
+      <h1 className="page-title">Nouvelle commande</h1>
 
-      <Card>
-        <CardContent className="form-card-content">
-          {error && (
-            <Alert severity="error" className="form-error">
-              {error}
-            </Alert>
-          )}
-          <Typography variant="body2" className="form-help">
+      <div className="ui-card">
+        <div className="ui-card--pad form-card-content">
+          {error && <div className="alert alert--error form-error">{error}</div>}
+          <p className="subtitle form-help">
             Sélectionnez le client puis créez la commande. Vous pourrez ensuite ajouter des produits dans le détail de la
             commande.
-          </Typography>
+          </p>
           <div className="form-fields">
-            <FormControl fullWidth>
-              <InputLabel id="client-select-label">Client</InputLabel>
-              <Select
-                labelId="client-select-label"
-                label="Client"
-                value={clientId}
-                onChange={(e) => setClientId(e.target.value)}
-              >
-                {clients.length === 0 && <MenuItem disabled>Aucun client disponible</MenuItem>}
+            <div className="field">
+              <label htmlFor="order-client">Client</label>
+              <select id="order-client" value={clientId} onChange={(e) => setClientId(e.target.value)}>
+                {clients.length === 0 && <option value="">Aucun client disponible</option>}
                 {clients.map((c) => (
-                  <MenuItem key={c.id} value={c.id}>
+                  <option key={c.id} value={c.id}>
                     {c.nom} — {c.ville || 'sans ville'}
-                  </MenuItem>
+                  </option>
                 ))}
-              </Select>
-            </FormControl>
+              </select>
+            </div>
             <div className="form-actions">
-              <Button onClick={() => navigate('/orders')} color="inherit">
+              <button type="button" className="btn btn--ghost" onClick={() => navigate('/orders')}>
                 Annuler
-              </Button>
-              <Button
-                variant="contained"
-                startIcon={<ShoppingCartIcon />}
-                onClick={handleCreate}
-                disabled={submitting || !clientId}
-              >
-                {submitting ? 'Création...' : 'Créer la commande'}
-              </Button>
+              </button>
+              <button type="button" className="btn btn--primary" onClick={handleCreate} disabled={submitting || !clientId}>
+                <ShoppingCartIcon size="sm" /> {submitting ? 'Création...' : 'Créer la commande'}
+              </button>
             </div>
           </div>
-        </CardContent>
-      </Card>
-    </Box>
+        </div>
+      </div>
+    </div>
   )
 }
