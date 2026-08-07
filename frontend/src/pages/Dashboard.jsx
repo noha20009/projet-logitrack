@@ -7,6 +7,7 @@ import {
   HiTruck,
   HiCheckCircle,
   HiExclamationCircle,
+  HiStar,
 } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
 import DashboardCard from '../components/DashboardCard'
@@ -47,6 +48,13 @@ function StatsDashboard() {
     { title: 'Expédiées', value: stats.shippedOrders, icon: <HiTruck size={24} />, color: 'info' },
     { title: 'Livrées', value: stats.deliveredOrders, icon: <HiCheckCircle size={24} />, color: 'success' },
     { title: 'Stock faible', value: stats.lowStockCount, icon: <HiExclamationCircle size={24} />, color: 'warning', to: '/products' },
+    {
+      title: 'Produit le plus commandé',
+      value: stats.mostOrderedProduct?.nom || '—',
+      icon: <HiStar size={24} />,
+      color: 'secondary',
+      to: stats.mostOrderedProduct ? `/products/${stats.mostOrderedProduct.produitId}` : undefined,
+    },
   ]
 
   return (
