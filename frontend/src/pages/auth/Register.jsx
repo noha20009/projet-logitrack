@@ -1,5 +1,14 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import {
+  HiTruck,
+  HiUser,
+  HiIdentification,
+  HiMail,
+  HiLockClosed,
+  HiUserGroup,
+  HiUserAdd,
+} from 'react-icons/hi'
 import { useAuth } from '../../context/AuthContext'
 import { ROLE_LABELS, ROLES } from '../../utils/constants'
 import './Register.css'
@@ -57,14 +66,19 @@ export default function Register() {
     }
   }
 
-  const fieldClass = (name) => `field${errors[name] ? ' field--error' : ''}`
+  const fieldClass = (name) => `register-field${errors[name] ? ' register-field--error' : ''}`
 
   return (
     <div className="register-bg">
-      <div className="ui-card register-card">
+      <div className="register-card">
         <div className="register-card-content">
-          <h1 className="page-title register-title">LogiTrack</h1>
-          <p className="subtitle register-subtitle">Créez votre compte</p>
+          <div className="register-brand">
+            <span className="register-brand-icon">
+              <HiTruck size={40} />
+            </span>
+            <h1 className="register-title">LogiTrack</h1>
+            <p className="register-subtitle">Créez votre compte</p>
+          </div>
 
           {error && <div className="alert alert--error register-error">{error}</div>}
 
@@ -73,38 +87,78 @@ export default function Register() {
               <div className="register-name-row">
                 <div className={fieldClass('prenom')}>
                   <label htmlFor="register-prenom">Prénom</label>
-                  <input id="register-prenom" name="prenom" value={form.prenom} onChange={handleChange} />
+                  <div className="register-field-input">
+                    <span className="register-field-icon">
+                      <HiUser size={20} />
+                    </span>
+                    <input id="register-prenom" name="prenom" value={form.prenom} onChange={handleChange} />
+                  </div>
                   {errors.prenom && <span className="field-helper field-helper--error">{errors.prenom}</span>}
                 </div>
                 <div className={fieldClass('nom')}>
                   <label htmlFor="register-nom">Nom</label>
-                  <input id="register-nom" name="nom" value={form.nom} onChange={handleChange} />
+                  <div className="register-field-input">
+                    <span className="register-field-icon">
+                      <HiIdentification size={20} />
+                    </span>
+                    <input id="register-nom" name="nom" value={form.nom} onChange={handleChange} />
+                  </div>
                   {errors.nom && <span className="field-helper field-helper--error">{errors.nom}</span>}
                 </div>
               </div>
               <div className={fieldClass('email')}>
                 <label htmlFor="register-email">Email</label>
-                <input id="register-email" type="email" name="email" value={form.email} onChange={handleChange} />
+                <div className="register-field-input">
+                  <span className="register-field-icon">
+                    <HiMail size={20} />
+                  </span>
+                  <input
+                    id="register-email"
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="vous@exemple.com"
+                  />
+                </div>
                 {errors.email && <span className="field-helper field-helper--error">{errors.email}</span>}
               </div>
               <div className={fieldClass('password')}>
                 <label htmlFor="register-password">Mot de passe</label>
-                <input id="register-password" type="password" name="password" value={form.password} onChange={handleChange} />
+                <div className="register-field-input">
+                  <span className="register-field-icon">
+                    <HiLockClosed size={20} />
+                  </span>
+                  <input
+                    id="register-password"
+                    type="password"
+                    name="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    placeholder="••••••••"
+                  />
+                </div>
                 {errors.password && <span className="field-helper field-helper--error">{errors.password}</span>}
               </div>
               <div className={fieldClass('role')}>
                 <label htmlFor="register-role">Rôle</label>
-                <select id="register-role" name="role" value={form.role} onChange={handleChange}>
-                  {Object.keys(ROLES).map((role) => (
-                    <option key={role} value={role}>
-                      {ROLE_LABELS[role]}
-                    </option>
-                  ))}
-                </select>
+                <div className="register-field-input">
+                  <span className="register-field-icon">
+                    <HiUserGroup size={20} />
+                  </span>
+                  <select id="register-role" name="role" value={form.role} onChange={handleChange}>
+                    {Object.keys(ROLES).map((role) => (
+                      <option key={role} value={role}>
+                        {ROLE_LABELS[role]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 {errors.role && <span className="field-helper field-helper--error">{errors.role}</span>}
               </div>
-              <button type="submit" className="btn btn--primary btn--lg" disabled={submitting}>
+              <button type="submit" className="register-submit" disabled={submitting}>
                 {submitting ? 'Création...' : 'Créer le compte'}
+                {!submitting && <HiUserAdd size={20} />}
               </button>
             </div>
           </form>
@@ -114,6 +168,12 @@ export default function Register() {
             <Link to="/login" className="auth-link">
               Se connecter
             </Link>
+          </p>
+
+          <p className="register-footer">
+            Personnel autorisé uniquement.
+            <br />
+            Protégé par LogiTrack Security Systems.
           </p>
         </div>
       </div>
