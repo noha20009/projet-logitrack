@@ -17,11 +17,11 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    // 256-bit secret. In production, move this to an environment variable.
+
     @Value("${jwt.secret:logitrack-super-secret-key-for-jwt-signing-change-me-in-prod-0001}")
     private String secret;
 
-    // Token validity: 24h
+
     @Value("${jwt.expiration:86400000}")
     private long expirationMs;
 

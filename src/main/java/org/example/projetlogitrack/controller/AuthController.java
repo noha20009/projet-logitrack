@@ -36,8 +36,7 @@ public class AuthController {
         }
     }
 
-    // Logout is handled client-side (token discarded). This endpoint exists for
-    // symmetry / future token-blacklist support.
+
     @PostMapping("/logout")
     public ResponseEntity<?> logout() {
         return ResponseEntity.ok(new ErrorMessage("Déconnecté."));
