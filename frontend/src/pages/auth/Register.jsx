@@ -9,60 +9,41 @@ import {
   HiUserGroup,
   HiUserAdd,
 } from 'react-icons/hi'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useAuth } from '../../context/AuthContext'
 import { ROLE_LABELS, ROLES } from '../../utils/constants'
+import { registerSchema } from '../../utils/validation'
 import './Register.css'
 
 export default function Register() {
   const { register: registerUser } = useAuth()
   const navigate = useNavigate()
 
-  const [form, setForm] = useState({
-    nom: '',
-    prenom: '',
-    email: '',
-    password: '',
-    role: ROLES.AGENT,
+  const [serverError, setServerError] = useState(null)
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(registerSchema),
+    defaultValues: {
+      prenom: '',
+      nom: '',
+      email: '',
+      password: '',
+      role: ROLES.AGENT,
+    },
   })
-  const [errors, setErrors] = useState({})
-  const [error, setError] = useState(null)
-  const [submitting, setSubmitting] = useState(false)
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
-
-  const validate = () => {
-    const newErrors = {}
-    if (!form.nom.trim()) newErrors.nom = 'Le nom est obligatoire'
-    if (!form.prenom.trim()) newErrors.prenom = 'Le prénom est obligatoire'
-    if (!form.email.trim()) {
-      newErrors.email = 'L’email est obligatoire'
-    } else if (!form.email.includes('@')) {
-      newErrors.email = 'Email invalide'
-    }
-    if (!form.password) {
-      newErrors.password = 'Le mot de passe est obligatoire'
-    } else if (form.password.length < 6) {
-      newErrors.password = 'Au moins 6 caractères'
-    }
-    if (!form.role) newErrors.role = 'Le rôle est obligatoire'
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const onSubmit = async (e) => {
-    e.preventDefault()
-    if (!validate()) return
-    setError(null)
-    setSubmitting(true)
+  const onSubmit = async (values) => {
+    setServerError(null)
     try {
-      await registerUser(form)
+      await registerUser(values)
       navigate('/dashboard', { replace: true })
     } catch (err) {
-      setError(err.message)
-    } finally {
-      setSubmitting(false)
+      setServerError(err.message)
     }
   }
 
@@ -80,9 +61,9 @@ export default function Register() {
             <p className="register-subtitle">Créez votre compte</p>
           </div>
 
-          {error && <div className="alert alert--error register-error">{error}</div>}
+          {serverError && <div className="alert alert--error register-error">{serverError}</div>}
 
-          <form onSubmit={onSubmit} noValidate>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="register-fields">
               <div className="register-name-row">
                 <div className={fieldClass('prenom')}>
@@ -91,9 +72,9 @@ export default function Register() {
                     <span className="register-field-icon">
                       <HiUser size={20} />
                     </span>
-                    <input id="register-prenom" name="prenom" value={form.prenom} onChange={handleChange} />
+                    <input id="register-prenom" {...register('prenom')} />
                   </div>
-                  {errors.prenom && <span className="field-helper field-helper--error">{errors.prenom}</span>}
+                  {errors.prenom && <span className="field-helper field-helper--error">{errors.prenom.message}</span>}
                 </div>
                 <div className={fieldClass('nom')}>
                   <label htmlFor="register-nom">Nom</label>
@@ -101,9 +82,9 @@ export default function Register() {
                     <span className="register-field-icon">
                       <HiIdentification size={20} />
                     </span>
-                    <input id="register-nom" name="nom" value={form.nom} onChange={handleChange} />
+                    <input id="register-nom" {...register('nom')} />
                   </div>
-                  {errors.nom && <span className="field-helper field-helper--error">{errors.nom}</span>}
+                  {errors.nom && <span className="field-helper field-helper--error">{errors.nom.message}</span>}
                 </div>
               </div>
               <div className={fieldClass('email')}>
@@ -115,13 +96,11 @@ export default function Register() {
                   <input
                     id="register-email"
                     type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
+                    {...register('email')}
                     placeholder="vous@exemple.com"
                   />
                 </div>
-                {errors.email && <span className="field-helper field-helper--error">{errors.email}</span>}
+                {errors.email && <span className="field-helper field-helper--error">{errors.email.message}</span>}
               </div>
               <div className={fieldClass('password')}>
                 <label htmlFor="register-password">Mot de passe</label>
@@ -132,13 +111,13 @@ export default function Register() {
                   <input
                     id="register-password"
                     type="password"
-                    name="password"
-                    value={form.password}
-                    onChange={handleChange}
+                    {...register('password')}
                     placeholder="••••••••"
                   />
                 </div>
-                {errors.password && <span className="field-helper field-helper--error">{errors.password}</span>}
+                {errors.password && (
+                  <span className="field-helper field-helper--error">{errors.password.message}</span>
+                )}
               </div>
               <div className={fieldClass('role')}>
                 <label htmlFor="register-role">Rôle</label>
@@ -146,7 +125,7 @@ export default function Register() {
                   <span className="register-field-icon">
                     <HiUserGroup size={20} />
                   </span>
-                  <select id="register-role" name="role" value={form.role} onChange={handleChange}>
+                  <select id="register-role" {...register('role')}>
                     {Object.keys(ROLES).map((role) => (
                       <option key={role} value={role}>
                         {ROLE_LABELS[role]}
@@ -154,11 +133,11 @@ export default function Register() {
                     ))}
                   </select>
                 </div>
-                {errors.role && <span className="field-helper field-helper--error">{errors.role}</span>}
+                {errors.role && <span className="field-helper field-helper--error">{errors.role.message}</span>}
               </div>
-              <button type="submit" className="register-submit" disabled={submitting}>
-                {submitting ? 'Création...' : 'Créer le compte'}
-                {!submitting && <HiUserAdd size={20} />}
+              <button type="submit" className="register-submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Création...' : 'Créer le compte'}
+                {!isSubmitting && <HiUserAdd size={20} />}
               </button>
             </div>
           </form>

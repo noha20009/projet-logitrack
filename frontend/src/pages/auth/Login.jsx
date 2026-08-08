@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { HiTruck, HiMail, HiLockClosed, HiArrowRight } from 'react-icons/hi'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useAuth } from '../../context/AuthContext'
+import { loginSchema } from '../../utils/validation'
 import './Login.css'
 
 export default function Login() {
@@ -9,42 +12,24 @@ export default function Login() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [form, setForm] = useState({ email: '', password: '' })
-  const [errors, setErrors] = useState({})
-  const [error, setError] = useState(null)
-  const [submitting, setSubmitting] = useState(false)
+  const [serverError, setServerError] = useState(null)
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+  })
 
-  const validate = () => {
-    const newErrors = {}
-    if (!form.email.trim()) {
-      newErrors.email = "L'email est obligatoire"
-    } else if (!form.email.includes('@')) {
-      newErrors.email = 'Email invalide'
-    }
-    if (!form.password) {
-      newErrors.password = 'Le mot de passe est obligatoire'
-    }
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const onSubmit = async (e) => {
-    e.preventDefault()
-    if (!validate()) return
-    setError(null)
-    setSubmitting(true)
+  const onSubmit = async (values) => {
+    setServerError(null)
     try {
-      await login(form)
+      await login(values)
       const from = location.state?.from?.pathname || '/dashboard'
       navigate(from, { replace: true })
     } catch (err) {
-      setError(err.message)
-    } finally {
-      setSubmitting(false)
+      setServerError(err.message)
     }
   }
 
@@ -60,9 +45,9 @@ export default function Login() {
             <p className="login-subtitle">Gestion logistique sécurisée</p>
           </div>
 
-          {error && <div className="alert alert--error login-error">{error}</div>}
+          {serverError && <div className="alert alert--error login-error">{serverError}</div>}
 
-          <form onSubmit={onSubmit} noValidate>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="login-fields">
               <div className={`login-field${errors.email ? ' login-field--error' : ''}`}>
                 <label htmlFor="login-email">Email</label>
@@ -73,13 +58,11 @@ export default function Login() {
                   <input
                     id="login-email"
                     type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
+                    {...register('email')}
                     placeholder="admin@logitack.global"
                   />
                 </div>
-                {errors.email && <span className="field-helper field-helper--error">{errors.email}</span>}
+                {errors.email && <span className="field-helper field-helper--error">{errors.email.message}</span>}
               </div>
               <div className={`login-field${errors.password ? ' login-field--error' : ''}`}>
                 <label htmlFor="login-password">Mot de passe</label>
@@ -90,23 +73,23 @@ export default function Login() {
                   <input
                     id="login-password"
                     type="password"
-                    name="password"
-                    value={form.password}
-                    onChange={handleChange}
+                    {...register('password')}
                     placeholder="••••••••"
                   />
                 </div>
-                {errors.password && <span className="field-helper field-helper--error">{errors.password}</span>}
+                {errors.password && (
+                  <span className="field-helper field-helper--error">{errors.password.message}</span>
+                )}
               </div>
               <div className="login-options">
                 <label className="login-remember">
-                  <input type="checkbox" name="remember-me" />
+                  <input type="checkbox" />
                   Se souvenir de moi
                 </label>
               </div>
-              <button type="submit" className="login-submit" disabled={submitting}>
-                {submitting ? 'Connexion...' : 'Se connecter'}
-                {!submitting && <HiArrowRight size={20} />}
+              <button type="submit" className="login-submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Connexion...' : 'Se connecter'}
+                {!isSubmitting && <HiArrowRight size={20} />}
               </button>
             </div>
           </form>

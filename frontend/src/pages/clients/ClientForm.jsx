@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { HiArrowLeft } from 'react-icons/hi'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { createClient, getClient, updateClient } from '../../api/clientApi'
 import Loader from '../../components/Loader'
+import { clientSchema } from '../../utils/validation'
 import './ClientForm.css'
 
 export default function ClientForm() {
@@ -11,17 +13,29 @@ export default function ClientForm() {
   const isEdit = Boolean(id)
   const navigate = useNavigate()
 
-  const [form, setForm] = useState({ nom: '', email: '', telephone: '', ville: '' })
-  const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(isEdit)
-  const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(clientSchema),
+    defaultValues: {
+      nom: '',
+      email: '',
+      telephone: '',
+      ville: '',
+    },
+  })
 
   useEffect(() => {
     if (!isEdit) return
     getClient(id)
       .then((client) => {
-        setForm({
+        reset({
           nom: client.nom,
           email: client.email,
           telephone: client.telephone || '',
@@ -30,41 +44,20 @@ export default function ClientForm() {
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false))
-  }, [id, isEdit])
+  }, [id, isEdit, reset])
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
-
-  const validate = () => {
-    const newErrors = {}
-    if (!form.nom.trim()) newErrors.nom = 'Le nom est obligatoire'
-    if (!form.email.trim()) {
-      newErrors.email = 'L’email est obligatoire'
-    } else if (!form.email.includes('@')) {
-      newErrors.email = 'Email invalide'
-    }
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const onSubmit = async (e) => {
-    e.preventDefault()
-    if (!validate()) return
-    setSubmitting(true)
+  const onSubmit = async (values) => {
     setError(null)
     try {
       if (isEdit) {
-        const updated = await updateClient(id, form)
+        const updated = await updateClient(id, values)
         navigate(`/clients/${updated.id}`, { replace: true })
       } else {
-        const created = await createClient(form)
+        const created = await createClient(values)
         navigate(`/clients/${created.id}`, { replace: true })
       }
     } catch (err) {
       setError(err.message)
-    } finally {
-      setSubmitting(false)
     }
   }
 
@@ -82,34 +75,36 @@ export default function ClientForm() {
       <div className="ui-card">
         <div className="ui-card--pad form-card-content">
           {error && <div className="alert alert--error form-error">{error}</div>}
-          <form onSubmit={onSubmit} noValidate>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="form-fields">
               <div className={fieldClass('nom')}>
                 <label htmlFor="client-nom">Nom</label>
-                <input id="client-nom" name="nom" value={form.nom} onChange={handleChange} />
-                {errors.nom && <span className="field-helper field-helper--error">{errors.nom}</span>}
+                <input id="client-nom" {...register('nom')} />
+                {errors.nom && <span className="field-helper field-helper--error">{errors.nom.message}</span>}
               </div>
               <div className={fieldClass('email')}>
                 <label htmlFor="client-email">Email</label>
-                <input id="client-email" type="email" name="email" value={form.email} onChange={handleChange} />
-                {errors.email && <span className="field-helper field-helper--error">{errors.email}</span>}
+                <input id="client-email" type="email" {...register('email')} />
+                {errors.email && <span className="field-helper field-helper--error">{errors.email.message}</span>}
               </div>
               <div className={fieldClass('telephone')}>
                 <label htmlFor="client-telephone">Téléphone</label>
-                <input id="client-telephone" name="telephone" value={form.telephone} onChange={handleChange} />
-                {errors.telephone && <span className="field-helper field-helper--error">{errors.telephone}</span>}
+                <input id="client-telephone" {...register('telephone')} />
+                {errors.telephone && (
+                  <span className="field-helper field-helper--error">{errors.telephone.message}</span>
+                )}
               </div>
               <div className={fieldClass('ville')}>
                 <label htmlFor="client-ville">Ville</label>
-                <input id="client-ville" name="ville" value={form.ville} onChange={handleChange} />
-                {errors.ville && <span className="field-helper field-helper--error">{errors.ville}</span>}
+                <input id="client-ville" {...register('ville')} />
+                {errors.ville && <span className="field-helper field-helper--error">{errors.ville.message}</span>}
               </div>
               <div className="form-actions">
                 <button type="button" className="btn btn--ghost" onClick={() => navigate('/clients')}>
                   Annuler
                 </button>
-                <button type="submit" className="btn btn--primary" disabled={submitting}>
-                  {submitting ? 'Enregistrement...' : isEdit ? 'Enregistrer' : 'Créer'}
+                <button type="submit" className="btn btn--primary" disabled={isSubmitting}>
+                  {isSubmitting ? 'Enregistrement...' : isEdit ? 'Enregistrer' : 'Créer'}
                 </button>
               </div>
             </div>

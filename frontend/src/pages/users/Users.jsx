@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import { HiTrash, HiUserAdd, HiX } from 'react-icons/hi'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { createUser, deleteUser, getUsers, updateUserRole } from '../../api/userApi'
 import Loader from '../../components/Loader'
 import ConfirmDialog from '../../components/ConfirmDialog'
 import { ROLE_LABELS, ROLES } from '../../utils/constants'
+import { userSchema } from '../../utils/validation'
 import { useAuth } from '../../context/AuthContext'
 import './Users.css'
 
@@ -15,8 +18,21 @@ export default function Users() {
   const [toDelete, setToDelete] = useState(null)
   const [deleting, setDeleting] = useState(false)
 
-  const [form, setForm] = useState({ nom: '', prenom: '', email: '', password: '', role: ROLES.AGENT })
-  const [errors, setErrors] = useState({})
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(userSchema),
+    defaultValues: {
+      prenom: '',
+      nom: '',
+      email: '',
+      password: '',
+      role: ROLES.AGENT,
+    },
+  })
 
   const load = () => {
     setLoading(true)
@@ -30,37 +46,11 @@ export default function Users() {
     load()
   }, [])
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
-
-  const validate = () => {
-    const newErrors = {}
-    if (!form.nom.trim()) newErrors.nom = 'Le nom est obligatoire'
-    if (!form.prenom.trim()) newErrors.prenom = 'Le prénom est obligatoire'
-    if (!form.email.trim()) {
-      newErrors.email = 'L’email est obligatoire'
-    } else if (!form.email.includes('@')) {
-      newErrors.email = 'Email invalide'
-    }
-    if (!form.password) {
-      newErrors.password = 'Le mot de passe est obligatoire'
-    } else if (form.password.length < 6) {
-      newErrors.password = 'Au moins 6 caractères'
-    }
-    if (!form.role) newErrors.role = 'Le rôle est obligatoire'
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const onSubmit = async (e) => {
-    e.preventDefault()
-    if (!validate()) return
+  const onSubmit = async (values) => {
     setError(null)
     try {
-      await createUser(form)
-      setForm({ nom: '', prenom: '', email: '', password: '', role: ROLES.AGENT })
-      setErrors({})
+      await createUser(values)
+      reset({ prenom: '', nom: '', email: '', password: '', role: ROLES.AGENT })
       load()
     } catch (err) {
       setError(err.message)
@@ -109,43 +99,45 @@ export default function Users() {
           <div className="ui-card">
             <div className="ui-card--pad">
               <h2 className="section-title">Ajouter un utilisateur</h2>
-              <form onSubmit={onSubmit} noValidate>
+              <form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <div className="users-form-fields">
                   <div className="users-name-row">
                     <div className={fieldClass('prenom')}>
                       <label htmlFor="user-prenom">Prénom</label>
-                      <input id="user-prenom" name="prenom" value={form.prenom} onChange={handleChange} />
-                      {errors.prenom && <span className="field-helper field-helper--error">{errors.prenom}</span>}
+                      <input id="user-prenom" {...register('prenom')} />
+                      {errors.prenom && <span className="field-helper field-helper--error">{errors.prenom.message}</span>}
                     </div>
                     <div className={fieldClass('nom')}>
                       <label htmlFor="user-nom">Nom</label>
-                      <input id="user-nom" name="nom" value={form.nom} onChange={handleChange} />
-                      {errors.nom && <span className="field-helper field-helper--error">{errors.nom}</span>}
+                      <input id="user-nom" {...register('nom')} />
+                      {errors.nom && <span className="field-helper field-helper--error">{errors.nom.message}</span>}
                     </div>
                   </div>
                   <div className={fieldClass('email')}>
                     <label htmlFor="user-email">Email</label>
-                    <input id="user-email" type="email" name="email" value={form.email} onChange={handleChange} />
-                    {errors.email && <span className="field-helper field-helper--error">{errors.email}</span>}
+                    <input id="user-email" type="email" {...register('email')} />
+                    {errors.email && <span className="field-helper field-helper--error">{errors.email.message}</span>}
                   </div>
                   <div className={fieldClass('password')}>
                     <label htmlFor="user-password">Mot de passe</label>
-                    <input id="user-password" type="password" name="password" value={form.password} onChange={handleChange} />
-                    {errors.password && <span className="field-helper field-helper--error">{errors.password}</span>}
+                    <input id="user-password" type="password" {...register('password')} />
+                    {errors.password && (
+                      <span className="field-helper field-helper--error">{errors.password.message}</span>
+                    )}
                   </div>
                   <div className={fieldClass('role')}>
                     <label htmlFor="user-role">Rôle</label>
-                    <select id="user-role" name="role" value={form.role} onChange={handleChange}>
+                    <select id="user-role" {...register('role')}>
                       {Object.keys(ROLES).map((r) => (
                         <option key={r} value={r}>
                           {ROLE_LABELS[r]}
                         </option>
                       ))}
                     </select>
-                    {errors.role && <span className="field-helper field-helper--error">{errors.role}</span>}
+                    {errors.role && <span className="field-helper field-helper--error">{errors.role.message}</span>}
                   </div>
-                  <button type="submit" className="btn btn--primary">
-                    <HiUserAdd size={18} /> Créer l'utilisateur
+                  <button type="submit" className="btn btn--primary" disabled={isSubmitting}>
+                    <HiUserAdd size={18} /> {isSubmitting ? 'Création...' : "Créer l'utilisateur"}
                   </button>
                 </div>
               </form>

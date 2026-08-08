@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
 import { HiArrowLeft, HiTrash, HiPlus } from 'react-icons/hi'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { addProduitToCommande, deleteCommande, getCommande, updateStatut } from '../../api/commandeApi'
 import { getProduits } from '../../api/produitApi'
 import Loader from '../../components/Loader'
 import ConfirmDialog from '../../components/ConfirmDialog'
 import { useAuth } from '../../context/AuthContext'
 import { STATUT_LABELS, STATUTS, formatDate, formatPrice } from '../../utils/constants'
+import { addProductLineSchema } from '../../utils/validation'
 import './OrderDetails.css'
 
 export default function OrderDetails() {
@@ -20,11 +23,21 @@ export default function OrderDetails() {
   const [status, setStatus] = useState('')
   const [updatingStatus, setUpdatingStatus] = useState(false)
   const [products, setProducts] = useState([])
-  const [produitId, setProduitId] = useState('')
-  const [quantite, setQuantite] = useState(1)
-  const [adding, setAdding] = useState(false)
   const [toDelete, setToDelete] = useState(false)
   const [deleting, setDeleting] = useState(false)
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(addProductLineSchema),
+    defaultValues: {
+      produitId: '',
+      quantite: 1,
+    },
+  })
 
   const canWrite = role === 'ADMIN' || role === 'MANAGER'
   const canDelete = role === 'ADMIN'
@@ -61,19 +74,14 @@ export default function OrderDetails() {
     }
   }
 
-  const handleAddProduct = async () => {
-    if (!produitId || !quantite) return
-    setAdding(true)
+  const onAddProduct = async (values) => {
     setError(null)
     try {
-      await addProduitToCommande(id, produitId, Number(quantite))
-      setProduitId('')
-      setQuantite(1)
+      await addProduitToCommande(id, Number(values.produitId), Number(values.quantite))
+      reset({ produitId: '', quantite: 1 })
       load()
     } catch (e) {
       setError(e.message)
-    } finally {
-      setAdding(false)
     }
   }
 
@@ -192,12 +200,12 @@ export default function OrderDetails() {
               </div>
 
               {canWrite && (
-                <div className="order-add-product">
+                <form className="order-add-product" onSubmit={handleSubmit(onAddProduct)} noValidate>
                   <h3 className="order-add-title">Ajouter un produit</h3>
                   <div className="order-add-row">
-                    <div className="field">
+                    <div className={`field${errors.produitId ? ' field--error' : ''}`}>
                       <label htmlFor="order-add-product">Produit</label>
-                      <select id="order-add-product" value={produitId} onChange={(e) => setProduitId(e.target.value)}>
+                      <select id="order-add-product" {...register('produitId')}>
                         <option value="">—</option>
                         {products.map((p) => (
                           <option key={p.id} value={p.id}>
@@ -205,21 +213,22 @@ export default function OrderDetails() {
                           </option>
                         ))}
                       </select>
+                      {errors.produitId && (
+                        <span className="field-helper field-helper--error">{errors.produitId.message}</span>
+                      )}
                     </div>
-                    <div className="field order-quantity">
+                    <div className={`field order-quantity${errors.quantite ? ' field--error' : ''}`}>
                       <label htmlFor="order-add-quantity">Quantité</label>
-                      <input
-                        id="order-add-quantity"
-                        type="number"
-                        value={quantite}
-                        onChange={(e) => setQuantite(e.target.value)}
-                      />
+                      <input id="order-add-quantity" type="number" step="1" {...register('quantite')} />
+                      {errors.quantite && (
+                        <span className="field-helper field-helper--error">{errors.quantite.message}</span>
+                      )}
                     </div>
-                    <button type="button" className="btn btn--primary" onClick={handleAddProduct} disabled={adding || !produitId}>
+                    <button type="submit" className="btn btn--primary" disabled={isSubmitting}>
                       <HiPlus size={18} /> Ajouter
                     </button>
                   </div>
-                </div>
+                </form>
               )}
             </div>
           </div>
