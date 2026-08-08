@@ -23,11 +23,12 @@
 .form-fields {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 16px;
+  padding-top: 4px;
 }

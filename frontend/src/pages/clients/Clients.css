@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .clients-header .page-title {
@@ -12,14 +12,14 @@
 }
 
 .clients-card {
-  padding: 16px;
+  padding: 24px;
 }
 
 .clients-filters {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .clients-info-chip {
@@ -29,10 +29,11 @@
 @media (min-width: 600px) {
   .clients-header {
     flex-direction: row;
+    align-items: flex-end;
   }
 
   .clients-filters {
     flex-direction: row;
-    align-items: center;
+    align-items: flex-end;
   }
 }

@@ -2,16 +2,16 @@
   position: sticky;
   top: 0;
   z-index: 1100;
-  background-color: #ffffff;
-  color: rgba(0, 0, 0, 0.87);
-  border-bottom: 1px solid #e2e8f0;
+  background-color: #f5f1ea;
+  color: var(--text);
+  box-shadow: 0 4px 20px rgba(46, 50, 48, 0.06);
 }
 
 .navbar-toolbar {
   display: flex;
   align-items: center;
   min-height: 64px;
-  padding: 0 16px;
+  padding: 0 24px;
   gap: 8px;
 }
 
@@ -21,12 +21,19 @@
 
 .navbar-menu-button {
   margin-right: 8px;
+  color: var(--primary);
+}
+
+.navbar-menu-button:hover {
+  background-color: rgba(74, 124, 89, 0.12);
 }
 
 .navbar-brand {
-  font-size: 1.25rem;
+  font-family: var(--font-headline);
+  font-size: 1.5rem;
   font-weight: 700;
   line-height: 1;
+  color: var(--primary);
 }
 
 .navbar-actions {
@@ -40,12 +47,19 @@
 }
 
 .navbar-avatar {
-  width: 32px;
-  height: 32px;
-  background-color: #AB6542;
-  font-size: 0.875rem;
-  border: none;
+  width: 40px;
+  height: 40px;
+  background-color: #e4e0d8;
+  color: var(--primary);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  border: 1px solid rgba(196, 200, 188, 0.3);
   cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.navbar-avatar:hover {
+  background-color: #d8d3c9;
 }
 
 .navbar-menu {
@@ -56,31 +70,31 @@
   position: absolute;
   right: 0;
   top: calc(100% + 8px);
-  min-width: 200px;
+  min-width: 220px;
   background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(196, 200, 188, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(46, 50, 48, 0.12);
   padding: 8px;
   z-index: 1200;
 }
 
 .navbar-menu-user {
-  min-width: 180px;
+  min-width: 200px;
   padding: 8px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid rgba(196, 200, 188, 0.2);
   margin-bottom: 8px;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--text);
 }
 
 .navbar-user-name {
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 2px;
 }
 
 .navbar-user-email {
   font-size: 0.75rem;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--text-muted);
 }
 
 .navbar-dropdown-item {
@@ -91,16 +105,16 @@
   text-align: left;
   padding: 10px 12px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   background: transparent;
   font-family: inherit;
-  font-size: 0.875rem;
-  color: rgba(0, 0, 0, 0.87);
+  font-size: 0.9375rem;
+  color: var(--text);
   cursor: pointer;
 }
 
 .navbar-dropdown-item:hover {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: #f5f1ea;
 }
 
 .navbar-logout-icon {

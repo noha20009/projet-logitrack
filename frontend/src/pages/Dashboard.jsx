@@ -58,7 +58,7 @@ function StatsDashboard() {
   ]
 
   return (
-    <div>
+    <div className="dashboard-page">
       <h1 className="page-title">Tableau de bord</h1>
 
       <div className="grid">
@@ -125,7 +125,7 @@ function AgentDashboard() {
   ]
 
   return (
-    <div>
+    <div className="dashboard-page">
       <h1 className="page-title">Tableau de bord</h1>
       <div className="grid">
         {cards.map((card) => (

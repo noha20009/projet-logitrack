@@ -9,20 +9,26 @@
 }
 
 .main-layout-main {
-  padding: 16px;
+  padding: 24px;
 }
 
 .main-layout-container {
-  max-width: 1536px;
+  max-width: 1280px;
   margin: 0 auto;
 }
 
 @media (min-width: 900px) {
   .main-layout-content {
-    margin-left: 260px;
+    margin-left: 288px;
   }
 
   .main-layout-main {
-    padding: 24px;
+    padding: 32px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .main-layout-main {
+    padding: 40px;
   }
 }

@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .orders-header .page-title {
@@ -12,7 +12,7 @@
 }
 
 .orders-card {
-  padding: 16px;
+  padding: 24px;
 }
 
 .orders-filters {
@@ -20,7 +20,7 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .order-client-id {
@@ -30,11 +30,13 @@
 @media (min-width: 600px) {
   .orders-header {
     flex-direction: row;
+    align-items: flex-end;
   }
 }
 
 @media (min-width: 900px) {
   .orders-filters {
     flex-direction: row;
+    align-items: flex-end;
   }
 }

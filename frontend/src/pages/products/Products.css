@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .products-header .page-title {
@@ -12,7 +12,7 @@
 }
 
 .products-card {
-  padding: 16px;
+  padding: 24px;
 }
 
 .products-filters {
@@ -20,7 +20,7 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .product-price-input {
@@ -35,13 +35,14 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  height: 40px;
-  padding: 0 14px;
+  height: 42px;
+  padding: 0 16px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background-color: var(--surface);
   font-family: inherit;
   font-size: 0.875rem;
+  font-weight: 600;
   color: var(--text);
   cursor: pointer;
   white-space: nowrap;
@@ -53,19 +54,19 @@
 
 .toggle-btn--active {
   border-color: var(--primary);
-  background-color: rgba(29, 78, 216, 0.08);
+  background-color: rgba(74, 124, 89, 0.1);
   color: var(--primary);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 @media (min-width: 600px) {
   .products-header {
     flex-direction: row;
+    align-items: flex-end;
   }
-}
 
-@media (min-width: 900px) {
   .products-filters {
     flex-direction: row;
+    align-items: flex-end;
   }
 }

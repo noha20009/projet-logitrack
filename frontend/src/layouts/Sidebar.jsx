@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import './Sidebar.css'
 
-export const SIDEBAR_WIDTH = 260
+export const SIDEBAR_WIDTH = 288
 
 export default function Sidebar({ mobileOpen, onClose }) {
   const { role } = useAuth()

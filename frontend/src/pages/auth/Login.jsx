@@ -103,9 +103,6 @@ export default function Login() {
                   <input type="checkbox" name="remember-me" />
                   Se souvenir de moi
                 </label>
-                <Link to="/login" className="login-forgot">
-                  Mot de passe oublié ?
-                </Link>
               </div>
               <button type="submit" className="login-submit" disabled={submitting}>
                 {submitting ? 'Connexion...' : 'Se connecter'}

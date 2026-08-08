@@ -12,7 +12,7 @@
 .profile-avatar {
   width: 64px;
   height: 64px;
-  background-color: #1d4ed8;
+  background-color: var(--primary);
   font-size: 28px;
 }
 
