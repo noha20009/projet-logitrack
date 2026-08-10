@@ -30,7 +30,6 @@ export default function OrderDetails() {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(addProductLineSchema),
@@ -75,10 +74,6 @@ export default function OrderDetails() {
     }
   }
 
- const produitId = watch('produitId')
- const quantite =Number(watch('quantite'))
- const produit =products.find((p)=>Number(p.id)===(produitId))
- const stockInsuffisant= produit &&quantite >produit.quantiteStock
 
   const onAddProduct = async (values) => {
     setError(null)

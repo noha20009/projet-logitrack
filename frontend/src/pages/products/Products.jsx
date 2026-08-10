@@ -208,7 +208,6 @@ export default function Products() {
                 page={page}
                 size={size}
                 totalElements={data.totalElements}
-                totalPages={data.totalPages}
                 onPageChange={setPage}
                 onSizeChange={(s) => {
                   setSize(s)

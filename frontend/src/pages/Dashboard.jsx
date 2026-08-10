@@ -12,6 +12,7 @@ import {
 import { Link } from 'react-router-dom'
 import DashboardCard from '../components/DashboardCard'
 import Loader from '../components/Loader'
+import Pagination from '../components/Pagination'
 import { getStats } from '../api/statsApi'
 import { getClients } from '../api/clientApi'
 import { getProduits } from '../api/produitApi'
@@ -146,7 +147,12 @@ function AgentDashboard() {
 }
 
 function RecentOrders({ orders }) {
+  const [page, setPage] = useState(0)
+  const [size, setSize] = useState(5)
+
   if (!orders || orders.length === 0) return null
+
+  const paged = orders.slice(page * size, (page + 1) * size)
 
   return (
     <div className="ui-card ui-card--pad dashboard-recent-orders">
@@ -163,7 +169,7 @@ function RecentOrders({ orders }) {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
+            {paged.map((order) => (
               <tr key={order.id}>
                 <td>#{order.id}</td>
                 <td>{order.client ? `${order.client.nom} (${order.client.ville || '-'})` : '-'}</td>
@@ -183,6 +189,16 @@ function RecentOrders({ orders }) {
           </tbody>
         </table>
       </div>
+      <Pagination
+        page={page}
+        size={size}
+        totalElements={orders.length}
+        onPageChange={setPage}
+        onSizeChange={(s) => {
+          setSize(s)
+          setPage(0)
+        }}
+      />
     </div>
   )
 }

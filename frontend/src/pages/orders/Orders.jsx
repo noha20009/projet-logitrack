@@ -170,7 +170,6 @@ export default function Orders() {
                 page={page}
                 size={size}
                 totalElements={data.totalElements}
-                totalPages={data.totalPages}
                 onPageChange={setPage}
                 onSizeChange={(s) => {
                   setSize(s)
