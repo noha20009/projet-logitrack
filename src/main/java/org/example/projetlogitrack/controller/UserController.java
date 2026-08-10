@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// All endpoints here are restricted to ADMIN, both at the SecurityConfig level
-// (/api/users/**) and again here with @PreAuthorize for defense in depth.
+
 @RestController
 @RequestMapping("/api/users")
 @PreAuthorize("hasRole('ADMIN')")

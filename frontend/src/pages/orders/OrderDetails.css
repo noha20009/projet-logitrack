@@ -1,0 +1,87 @@
+.orders-back-button {
+  margin-bottom: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.order-details-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.order-details-header .page-title {
+  margin-bottom: 0;
+}
+
+.order-error {
+  margin-bottom: 16px;
+}
+
+.order-info-status {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.order-info-status-select {
+  margin-top: 4px;
+}
+
+.order-articles-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.order-articles-header .section-title {
+  margin-bottom: 0;
+}
+
+.order-total {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.order-add-product {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #f5f1ea;
+  border-radius: 12px;
+}
+
+.order-add-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+.order-add-row {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.order-quantity {
+  max-width: 120px;
+}
+
+.text-danger {
+  color: var(--danger);
+}
+
+@media (min-width: 600px) {
+  .order-details-header {
+    flex-direction: row;
+  }
+
+  .order-add-row {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+}

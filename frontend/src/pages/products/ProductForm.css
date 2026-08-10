@@ -1,0 +1,30 @@
+.form-page {
+  max-width: 640px;
+}
+
+.form-back-button {
+  margin-bottom: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.form-page .page-title {
+  margin-bottom: 16px;
+}
+
+.form-error {
+  margin-bottom: 16px;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding-top: 4px;
+}

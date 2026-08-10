@@ -1,0 +1,29 @@
+.clients-back-button {
+  margin-bottom: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.client-details-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.client-details-header .page-title {
+  margin-bottom: 0;
+}
+
+.client-details-actions {
+  display: flex;
+  gap: 8px;
+}
+
+@media (min-width: 600px) {
+  .client-details-header {
+    flex-direction: row;
+  }
+}

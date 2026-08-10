@@ -1,0 +1,5 @@
+.status-filter {
+  min-width: 180px;
+  width: auto;
+  flex-shrink: 0;
+}

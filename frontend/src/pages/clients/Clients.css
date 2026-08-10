@@ -1,0 +1,39 @@
+.clients-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.clients-header .page-title {
+  margin-bottom: 0;
+}
+
+.clients-card {
+  padding: 24px;
+}
+
+.clients-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.clients-info-chip {
+  margin: 16px 0 0;
+}
+
+@media (min-width: 600px) {
+  .clients-header {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .clients-filters {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+}

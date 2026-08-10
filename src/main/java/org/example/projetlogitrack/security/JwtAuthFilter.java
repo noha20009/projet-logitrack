@@ -38,8 +38,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             try {
                 email = jwtUtil.extractUsername(jwt);
             } catch (Exception e) {
-                // Invalid/expired token: leave email null, request will be rejected downstream
-                // if it targets a protected endpoint.
+
             }
         }
 

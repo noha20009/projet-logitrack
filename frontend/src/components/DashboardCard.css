@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+.dashboard-card {
+  --dash-accent: #4a7c59;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid rgba(196, 200, 188, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(46, 50, 48, 0.06);
+  transition: box-shadow 0.3s ease;
+}
+
+.dashboard-card:hover {
+  box-shadow: 0 8px 24px rgba(46, 50, 48, 0.12);
+}
+
+.dashboard-card::before {
+  content: '';
+  position: absolute;
+  top: -64px;
+  right: -64px;
+  width: 128px;
+  height: 128px;
+  border-bottom-left-radius: 9999px;
+  background-color: var(--dash-accent);
+  opacity: 0.05;
+  pointer-events: none;
+  transition: transform 0.5s ease-out;
+}
+
+.dashboard-card:hover::before {
+  transform: scale(1.1);
+}
+
+.dashboard-card--primary {
+  --dash-accent: #4a7c59;
+}
+
+.dashboard-card--secondary {
+  --dash-accent: #6b6358;
+}
+
+.dashboard-card--warning {
+  --dash-accent: #c4a66a;
+}
+
+.dashboard-card--info {
+  --dash-accent: #78a886;
+}
+
+.dashboard-card--success {
+  --dash-accent: #4a7c59;
+}
+
+.dashboard-card--error {
+  --dash-accent: #b83230;
+}
+
+.dashboard-card-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dashboard-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  background-color: #f0e8db;
+  color: #5e5548;
+}
+
+.dashboard-card-title {
+  margin: 0;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #4a4e4a;
+}
+
+.dashboard-card-value {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  font-family: 'Literata', serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #2e3230;
+}
+
+.dashboard-card-value--text {
+  font-size: 18px;
+}

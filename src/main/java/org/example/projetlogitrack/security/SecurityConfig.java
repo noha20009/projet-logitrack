@@ -57,25 +57,28 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
+
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // --- Stats : ADMIN & MANAGER ---
+
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
+
                         .requestMatchers("/api/stats/**").hasAnyRole("ADMIN", "MANAGER")
 
-                        // --- Products ---
+
                         .requestMatchers(HttpMethod.GET, "/api/products/**").hasAnyRole("ADMIN", "MANAGER", "AGENT")
                         .requestMatchers(HttpMethod.POST, "/api/products/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers(HttpMethod.PUT, "/api/products/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
 
-                        // --- Clients ---
+
                         .requestMatchers(HttpMethod.GET, "/api/clients/**").hasAnyRole("ADMIN", "MANAGER", "AGENT")
                         .requestMatchers(HttpMethod.POST, "/api/clients/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers(HttpMethod.PUT, "/api/clients/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/api/clients/**").hasRole("ADMIN")
 
-                        // --- Orders (Commandes) ---
+
                         .requestMatchers(HttpMethod.GET, "/api/orders/**").hasAnyRole("ADMIN", "MANAGER", "AGENT")
                         .requestMatchers(HttpMethod.PUT, "/api/orders/*/status").hasAnyRole("ADMIN", "MANAGER", "AGENT")
                         .requestMatchers(HttpMethod.PUT, "/api/orders/**").hasAnyRole("ADMIN", "MANAGER")
