@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { HiArrowLeft, HiTrash, HiPlus } from 'react-icons/hi'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
+import { useForm, Watch } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { addProduitToCommande, deleteCommande, getCommande, updateStatut } from '../../api/commandeApi'
 import { getProduits } from '../../api/produitApi'
@@ -30,6 +30,7 @@ export default function OrderDetails() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(addProductLineSchema),
@@ -73,6 +74,11 @@ export default function OrderDetails() {
       setUpdatingStatus(false)
     }
   }
+
+ const produitId = watch('produitId')
+ const quantite =Number(watch('quantite'))
+ const produit =products.find((p)=>Number(p.id)===(produitId))
+ const stockInsuffisant= produit &&quantite >produit.quantiteStock
 
   const onAddProduct = async (values) => {
     setError(null)

@@ -25,4 +25,6 @@ public interface ProduitRepository extends JpaRepository<Produit, Long> {
 
     @Query("SELECT p FROM Produit p WHERE p.quantiteStock < 5")
     Page<Produit> findLowStockPageable(Pageable pageable);
+
+
 }

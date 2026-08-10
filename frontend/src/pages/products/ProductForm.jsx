@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { HiArrowLeft } from 'react-icons/hi'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
