@@ -2,6 +2,7 @@ export const ROLES = {
   ADMIN: 'ADMIN',
   MANAGER: 'MANAGER',
   AGENT: 'AGENT',
+  Reporter:'Reporter'
 }
 
 export const ROLE_LABELS = {

@@ -74,7 +74,6 @@ export default function OrderDetails() {
     }
   }
 
-
   const onAddProduct = async (values) => {
     setError(null)
     try {
@@ -85,7 +84,6 @@ export default function OrderDetails() {
       setError(e.message)
     }
   }
-
   const confirmDelete = async () => {
     setDeleting(true)
     try {
@@ -95,12 +93,10 @@ export default function OrderDetails() {
       setDeleting(false)
     }
   }
-
   if (loading) return <Loader />
   if (!order) return <p className="text-danger">{error || 'Commande introuvable.'}</p>
-
   const total = order.lignes?.reduce((sum, l) => sum + l.quantite * l.produit.prix, 0) || 0
-
+  
   return (
     <div>
       <button type="button" className="btn btn--ghost orders-back-button" onClick={() => navigate('/orders')}>

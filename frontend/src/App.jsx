@@ -21,6 +21,7 @@ import NotFound from './pages/NotFound'
 
 const WRITE_ROLES = ['ADMIN', 'MANAGER']
 const ADMIN_ONLY = ['ADMIN']
+const Reporter_ONLY=['Reporter']
 
 function App() {
   return (
@@ -38,7 +39,13 @@ function App() {
         }
       >
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard"
+         element={
+            <RoleGuard roles={Reporter_ONLY}>
+              <ClientForm />
+            </RoleGuard>
+         }
+        />
 
         <Route path="/clients" element={<Clients />} />
         <Route
@@ -97,6 +104,7 @@ function App() {
             </RoleGuard>
           }
         />
+        
 
         <Route path="/profile" element={<Profile />} />
 

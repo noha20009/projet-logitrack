@@ -23,7 +23,8 @@ import './Dashboard.css'
 
 export default function Dashboard() {
   const { role } = useAuth()
-  return role === 'AGENT' ? <AgentDashboard /> : <StatsDashboard />
+  return role === 'Reporter' ? <AgentDashboard /> : <StatsDashboard />
+
 }
 
 function StatsDashboard() {
