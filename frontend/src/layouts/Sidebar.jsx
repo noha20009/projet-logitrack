@@ -1,6 +1,7 @@
 import { HiViewGrid, HiUsers, HiCube, HiShoppingCart, HiShieldCheck, HiUser } from 'react-icons/hi'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import logo from '../Photos/661897cd-b9ba-4012-a9c7-dd79280d7a18.png'
 import './Sidebar.css'
 
 export const SIDEBAR_WIDTH = 288
@@ -22,10 +23,9 @@ export default function Sidebar({ mobileOpen, onClose }) {
   const content = (
     <>
       <div className="sidebar-toolbar">
-        <div className="sidebar-logo-row">
-          <div className="sidebar-logo-box">LT</div>
-          <span className="sidebar-brand">LogiTrack</span>
-        </div>
+          <div className="sidebar-logo-row">
+            <img src={logo} alt="LogiTrack" className="sidebar-logo" />
+          </div>
       </div>
       <nav className="sidebar-nav">
         {items.map((item) => {

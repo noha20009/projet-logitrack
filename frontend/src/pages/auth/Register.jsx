@@ -6,13 +6,11 @@ import {
   HiIdentification,
   HiMail,
   HiLockClosed,
-  HiUserGroup,
   HiUserAdd,
 } from 'react-icons/hi'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useAuth } from '../../context/AuthContext'
-import { ROLE_LABELS, ROLES } from '../../utils/constants'
 import { registerSchema } from '../../utils/validation'
 import './Register.css'
 
@@ -33,7 +31,6 @@ export default function Register() {
       nom: '',
       email: '',
       password: '',
-      role: ROLES.AGENT,
     },
   })
 
@@ -41,7 +38,8 @@ export default function Register() {
     setServerError(null)
     try {
       await registerUser(values)
-      navigate('/dashboard', { replace: true })
+      alert("Inscription réussie, vous pouvez maintenant vous connecter.")
+      setTimeout(navigate('/login', { replace: true }),1500)
     } catch (err) {
       setServerError(err.message)
     }
@@ -118,22 +116,6 @@ export default function Register() {
                 {errors.password && (
                   <span className="field-helper field-helper--error">{errors.password.message}</span>
                 )}
-              </div>
-              <div className={fieldClass('role')}>
-                <label htmlFor="register-role">Rôle</label>
-                <div className="register-field-input">
-                  <span className="register-field-icon">
-                    <HiUserGroup size={20} />
-                  </span>
-                  <select id="register-role" {...register('role')}>
-                    {Object.keys(ROLES).map((role) => (
-                      <option key={role} value={role}>
-                        {ROLE_LABELS[role]}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {errors.role && <span className="field-helper field-helper--error">{errors.role.message}</span>}
               </div>
               <button type="submit" className="register-submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Création...' : 'Créer le compte'}

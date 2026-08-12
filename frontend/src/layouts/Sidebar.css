@@ -33,29 +33,25 @@
 }
 
 .sidebar-toolbar {
-  min-height: 64px;
+  min-height: 108px;
   display: flex;
   align-items: center;
-  padding: 0 24px;
+  justify-content: center;
+  padding: 12px 24px;
 }
 
 .sidebar-logo-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 16px;
 }
 
-.sidebar-logo-box {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background-color: var(--primary);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 18px;
+.sidebar-logo {
+  height: 100px;
+  width: auto;
+  object-fit: contain;
+  image-rendering: auto;
 }
 
 .sidebar-brand {

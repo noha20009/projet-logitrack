@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { HiArrowLeft, HiPencil, HiTrash } from 'react-icons/hi'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { deleteClient, getClient } from '../../api/clientApi'
@@ -23,7 +23,7 @@ export default function ClientDetails() {
   const canWrite = role === 'ADMIN' || role === 'MANAGER'
   const canDelete = role === 'ADMIN'
 
-  const load = () => {
+  const load = useCallback(() => {
     setLoading(true)
     Promise.all([getClient(id), getCommandesByClient(id, { page: 0, size: 50 })])
       .then(([clientData, ordersData]) => {
@@ -31,11 +31,11 @@ export default function ClientDetails() {
         setOrders(ordersData)
       })
       .finally(() => setLoading(false))
-  }
+  }, [id])
 
   useEffect(() => {
     load()
-  }, [])
+  }, [load])
 
   const confirmDelete = async () => {
     setDeleting(true)

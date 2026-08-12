@@ -1,7 +1,8 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import ProtectedRoute from './guards/ProtectedRoute'
 import RoleGuard from './guards/RoleGuard'
 import MainLayout from './layouts/MainLayout'
+import Landing from './pages/Landing'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import Dashboard from './pages/Dashboard'
@@ -21,11 +22,11 @@ import NotFound from './pages/NotFound'
 
 const WRITE_ROLES = ['ADMIN', 'MANAGER']
 const ADMIN_ONLY = ['ADMIN']
-const Reporter_ONLY=['Reporter']
 
 function App() {
   return (
     <Routes>
+      <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/access-denied" element={<AccessDenied />} />
@@ -38,14 +39,7 @@ function App() {
           </ProtectedRoute>
         }
       >
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="/dashboard"
-         element={
-            <RoleGuard roles={Reporter_ONLY}>
-              <ClientForm />
-            </RoleGuard>
-         }
-        />
+        <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/clients" element={<Clients />} />
         <Route

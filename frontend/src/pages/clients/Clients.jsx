@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { HiPlus, HiPencil, HiTrash, HiEye } from 'react-icons/hi'
 import { Link, useNavigate } from 'react-router-dom'
 import { getClients, searchClients, deleteClient } from '../../api/clientApi'
@@ -25,16 +25,16 @@ export default function Clients() {
   const canWrite = role === 'ADMIN' || role === 'MANAGER'
   const canDelete = role === 'ADMIN'
 
-  const load = () => {
+  const load = useCallback(() => {
     setLoading(true)
     const params = { page, size, sort }
     const request = search.trim() ? searchClients({ ...params, nom: search.trim() }) : getClients(params)
     request.then(setData).finally(() => setLoading(false))
-  }
+  }, [page, size, sort, search])
 
   useEffect(() => {
     load()
-  }, [page, size, sort, search])
+  }, [load])
 
   const handleSearch = () => {
     setPage(0)

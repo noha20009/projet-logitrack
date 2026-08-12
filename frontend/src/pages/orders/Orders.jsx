@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { HiPlus, HiTrash, HiEye } from 'react-icons/hi'
 import { Link, useNavigate } from 'react-router-dom'
 import { deleteCommande, getCommandes, getCommandesByClient } from '../../api/commandeApi'
@@ -27,16 +27,16 @@ export default function Orders() {
   const canWrite = role === 'ADMIN' || role === 'MANAGER'
   const canDelete = role === 'ADMIN'
 
-  const load = () => {
+  const load = useCallback(() => {
     setLoading(true)
     const params = { page, size, sort, ...(statut ? { statut } : {}) }
     const request = clientId.trim() ? getCommandesByClient(clientId.trim(), params) : getCommandes(params)
     request.then(setData).finally(() => setLoading(false))
-  }
+  }, [page, size, sort, statut, clientId])
 
   useEffect(() => {
     load()
-  }, [page, size, sort, statut, clientId])
+  }, [load])
 
   const changeFilter = (fn) => {
     setPage(0)

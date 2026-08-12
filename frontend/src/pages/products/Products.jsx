@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { HiPlus, HiPencil, HiTrash, HiEye, HiExclamationCircle } from 'react-icons/hi'
 import { Link, useNavigate } from 'react-router-dom'
 import {
@@ -35,7 +35,7 @@ export default function Products() {
   const canDelete = role === 'ADMIN'
   const canSeeLowStock = role === 'ADMIN' || role === 'MANAGER'
 
-  const load = () => {
+  const load = useCallback(() => {
     setLoading(true)
     const params = { page, size, sort }
     let request
@@ -44,11 +44,11 @@ export default function Products() {
     else if (price !== '') request = getByPrix(price, params)
     else request = getProduits(params)
     request.then(setData).finally(() => setLoading(false))
-  }
+  }, [page, size, sort, category, price, lowStock])
 
   useEffect(() => {
     load()
-  }, [page, size, sort, category, price, lowStock])
+  }, [load])
 
   const resetFilters = () => {
     setCategory('')

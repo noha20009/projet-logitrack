@@ -30,7 +30,7 @@ export default function Navbar({ onMenuClick }) {
   const handleLogout = () => {
     setOpen(false)
     logout()
-    navigate('/login')
+    navigate('/')
   }
 
   const goToProfile = () => {

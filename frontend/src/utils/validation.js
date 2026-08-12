@@ -20,7 +20,6 @@ export const registerSchema = yup.object().shape({
   nom: yup.string().required('Le nom est obligatoire'),
   email: emailRule,
   password: passwordRule,
-  role: yup.string().required('Le rôle est obligatoire'),
 })
 
 export const clientSchema = yup.object().shape({

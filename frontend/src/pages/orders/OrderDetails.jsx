@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { HiArrowLeft, HiTrash, HiPlus } from 'react-icons/hi'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useForm, Watch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { addProduitToCommande, deleteCommande, getCommande, updateStatut } from '../../api/commandeApi'
 import { getProduits } from '../../api/produitApi'
@@ -42,7 +42,7 @@ export default function OrderDetails() {
   const canWrite = role === 'ADMIN' || role === 'MANAGER'
   const canDelete = role === 'ADMIN'
 
-  const load = () => {
+  const load = useCallback(() => {
     setLoading(true)
     getCommande(id)
       .then((data) => {
@@ -51,14 +51,14 @@ export default function OrderDetails() {
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false))
-  }
+  }, [id])
 
   useEffect(() => {
     load()
     if (canWrite) {
       getProduits({ page: 0, size: 100 }).then((data) => setProducts(data.content))
     }
-  }, [])
+  }, [load, canWrite])
 
   const handleStatusChange = async (newStatus) => {
     setUpdatingStatus(true)
