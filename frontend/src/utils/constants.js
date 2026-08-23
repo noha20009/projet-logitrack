@@ -8,7 +8,6 @@ export const ROLE_LABELS = {
   ADMIN: 'Administrateur',
   MANAGER: 'Manager',
   AGENT: 'Agent',
-  REPORTER: 'Reporter',
 }
 
 export const STATUTS = ['EN_ATTENTE', 'EXPEDIEE', 'LIVREE']
