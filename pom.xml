@@ -42,12 +42,27 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <!--  Envoi d'emails (réinitialisation de mot de passe)  -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!--  Thymeleaf  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-
+        <!-- Spring Boot Actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!-- Micrometer Prometheus registry -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
         <!--  H2 Database (ou MySQL selon ton choix)  -->
         <!--         <dependency> -->
         <!--             <groupId>com.h2database</groupId> -->

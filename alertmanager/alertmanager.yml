@@ -1,0 +1,30 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by: ['alertname', 'severity']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'logitrack-notifications'
+
+receivers:
+  - name: 'logitrack-notifications'
+    webhook_configs:
+      - url: 'http://backend:8080/api/alerts/webhook'
+        send_resolved: true
+    # Optionnel : email (décommentez et configurez vos infos)
+    # email_configs:
+    #   - to: 'admin@logitrack.com'
+    #     from: 'alertmanager@logitrack.com'
+    #     smarthost: 'smtp.gmail.com:587'
+    #     auth_username: 'VOTRE_EMAIL@gmail.com'
+    #     auth_password: 'VOTRE_MOT_DE_PASSE'
+    #     require_tls: true
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname']

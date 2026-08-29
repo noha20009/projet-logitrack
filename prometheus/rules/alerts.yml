@@ -1,0 +1,55 @@
+groups:
+  - name: logitrack-alerts
+    rules:
+      # Alerte 1 : API indisponible
+      - alert: ApiDown
+        expr: up{job="logitrack"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "LogiTrack API est DOWN"
+          description: "L'API LogiTrack ne répond plus depuis 30 secondes."
+
+      # Alerte 2 : Taux d'erreurs HTTP élevé (5xx > 5%)
+      - alert: HighHttpErrorRate
+        expr: |
+          (
+            sum(rate(http_server_requests_active_seconds_count{status=~"5..", application="logitrack"}[5m]))
+            /
+            sum(rate(http_server_requests_active_seconds_count{application="logitrack"}[5m]))
+          ) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Taux d'erreurs HTTP élevé"
+          description: "Plus de 5% des requêtes HTTP retournent des erreurs 5xx."
+
+      # Alerte 3 : Temps de réponse trop élevé (p95 > 2s)
+      - alert: HighResponseTime
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(http_server_requests_active_seconds_bucket{application="logitrack"}[5m])) by (le)
+          ) > 2
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Temps de réponse trop élevé"
+          description: "Le temps de réponse p95 dépasse 2 secondes."
+
+      # Alerte 4 : Utilisation mémoire heap élevée (> 85%)
+      - alert: HighMemoryUsage
+        expr: |
+          (
+            jvm_memory_used_bytes{area="heap", application="logitrack"}
+            /
+            jvm_memory_max_bytes{area="heap", application="logitrack"}
+          ) > 0.85
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Utilisation mémoire heap élevée"
+          description: "L'utilisation de la mémoire heap dépasse 85%."

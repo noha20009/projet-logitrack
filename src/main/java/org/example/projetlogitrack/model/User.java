@@ -2,6 +2,8 @@ package org.example.projetlogitrack.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -22,6 +24,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private String resetToken;
+
+    private LocalDateTime resetTokenExpiry;
 
     public User() {
     }
@@ -80,5 +86,21 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
+
+    public LocalDateTime getResetTokenExpiry() {
+        return resetTokenExpiry;
+    }
+
+    public void setResetTokenExpiry(LocalDateTime resetTokenExpiry) {
+        this.resetTokenExpiry = resetTokenExpiry;
     }
 }

@@ -15,6 +15,18 @@ export const loginSchema = yup.object().shape({
   password: yup.string().required('Le mot de passe est obligatoire'),
 })
 
+export const forgotPasswordSchema = yup.object().shape({
+  email: emailRule,
+})
+
+export const resetPasswordSchema = yup.object().shape({
+  newPassword: passwordRule,
+  confirmPassword: yup
+    .string()
+    .required('La confirmation du mot de passe est obligatoire')
+    .oneOf([yup.ref('newPassword')], 'Les mots de passe ne correspondent pas'),
+})
+
 export const registerSchema = yup.object().shape({
   prenom: yup.string().required('Le prénom est obligatoire'),
   nom: yup.string().required('Le nom est obligatoire'),

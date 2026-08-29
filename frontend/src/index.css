@@ -300,6 +300,11 @@ h6 {
   color: var(--danger-dark);
 }
 
+.alert--success {
+  background-color: #d9f2e6;
+  color: #0f6b3c;
+}
+
 .alert-close {
   display: inline-flex;
   align-items: center;

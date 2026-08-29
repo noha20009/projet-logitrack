@@ -21,7 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/stats")
-@PreAuthorize("hasAnyRole('Reporter')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
 public class StatsController {
 
     @Autowired
