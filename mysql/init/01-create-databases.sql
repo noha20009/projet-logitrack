@@ -1,0 +1,2 @@
+CREATE DATABASE IF NOT EXISTS projetlogitrack;
+CREATE DATABASE IF NOT EXISTS notification_db;
