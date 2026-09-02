@@ -17,6 +17,7 @@ public class Notification {
 
     private LocalDateTime dateCreation;
 
+    @Column(name = "est_lue")
     private boolean read = false;
 
     private Long orderId;
