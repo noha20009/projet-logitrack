@@ -8,8 +8,27 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/projetlogitrack?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: nouha23
+      NOTIFICATION_SERVICE_URL: http://notification-service:8081
     ports:
       - "8080:8080"
+    depends_on:
+      - notification-service
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
+        loki-retries: "5"
+        loki-timeout: "2s"
+
+  notification-service:
+    build: ./logitrack-notification-service
+    container_name: logitrack-notification-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/notification_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: nouha23
+    ports:
+      - "8081:8081"
     logging:
       driver: loki
       options:
