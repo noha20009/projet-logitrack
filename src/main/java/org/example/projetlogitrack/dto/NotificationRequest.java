@@ -1,8 +1,41 @@
-package com.logitrack.notification.dto;
+package org.example.projetlogitrack.dto;
 
-// TODO: Créez le DTO qui sera envoyé au Notification Service
-//  Champs :
-//  - orderId (Long)
-//  - type (String) → "ORDER_CREATED", "ORDER_SHIPPED", "ORDER_DELIVERED"
-//  - message (String)
-//  Getter/Setter ou Lombok @Data
+public class NotificationRequest {
+
+    private Long orderId;
+    private String type;
+    private String message;
+
+    public NotificationRequest() {
+    }
+
+    public NotificationRequest(Long orderId, String type, String message) {
+        this.orderId = orderId;
+        this.type = type;
+        this.message = message;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+}

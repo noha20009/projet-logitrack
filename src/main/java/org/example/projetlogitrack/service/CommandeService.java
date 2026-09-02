@@ -1,7 +1,9 @@
 package org.example.projetlogitrack.service;
 
+import org.example.projetlogitrack.client.NotificationClient;
 import org.example.projetlogitrack.dto.CommandeDTO;
 import org.example.projetlogitrack.dto.CommandeLigneDTO;
+import org.example.projetlogitrack.dto.NotificationRequest;
 import org.example.projetlogitrack.exception.ResourceNotFoundException;
 import org.example.projetlogitrack.mapper.CommandeLigneMapper;
 import org.example.projetlogitrack.mapper.CommandeMapper;
@@ -38,6 +40,9 @@ public class CommandeService {
     @Autowired
     private CommandeLigneMapper commandeLigneMapper;
 
+    @Autowired
+    private NotificationClient notificationClient;
+
     public Page<CommandeDTO> findAll(String statut, Pageable pageable) {
         if (statut != null && !statut.isBlank()) {
             return commandeRepository.findByStatut(parseStatut(statut), pageable).map(commandeMapper::toDto);
@@ -64,7 +69,15 @@ public class CommandeService {
         commande.setDateCommande(LocalDate.now());
         commande.setStatut(StatutCommande.EN_ATTENTE);
 
-        return commandeMapper.toDto(commandeRepository.save(commande));
+        Commande saved = commandeRepository.save(commande);
+
+        notificationClient.createNotification(new NotificationRequest(
+                saved.getId(),
+                "ORDER_CREATED",
+                "La commande " + saved.getId() + " a été créée pour le client " + client.getId() + "."
+        ));
+
+        return commandeMapper.toDto(saved);
     }
 
     public CommandeLigneDTO addProduit(Long orderId, Long produitId, int quantite) {
@@ -88,8 +101,19 @@ public class CommandeService {
     public CommandeDTO updateStatus(Long id, String status) {
         Commande commande = commandeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Commande introuvable avec l'id " + id));
-        commande.setStatut(parseStatut(status));
-        return commandeMapper.toDto(commandeRepository.save(commande));
+        StatutCommande newStatus = parseStatut(status);
+        commande.setStatut(newStatus);
+        CommandeDTO dto = commandeMapper.toDto(commandeRepository.save(commande));
+
+        switch (newStatus) {
+            case EXPEDIEE -> notificationClient.createNotification(new NotificationRequest(
+                    id, "ORDER_SHIPPED", "La commande " + id + " a été expédiée."));
+            case LIVREE -> notificationClient.createNotification(new NotificationRequest(
+                    id, "ORDER_DELIVERED", "La commande " + id + " a été livrée."));
+            default -> { }
+        }
+
+        return dto;
     }
 
     public long count() {

@@ -1,12 +1,17 @@
 package org.example.projetlogitrack.client;
 
-// TODO: Créez l'interface Feign NotificationClient
-//  Annotée avec @FeignClient(name = "notification-service", url = "${notification.service.url}")
-//
-//  Méthodes à déclarer :
-//  - @PostMapping("/api/notifications") Notification createNotification(@RequestBody NotificationRequest request)
-//
-//  Conseils :
-//  - Le fallback peut être géré via @FeignClient(fallback = ...) ou un ErrorDecoder
-//  - L'URL du notification service sera dans application.properties :
-//      notification.service.url=http://notification-service:8081
+import org.example.projetlogitrack.dto.NotificationRequest;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+@FeignClient(
+        name = "notification-service",
+        url = "${notification.service.url}",
+        fallback = NotificationClientFallback.class
+)
+public interface NotificationClient {
+
+    @PostMapping("/api/notifications")
+    void createNotification(@RequestBody NotificationRequest request);
+}
